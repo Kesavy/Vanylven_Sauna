@@ -104,9 +104,7 @@
   }
   .fog nav a:hover { color: var(--heat-soft); }
   .fog.open nav a { opacity: 1; filter: blur(0); transform: none; }
-  .fog .foot { margin-top: auto; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; color: var(--muted); }
-  .slats { height: 26px; position: relative; margin: 36px 0; }
-  .slats::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--line); box-shadow: 0 6px 0 var(--line), 0 10px 0 var(--line), 0 17px 0 var(--line), 0 25px 0 var(--line); }
+  .fog .foot { margin-top: auto; padding-top: 36px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; color: var(--muted); }
 
   /* Steam canvases sit above photos and below text */
   canvas.steam { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -253,9 +251,7 @@
   .finale p { margin: 26px auto 0; color: var(--muted); max-width: 40ch; font-size: 1.15rem; }
   .finale .btn { margin-top: 36px; padding: 20px 34px; font-size: 1.1rem; }
 
-  footer { background: var(--brand); color: #f3eee9; padding: 0 0 40px; }
-  footer .slats { margin: 0 0 40px; }
-  footer .slats::before { background: rgb(243 238 233 / .16); box-shadow: 0 6px 0 rgb(243 238 233 / .16), 0 10px 0 rgb(243 238 233 / .16), 0 17px 0 rgb(243 238 233 / .16), 0 25px 0 rgb(243 238 233 / .16); }
+  footer { background: var(--brand); color: #f3eee9; padding: 40px 0; }
   footer .row { display: flex; flex-wrap: wrap; gap: 28px; justify-content: space-between; align-items: center; }
   footer nav { display: flex; flex-wrap: wrap; gap: 24px; }
   footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; opacity: .9; }
@@ -337,7 +333,6 @@
       <a href="#rules" style="--i:3" data-close>Before you come</a>
       <a href="#find" style="--i:4" data-close>Find us</a>
     </nav>
-    <div class="slats" aria-hidden="true"></div>
     <div class="foot">
       <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
       <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>
@@ -454,9 +449,8 @@
       </div>
       <figure><img src="../img/harbour-reflection.jpg" width="2000" height="1504" loading="lazy" alt="The old stone pier at Fiskå mirrored in still water"></figure>
       <figure class="up"><img src="../img/fiska-harbour.jpg" width="1536" height="2048" loading="lazy" alt="Fiskå harbour with houses and mountains reflected in the water"></figure>
-      <figure class="down"><img src="../img/door-deck.jpg" width="2000" height="1500" loading="lazy" alt="The sauna door opening onto the deck and the fjord"></figure>
-      <figure><img src="../img/deck-fjord.jpg" width="2000" height="1500" loading="lazy" alt="The deck and glass front of the sauna above the fjord"></figure>
-      <figure class="up"><img src="../img/exterior-side.jpg" width="1601" height="1256" loading="lazy" alt="The sauna cabin on the rocks, seen from the side"></figure>
+      <figure class="down"><img src="../img/pier-rocks.jpg" width="2000" height="1500" loading="lazy" alt="Rocks and a small pier on the shore by the sauna"></figure>
+      <figure><img src="../img/deck-reflection.jpg" width="1536" height="1155" loading="lazy" alt="Mountains and boathouses reflected in the sauna's glass wall"></figure>
       <span class="end"></span>
     </div>
   </section>
@@ -596,7 +590,6 @@
 </main>
 
 <footer>
-  <div class="slats" aria-hidden="true"></div>
   <div class="wrap row">
     <a class="brand" href="#top"><img src="../img/logo-mark.png" alt="" width="42" height="42">Vanylven Sauna</a>
     <nav aria-label="Contact and social">

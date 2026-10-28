@@ -16,7 +16,7 @@
 <link rel="preload" as="image" href="img/deck-fjord.jpg">
 <style>
   /*
-    Theme: steam and fogged glass, wooden slats, heat and cold, pebbles.
+    Theme: steam and fogged glass, heat and cold, pebbles.
     Colour logic: --heat (ember) is for actions only. --cold (fjord) appears only where the cold is the subject.
     Shape rule: photos and panels 14px, buttons full pill, markers are irregular pebbles (.pebble).
   */
@@ -77,12 +77,6 @@
   .pebble.p3 { border-radius: 62% 38% 48% 52% / 52% 40% 60% 48%; }
   .pebble.p4 { border-radius: 50% 50% 62% 38% / 40% 56% 44% 60%; }
 
-  /* Slats: a short run of lines with uneven gaps, like a sauna wall */
-  .slats { height: 26px; position: relative; }
-  .slats::before {
-    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--line);
-    box-shadow: 0 6px 0 var(--line), 0 10px 0 var(--line), 0 17px 0 var(--line), 0 25px 0 var(--line);
-  }
 
   /* Buttons */
   .btn {
@@ -148,8 +142,7 @@
     transition-delay: calc(var(--i) * 60ms + 80ms);
   }
   .fog.open nav a { opacity: 1; filter: blur(0); transform: none; }
-  .fog .slats { margin: 32px 0; }
-  .fog .fog-foot { margin-top: auto; display: grid; gap: 16px; }
+  .fog .fog-foot { margin-top: auto; padding-top: 32px; display: grid; gap: 16px; }
   .fog .fog-foot .btn { justify-content: center; }
   .fog .fog-foot p { color: var(--muted); font-size: .95rem; }
 
@@ -294,9 +287,7 @@
   .find-body .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
 
   /* Footer */
-  footer { background: var(--brand); color: var(--on-brand); padding: 0 0 40px; }
-  footer .slats::before { background: rgb(243 238 233 / .14); box-shadow: 0 6px 0 rgb(243 238 233 / .14), 0 10px 0 rgb(243 238 233 / .14), 0 17px 0 rgb(243 238 233 / .14), 0 25px 0 rgb(243 238 233 / .14); }
-  footer .slats { margin-bottom: 40px; }
+  footer { background: var(--brand); color: var(--on-brand); padding: 40px 0; }
   footer .row { display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: center; }
   footer .brand img { width: 46px; height: 46px; }
   footer nav { display: flex; flex-wrap: wrap; gap: 24px; }
@@ -390,7 +381,6 @@
     <a href="#before" style="--i:3" data-close>Before you come</a>
     <a href="#gift" style="--i:4" data-close>Gift cards</a>
   </nav>
-  <div class="slats" aria-hidden="true"></div>
   <div class="fog-foot">
     <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
     <p><a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> &nbsp; <a href="https://www.vanylvensauna.no/home" lang="nn">Norsk</a></p>
@@ -538,9 +528,8 @@
     <div class="track" id="track">
       <button type="button" aria-label="Enlarge photo"><img src="img/deck-reflection.jpg" width="1536" height="1155" loading="lazy" alt="Mountains and boathouses reflected in the sauna's glass wall"></button>
       <button type="button" aria-label="Enlarge photo"><img src="img/harbour-reflection.jpg" width="2000" height="1504" loading="lazy" alt="The old stone pier at Fiskå mirrored in still water"></button>
-      <button type="button" aria-label="Enlarge photo"><img src="img/door-deck.jpg" width="2000" height="1500" loading="lazy" alt="The sauna door opening onto the deck and the fjord"></button>
       <button type="button" aria-label="Enlarge photo"><img src="img/fiska-harbour.jpg" width="1536" height="2048" loading="lazy" alt="Fiskå harbour with houses and mountains reflected in the water"></button>
-      <button type="button" aria-label="Enlarge photo"><img src="img/exterior-side.jpg" width="1601" height="1256" loading="lazy" alt="The sauna cabin seen from the side, with the fjord behind"></button>
+      <button type="button" aria-label="Enlarge photo"><img src="img/pier-rocks.jpg" width="2000" height="1500" loading="lazy" alt="Rocks and a small pier on the shore by the sauna"></button>
     </div>
     <dialog class="lightbox" id="lightbox"><img src="" alt=""></dialog>
   </section>
@@ -611,7 +600,6 @@
 </main>
 
 <footer>
-  <div class="slats" aria-hidden="true"></div>
   <div class="wrap row">
     <a class="brand" href="#top"><img src="img/logo-mark.png" alt="" width="46" height="46">Vanylven Sauna</a>
     <nav aria-label="Contact and social">
