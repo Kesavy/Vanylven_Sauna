@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="nn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vanylven Sauna | Badstue ved fjorden på Fiskå</title>
+<meta name="description" content="Privat badstue for opptil 8 personar ved Vanylvsfjorden på Fiskå. 600 kr for 2 timar. Open badstue kvar onsdag. Drifta av lokale frivillige.">
+<meta property="og:title" content="Vanylven Sauna">
+<meta property="og:description" content="Varm deg opp og bad i Vanylvsfjorden. Privat badstue for opptil 8 personar på Fiskå.">
+<meta property="og:image" content="../img/deck-fjord.jpg">
+<link rel="alternate" hreflang="en" href="../">
+<link rel="icon" href="../img/logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..800;1,400..600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<link rel="preload" as="image" href="../img/deck-fjord.jpg">
+<style>
+  /*
+    Theme: steam and fogged glass, heat and cold, pebbles.
+    Colour logic: --heat (ember) is for actions only. --cold (fjord) appears only where the cold is the subject.
+    Shape rule: photos and panels 14px, buttons full pill, markers are irregular pebbles (.pebble).
+  */
+  :root {
+    --bg: #eef1f0;
+    --surface: #f8faf9;
+    --ink: #172225;
+    --muted: #4c5a5e;
+    --line: #d3dbda;
+    --brand: #5a4d44;
+    --on-brand: #f3eee9;
+    --heat: #ef6a32;
+    --on-heat: #1a1310;
+    --cold: #2f6d7d;
+    --steam: rgb(120 135 138 / .38);
+    --radius: 14px;
+    --max: 1240px;
+    --nav-h: 68px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111819;
+      --surface: #182122;
+      --ink: #e7edec;
+      --muted: #a3b1b1;
+      --line: #2a3537;
+      --brand: #3b322c;
+      --on-brand: #efe8e2;
+      --cold: #6fb0c0;
+      --steam: rgb(230 236 236 / .32);
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 16px); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: "Schibsted Grotesk", system-ui, sans-serif;
+    font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  body.locked { overflow: hidden; }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+  h1, h2, h3 { margin: 0; line-height: 1.08; letter-spacing: -0.02em; font-weight: 700; }
+  h2 { font-size: clamp(2rem, 3.6vw, 3rem); }
+  h3 { font-size: 1.2rem; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  .lead { color: var(--muted); max-width: 58ch; font-size: 1.08rem; }
+  section { padding: 112px 0; }
+  :focus-visible { outline: 3px solid var(--heat); outline-offset: 3px; }
+
+  /* Pebbles: four irregular shapes, rotated so no two neighbours look alike */
+  .pebble { display: inline-grid; place-items: center; border-radius: 58% 42% 55% 45% / 47% 58% 42% 53%; }
+  .pebble.p2 { border-radius: 45% 55% 40% 60% / 60% 45% 55% 40%; }
+  .pebble.p3 { border-radius: 62% 38% 48% 52% / 52% 40% 60% 48%; }
+  .pebble.p4 { border-radius: 50% 50% 62% 38% / 40% 56% 44% 60%; }
+
+
+  /* Buttons */
+  .btn {
+    position: relative; display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 24px; border-radius: 999px; border: 0; cursor: pointer;
+    font-weight: 600; font-size: 1rem; line-height: 1; text-decoration: none; white-space: nowrap;
+    transition: transform .2s cubic-bezier(.16,1,.3,1), background-color .2s, box-shadow .2s;
+  }
+  .btn:active { transform: translateY(1px) scale(.98); }
+  .btn i { font-size: 1.1em; }
+  .btn-heat { background: var(--heat); color: var(--on-heat); }
+  .btn-heat:hover { background: #ff7a42; }
+  .btn-ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+  .btn-ghost:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .btn-light { background: #f2f5f4; color: #172225; }
+  .btn-light:hover { background: #fff; }
+  .btn-outline-light { background: transparent; color: #f2f5f4; box-shadow: inset 0 0 0 1.5px rgb(242 245 244 / .6); }
+  .btn-outline-light:hover { box-shadow: inset 0 0 0 1.5px #f2f5f4; }
+
+  /* Steam puff on booking clicks */
+  .puff {
+    position: fixed; width: 22px; height: 22px; border-radius: 50%; pointer-events: none; z-index: 60;
+    background: var(--steam); filter: blur(6px);
+    animation: puff 1.1s cubic-bezier(.16,1,.3,1) forwards;
+  }
+  @keyframes puff {
+    from { opacity: .9; transform: translate(-50%, 0) scale(.6); }
+    to { opacity: 0; transform: translate(calc(-50% + var(--dx)), -70px) scale(2.2); }
+  }
+
+  /* Nav: clear over the hero photo, fogged glass once scrolled */
+  .nav { position: fixed; inset: 0 0 auto; z-index: 40; color: #f2f5f4; transition: background-color .3s, color .3s, border-color .3s; border-bottom: 1px solid transparent; }
+  .nav.solid {
+    color: var(--ink); border-bottom-color: var(--line);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(16px) saturate(1.2); -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  }
+  .nav .wrap { height: var(--nav-h); display: flex; align-items: center; gap: 32px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; letter-spacing: -0.01em; }
+  .brand img { width: 38px; height: 38px; border-radius: 10px; }
+  .nav ul { display: flex; gap: 28px; list-style: none; margin: 0 0 0 auto; padding: 0; }
+  .nav ul a, .nav .lang { text-decoration: none; font-size: .95rem; opacity: .82; }
+  .nav ul a:hover, .nav .lang:hover { opacity: 1; }
+  .nav .btn { padding: 11px 20px; font-size: .95rem; }
+  .menu-btn { display: none; width: 46px; height: 46px; border: 0; cursor: pointer; background: rgb(255 255 255 / .16); font-size: 1.35rem; }
+  .nav.solid .menu-btn { background: color-mix(in srgb, var(--ink) 8%, transparent); }
+
+  /* Fogged-glass menu (mobile) */
+  .fog {
+    position: fixed; inset: 0; z-index: 50; display: flex; flex-direction: column; padding: 16px 16px 32px;
+    background: color-mix(in srgb, var(--bg) 62%, transparent);
+    backdrop-filter: blur(22px) saturate(1.15); -webkit-backdrop-filter: blur(22px) saturate(1.15);
+    opacity: 0; visibility: hidden; transition: opacity .45s cubic-bezier(.16,1,.3,1), visibility 0s .45s;
+  }
+  .fog.open { opacity: 1; visibility: visible; transition: opacity .45s cubic-bezier(.16,1,.3,1); }
+  .fog-top { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+  .fog-top .menu-btn { display: inline-grid; background: color-mix(in srgb, var(--ink) 8%, transparent); }
+  .fog nav { display: grid; gap: 6px; margin-top: 40px; }
+  .fog nav a {
+    font-size: 2.1rem; font-weight: 700; letter-spacing: -0.03em; text-decoration: none; padding: 6px 0;
+    opacity: 0; filter: blur(10px); transform: translateY(10px);
+    transition: opacity .6s, filter .6s, transform .6s cubic-bezier(.16,1,.3,1);
+    transition-delay: calc(var(--i) * 60ms + 80ms);
+  }
+  .fog.open nav a { opacity: 1; filter: blur(0); transform: none; }
+  .fog .fog-foot { margin-top: auto; padding-top: 32px; display: grid; gap: 16px; }
+  .fog .fog-foot .btn { justify-content: center; }
+  .fog .fog-foot p { color: var(--muted); font-size: .95rem; }
+
+  /* Hero */
+  .hero { position: relative; min-height: 100dvh; padding: 0; display: flex; align-items: flex-end; overflow: hidden; color: #f2f5f4; background: #1d2a2e; }
+  .hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 60% 62%; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    background:
+      linear-gradient(to bottom, rgb(10 18 20 / .45), transparent 22%),
+      linear-gradient(to top right, rgb(10 18 20 / .78), rgb(10 18 20 / .25) 45%, transparent 70%);
+  }
+  .hero .wrap { position: relative; z-index: 2; width: 100%; padding-bottom: clamp(48px, 9vh, 96px); }
+  .hero h1 { font-size: clamp(2.7rem, 6vw, 5.2rem); letter-spacing: -0.04em; max-width: 12ch; }
+  .hero p { margin-top: 20px; max-width: 44ch; font-size: 1.18rem; color: #dbe4e3; }
+  .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+  /* Prices */
+  .visit-head { max-width: 640px; }
+  .visit-head .lead { margin-top: 16px; }
+  .options { display: grid; grid-template-columns: 7fr 5fr; gap: 20px; margin-top: 56px; }
+  .option { border-radius: var(--radius); padding: 40px; display: flex; flex-direction: column; gap: 20px; }
+  .option.private { background: var(--surface); box-shadow: 0 1px 0 var(--line), 0 24px 48px -32px rgb(23 34 37 / .35); }
+  .option.open { box-shadow: inset 0 0 0 1.5px var(--line); }
+  .option header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  /* Tag: a brown pebble with a light line icon, echoing the white line-drawn bucket on the brown logo */
+  .option .tag { display: inline-flex; align-items: center; gap: 12px; font-size: .95rem; font-weight: 600; color: var(--ink); }
+  .option .tag .pebble { width: 60px; height: 55px; background: #5a4d44; color: #f3eee9; font-size: 2.1rem; }
+  .price { display: flex; align-items: baseline; gap: 10px; }
+  .price strong { font-size: clamp(2.4rem, 4vw, 3.4rem); letter-spacing: -0.03em; line-height: 1; }
+  .price span { color: var(--muted); }
+  .option dl { display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; margin: 0; color: var(--muted); }
+  .option dt { color: var(--ink); font-weight: 600; }
+  .option dd { margin: 0; }
+  .option .btn { align-self: flex-start; margin-top: auto; }
+  .outside { margin-top: 24px; color: var(--muted); }
+
+  /* How booking works */
+  .how { background: var(--surface); }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); margin: 48px 0 0; padding: 0; list-style: none; }
+  .step { padding-right: 32px; }
+  .step + .step { padding-left: 32px; border-left: 1px solid var(--line); }
+  .step .pebble { width: 46px; height: 42px; margin-bottom: 22px; background: var(--ink); color: var(--bg); font-weight: 700; }
+  .step p { margin-top: 10px; color: var(--muted); }
+  .pay { margin-top: 18px; padding: 18px 20px; border-radius: var(--radius); background: var(--bg); font-size: .95rem; display: grid; gap: 4px; }
+  .pay b { font-weight: 600; }
+  .mono { font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+  .cancel { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--line); display: flex; gap: 14px; align-items: flex-start; color: var(--muted); }
+  .cancel i { font-size: 1.4rem; color: var(--ink); margin-top: 2px; }
+
+  /* The sauna: intro */
+  .about-top { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: end; }
+  .about-top .lead { margin-top: 16px; }
+  .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 32px; margin: 0; }
+  .facts dt { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  .facts dd { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+
+  /* Photo essay: Arrive, Heat, Cold, Rest */
+  .essay { padding: 0; }
+  .chapter { position: relative; }
+  .chapter h3 { font-size: clamp(3rem, 7vw, 6rem); letter-spacing: -0.045em; line-height: 1; }
+  .chapter p { margin-top: 16px; font-size: 1.15rem; max-width: 34ch; }
+
+  /* Every chapter: full-bleed photo, same height, text bottom corner. Side alternates for rhythm. */
+  .chapter { min-height: 88dvh; display: flex; align-items: flex-end; color: #f2f5f4; overflow: hidden; background: #1d2a2e; }
+  .chapter > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .chapter::before {
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    background: linear-gradient(to top right, rgb(var(--tint) / .82), rgb(var(--tint) / .35) 40%, transparent 68%);
+  }
+  .chapter .wrap { position: relative; z-index: 2; width: 100%; padding-bottom: 80px; display: flex; flex-direction: column; align-items: flex-start; }
+  .chapter p { color: #dbe4e3; }
+  .chapter { --tint: 10 18 20; }
+  .chapter.right::before { background: linear-gradient(to top left, rgb(var(--tint) / .82), rgb(var(--tint) / .35) 40%, transparent 68%); }
+  .chapter.right .wrap { align-items: flex-end; text-align: right; }
+  .ch-heat { --tint: 52 20 8; }
+  .ch-heat > img { object-position: 30% 60%; }
+  .ch-heat h3 { color: #ffb48f; }
+  .ch-heat p { color: #f0ddd2; }
+  .ch-cold { --tint: 10 46 58; }
+  .ch-cold h3 { color: #bfe3ec; }
+  .again { display: inline-flex; align-items: center; gap: 8px; margin-top: 24px; font-weight: 600; text-decoration: none; color: #f2f5f4; }
+  .again i { color: var(--heat); }
+  .chapter + .chapter { border-top: 1px solid rgb(10 18 20 / .5); }
+
+  /* Carousel */
+  .more { padding: 112px 0 112px; }
+  .more-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+  .arrows { display: flex; gap: 10px; }
+  .arrow { width: 52px; height: 48px; border: 0; cursor: pointer; background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--line); font-size: 1.2rem; transition: box-shadow .2s, transform .2s; }
+  .arrow:hover { box-shadow: inset 0 0 0 1.5px var(--ink); }
+  .arrow:active { transform: scale(.95); }
+  .arrow:disabled { opacity: .35; cursor: default; box-shadow: inset 0 0 0 1.5px var(--line); }
+  .track {
+    display: grid; grid-auto-flow: column; grid-auto-columns: min(78vw, 980px); gap: 16px;
+    overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    margin-top: 40px; padding: 0 max(24px, calc((100vw - var(--max)) / 2 + 24px));
+    scroll-padding: 0 max(24px, calc((100vw - var(--max)) / 2 + 24px));
+  }
+  .track::-webkit-scrollbar { display: none; }
+  .track button { all: unset; cursor: zoom-in; scroll-snap-align: start; border-radius: var(--radius); overflow: hidden; aspect-ratio: 3 / 2; }
+  .track button:focus-visible { outline: 3px solid var(--heat); outline-offset: 3px; }
+  .track img { width: 100%; height: 100%; object-fit: cover; transition: transform .9s cubic-bezier(.16,1,.3,1); }
+  .track button:hover img { transform: scale(1.025); }
+  .lightbox { border: 0; padding: 0; background: transparent; max-width: 94vw; max-height: 92dvh; }
+  .lightbox::backdrop { background: rgb(10 18 20 / .86); backdrop-filter: blur(6px); }
+  .lightbox img { max-width: 94vw; max-height: 92dvh; width: auto; border-radius: var(--radius); cursor: zoom-out; }
+
+  /* Before you come: rules on fogged glass over the fjord */
+  .rules { position: relative; overflow: hidden; color: #f2f5f4; }
+  .rules > img { position: absolute; inset: -40px; width: calc(100% + 80px); height: calc(100% + 80px); object-fit: cover; filter: blur(14px) saturate(.9); }
+  .rules::before { content: ""; position: absolute; inset: 0; background: rgb(12 22 25 / .58); }
+  .glass {
+    position: relative; border-radius: 22px; padding: clamp(28px, 5vw, 64px);
+    background: linear-gradient(135deg, rgb(255 255 255 / .12), rgb(255 255 255 / .03)), rgb(12 22 25 / .42);
+    backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / .18), inset 0 1px 0 rgb(255 255 255 / .3), 0 30px 80px -40px rgb(0 0 0 / .6);
+  }
+  @media (prefers-reduced-transparency: reduce) { .glass { background: rgb(20 32 35 / .94); backdrop-filter: none; } }
+  .glass .lead { color: #d7e0df; margin-top: 16px; }
+  .groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 48px; }
+  .group h3 { display: flex; align-items: center; gap: 10px; }
+  .group h3 i { font-size: 1.3rem; color: #ffb48f; }
+  .group ul { margin: 16px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; color: #d7e0df; }
+  .group li { padding-left: 22px; position: relative; }
+  .group li .pebble { position: absolute; left: 0; top: .5em; width: 10px; height: 9px; background: rgb(242 245 244 / .55); }
+
+  /* Gift cards */
+  .gift .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+  .gift figure { margin: 0; border-radius: var(--radius); overflow: hidden; aspect-ratio: 1 / 1; background: #c9b8a6; }
+  .gift figure img { width: 100%; height: 100%; object-fit: cover; }
+  .gift .lead { margin-top: 18px; }
+  .gift .btn { margin-top: 32px; }
+
+  /* Find us */
+  .find { padding: 0 0 112px; }
+  .find-card { position: relative; border-radius: var(--radius); overflow: hidden; min-height: 460px; display: flex; align-items: flex-end; }
+  .find-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .find-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(12 20 22 / .9), rgb(12 20 22 / .6) 45%, rgb(12 20 22 / .05) 85%); }
+  .find-body { position: relative; z-index: 1; padding: 48px; color: #f2f5f4; display: grid; gap: 16px; max-width: 620px; }
+  .find-body p { color: #d5dedd; }
+  .find-body .row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+
+  /* Footer */
+  footer { background: var(--brand); color: var(--on-brand); padding: 40px 0; }
+  footer .row { display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: center; }
+  footer .brand img { width: 46px; height: 46px; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 24px; }
+  footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; opacity: .9; }
+  footer a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+
+  .mbar { display: none; }
+
+  /* Motion, only when welcome */
+  @media (prefers-reduced-motion: no-preference) {
+    .js .reveal { opacity: 0; transform: translateY(20px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+    .js .reveal.in { opacity: 1; transform: none; }
+    /* The hero opens like a fogged window clearing */
+    .hero > img { animation: defog 2.2s cubic-bezier(.16,1,.3,1) both; }
+    @keyframes defog {
+      from { filter: blur(18px) brightness(1.25) saturate(.6); transform: scale(1.06); }
+      to { filter: none; transform: scale(1); }
+    }
+    .hero .wrap > * { animation: rise 1.2s cubic-bezier(.16,1,.3,1) both; }
+    .hero .wrap > :nth-child(2) { animation-delay: .12s; }
+    .hero .wrap > :nth-child(3) { animation-delay: .24s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  }
+  @media (prefers-reduced-motion: reduce) { .puff { display: none; } .fog nav a { transition: none; } }
+
+  /* Tablet */
+  @media (max-width: 1023px) {
+    .nav ul, .nav .lang, .nav .btn { display: none; }
+    .menu-btn { display: inline-grid; place-items: center; margin-left: auto; }
+    .options, .about-top, .gift .wrap { grid-template-columns: 1fr; }
+    .groups { grid-template-columns: 1fr 1fr; }
+  }
+  /* Phone */
+  @media (max-width: 767px) {
+    body { font-size: 16px; }
+    .wrap { padding: 0 16px; }
+    section { padding: 72px 0; }
+    .hero .ctas .btn { flex: 1 1 auto; justify-content: center; }
+    .option { padding: 28px 24px; }
+    .steps { grid-template-columns: 1fr; gap: 36px; }
+    .step, .step + .step { padding: 0; border: 0; }
+    /* On phones the text sits bottom-left in every chapter; the shade rises from the bottom. */
+    .chapter { min-height: 78dvh; }
+    .chapter .wrap { padding-bottom: 48px; }
+    .chapter.right .wrap { align-items: flex-start; text-align: left; }
+    .ch-heat > img { object-position: 82% 75%; }
+    .chapter::before, .chapter.right::before { background: linear-gradient(to top, rgb(var(--tint) / .85), rgb(var(--tint) / .3) 45%, transparent 70%); }
+    .more { padding: 72px 0; }
+    .arrows { display: none; }
+    .track { grid-auto-columns: 86vw; gap: 10px; padding: 0 16px; scroll-padding: 0 16px; }
+    .groups { grid-template-columns: 1fr; gap: 32px; }
+    .find { padding-bottom: 72px; }
+    .find-body { padding: 28px 24px; }
+    footer { padding-bottom: 104px; }
+    .mbar {
+      display: block; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 30;
+      transform: translateY(140%); transition: transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .mbar.show { transform: none; }
+    .mbar .btn { width: 100%; justify-content: center; box-shadow: 0 12px 32px -12px rgb(23 34 37 / .5); }
+  }
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="../img/logo-mark.png" alt="" width="38" height="38">Vanylven Sauna</a>
+    <ul>
+      <li><a href="#visit">Prisar</a></li>
+      <li><a href="#how">Slik bookar du</a></li>
+      <li><a href="#sauna">Badstua</a></li>
+      <li><a href="#before">Før du kjem</a></li>
+      <li><a href="#gift">Gåvekort</a></li>
+    </ul>
+    <a class="lang" href="../" hreflang="en" lang="en">English</a>
+    <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt</a>
+    <button class="menu-btn pebble" type="button" aria-label="Opne meny" aria-controls="fog" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+  </div>
+</header>
+
+<div class="fog" id="fog" role="dialog" aria-modal="true" aria-label="Meny">
+  <div class="fog-top">
+    <a class="brand" href="#top" data-close><img src="../img/logo-mark.png" alt="" width="38" height="38">Vanylven Sauna</a>
+    <button class="menu-btn pebble p3" type="button" aria-label="Lukk meny" data-close><i class="ph ph-x" aria-hidden="true"></i></button>
+  </div>
+  <nav aria-label="Hovudmeny">
+    <a href="#visit" style="--i:0" data-close>Prisar</a>
+    <a href="#how" style="--i:1" data-close>Slik bookar du</a>
+    <a href="#sauna" style="--i:2" data-close>Badstua</a>
+    <a href="#before" style="--i:3" data-close>Før du kjem</a>
+    <a href="#gift" style="--i:4" data-close>Gåvekort</a>
+  </nav>
+  <div class="fog-foot">
+    <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+    <p><a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> &nbsp; <a href="../" hreflang="en" lang="en">English</a></p>
+  </div>
+</div>
+
+<main id="top">
+  <section class="hero">
+    <img src="../img/deck-fjord.jpg" width="2000" height="1500" alt="Glasfronten og terrassen på badstua, med blank Vanylvsfjord og fjell bak" fetchpriority="high">
+    <div class="wrap">
+      <h1>Badstue heilt ute ved fjorden.</h1>
+      <p>Varm deg opp, og bad i Vanylvsfjorden. Privat badstue for opptil 8 personar på Fiskå, drifta av lokale frivillige.</p>
+      <div class="ctas">
+        <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+        <a class="btn btn-outline-light" href="#visit">Sjå prisar</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="visit">
+    <div class="wrap">
+      <div class="visit-head reveal">
+        <h2>To måtar å kome på</h2>
+        <p class="lead">Book heile badstua for gruppa di, eller bli med på open badstue onsdagskveldar.</p>
+      </div>
+      <div class="options">
+        <article class="option private reveal">
+          <header><h3>Privat badstue</h3><span class="tag">2 timar<span class="pebble p2" aria-hidden="true"><i class="ph-light ph-hourglass-medium"></i></span></span></header>
+          <div class="price"><strong>600 kr</strong><span>for 2 timar</span></div>
+          <p class="lead">Badstua er dykkar. Same pris anten du kjem åleine eller med sju vener.</p>
+          <dl>
+            <dt>Når</dt><dd>Torsdag til søndag, 10:00 til 20:00</dd>
+            <dt>Siste start</dt><dd>18:00</dd>
+            <dt>Storleik</dt><dd>Opptil 8 personar</dd>
+          </dl>
+          <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+        </article>
+        <article class="option open reveal">
+          <header><h3>Open badstue</h3><span class="tag">Felles<span class="pebble p4" aria-hidden="true"><i class="ph-light ph-users-three"></i></span></span></header>
+          <div class="price"><strong>100 kr</strong><span>per person</span></div>
+          <p class="lead">Del varmen med bygdefolk og andre gjester. Bli så lenge du vil.</p>
+          <dl>
+            <dt>Når</dt><dd>Onsdag, 17:00 til 20:00</dd>
+          </dl>
+        </article>
+      </div>
+      <p class="outside reveal">Vil du kome utanom opningstidene? Send e-post til <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> eller ei melding på <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener">Messenger</a>.</p>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <h2 class="reveal">Slik bookar du</h2>
+      <ol class="steps">
+        <li class="step reveal">
+          <span class="pebble" aria-hidden="true">1</span>
+          <h3>Vel ei tid</h3>
+          <p>Finn ei ledig tid i <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">bookingkalenderen</a> vår.</p>
+        </li>
+        <li class="step reveal">
+          <span class="pebble p2" aria-hidden="true">2</span>
+          <h3>Betal på førehand</h3>
+          <p>Betal med Vipps, eller med bankoverføring om du kjem frå utlandet.</p>
+          <div class="pay">
+            <span><b>Vipps</b> <span class="mono">943550</span></span>
+            <span><b>Kontonamn</b> <span class="mono">Sauna</span></span>
+            <span><b>IBAN</b> <span class="mono">NO84 3905 3414 714</span></span>
+            <span><b>SWIFT</b> <span class="mono">SPARNO22XXX</span></span>
+          </div>
+        </li>
+        <li class="step reveal">
+          <span class="pebble p3" aria-hidden="true">3</span>
+          <h3>Få koden til døra</h3>
+          <p>Når betalinga er komen inn, sender vi deg koden til badstua dagen før besøket.</p>
+        </li>
+      </ol>
+      <div class="cancel reveal">
+        <i class="ph ph-calendar-x" aria-hidden="true"></i>
+        <p>Endra planar? Avbestill på e-post seinast 24 timar før økta, så kostar det ingenting. Ved seinare avbestilling er gebyret 300 kr.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="sauna">
+    <div class="wrap about-top">
+      <div class="reveal">
+        <h2>Heilt nede i sjøkanten</h2>
+        <p class="lead">Badstua ligg på svaberget nedanfor Fiskå Brygge Gjestgiveri, med store vindauge mot Vanylvsfjorden. Nokre steg frå benken, og du er i sjøen.</p>
+      </div>
+      <dl class="facts reveal">
+        <div><dt>8 personar</dt><dd>Maks på ein gong</dd></div>
+        <div><dt>Elektrisk</dt><dd>Varma opp av ein elektrisk omn</dd></div>
+        <div><dt>Frivillige</dt><dd>Drifta av folk frå Vanylven</dd></div>
+        <div><dt>Stad Kystbygg</dt><dd>Bygde badstua</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="essay" aria-label="Eit besøk">
+    <!-- PHOTO WANTED: arrival at dusk, warm light in the windows, someone walking along the shore with a towel. -->
+    <article class="chapter">
+      <img src="../img/exterior-dock.jpg" width="2000" height="1500" loading="lazy" alt="Badstuhytta på svaberget ved fjorden">
+      <div class="wrap reveal">
+        <h3>Kom fram</h3>
+        <p>Følg strandkanten nedanfor gjestgiveriet til hytta på svaberget, og lås deg inn med koden din.</p>
+      </div>
+    </article>
+
+    <!-- PHOTO WANTED: steam rising from the stones as water is poured, warm low light, ladle and bucket in view. -->
+    <article class="chapter right ch-heat">
+      <img src="../img/interior-bench.jpg" width="1536" height="1155" loading="lazy" alt="Trebenkar inne i badstua, med vindauge mot fjorden">
+      <div class="wrap reveal">
+        <h3>Varme</h3>
+        <p>Lat att døra, øs vatn på steinane og kjenn dampen rulle over deg.</p>
+      </div>
+    </article>
+
+    <!-- PHOTO WANTED: someone stepping into the fjord from the deck, early morning, mist on the water. -->
+    <article class="chapter ch-cold">
+      <img src="../img/deck-wide.jpg" width="2000" height="1500" loading="lazy" alt="Terrassen som går frå badstua ned mot fjorden">
+      <div class="wrap reveal">
+        <h3>Kulde</h3>
+        <p>Gå ned terrassen og uti Vanylvsfjorden. Pust ut. Så tilbake i varmen.</p>
+      </div>
+    </article>
+
+    <!-- PHOTO WANTED: people resting by the big window, wrapped in towels, evening light on the water. -->
+    <article class="chapter right">
+      <img src="../img/window-view.jpg" width="1536" height="2048" loading="lazy" alt="Utsikt frå badstua gjennom det store vindauget mot fjorden" style="object-position:50% 55%">
+      <div class="wrap reveal">
+        <h3>Kvile</h3>
+        <p>Set deg ved det store vindauget og sjå lyset på vatnet. Så ein runde til.</p>
+        <a class="again" href="#visit"><i class="ph ph-arrows-clockwise" aria-hidden="true"></i>To timar gir tid til fleire rundar</a>
+      </div>
+    </article>
+  </section>
+
+  <section class="more" aria-labelledby="more-title">
+    <div class="wrap more-head">
+      <h2 id="more-title" class="reveal">Meir frå strandkanten</h2>
+      <div class="arrows">
+        <button class="arrow pebble p2" type="button" data-dir="-1" aria-label="Førre bilete"><i class="ph ph-arrow-left" aria-hidden="true"></i></button>
+        <button class="arrow pebble p4" type="button" data-dir="1" aria-label="Neste bilete"><i class="ph ph-arrow-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
+    <div class="track" id="track">
+      <button type="button" aria-label="Forstørr bilete"><img src="../img/deck-reflection.jpg" width="1536" height="1155" loading="lazy" alt="Fjell og naust speglar seg i glasveggen på badstua"></button>
+      <button type="button" aria-label="Forstørr bilete"><img src="../img/harbour-reflection.jpg" width="2000" height="1504" loading="lazy" alt="Den gamle steinkaia på Fiskå speglar seg i blankt vatn"></button>
+      <button type="button" aria-label="Forstørr bilete"><img src="../img/fiska-harbour.jpg" width="1536" height="2048" loading="lazy" alt="Hamna på Fiskå med hus og fjell som speglar seg i vatnet"></button>
+      <button type="button" aria-label="Forstørr bilete"><img src="../img/pier-rocks.jpg" width="2000" height="1500" loading="lazy" alt="Svaberg og ei lita brygge ved badstua"></button>
+    </div>
+    <dialog class="lightbox" id="lightbox"><img src="" alt=""></dialog>
+  </section>
+
+  <section class="rules" id="before">
+    <img src="../img/pier-rocks.jpg" width="2000" height="1500" loading="lazy" alt="">
+    <div class="wrap">
+      <div class="glass reveal">
+        <h2>Før du kjem</h2>
+        <p class="lead">Nokre enkle reglar, så alle finn badstua slik dei håpa.</p>
+        <div class="groups">
+          <div class="group">
+            <h3><i class="ph ph-backpack" aria-hidden="true"></i>Ta med</h3>
+            <ul>
+              <li><span class="pebble" aria-hidden="true"></span>Badetøy</li>
+              <li><span class="pebble p2" aria-hidden="true"></span>Eige handkle å sitje eller liggje på</li>
+              <li><span class="pebble p3" aria-hidden="true"></span>Rikeleg med vatn å drikke før, under og etter</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h3><i class="ph ph-drop" aria-hidden="true"></i>I badstua</h3>
+            <ul>
+              <li><span class="pebble p4" aria-hidden="true"></span>Berre ferskvatn på omnen</li>
+              <li><span class="pebble" aria-hidden="true"></span>Ikkje mat inne i badstua</li>
+              <li><span class="pebble p3" aria-hidden="true"></span>Ikkje alkohol, verken inne eller ute</li>
+              <li><span class="pebble p2" aria-hidden="true"></span>Forlat badstua slik du sjølv ønskjer å finne ho</li>
+            </ul>
+          </div>
+          <div class="group">
+            <h3><i class="ph ph-info" aria-hidden="true"></i>Greitt å vite</h3>
+            <ul>
+              <li><span class="pebble p2" aria-hidden="true"></span>Maks 8 personar om gongen</li>
+              <li><span class="pebble p4" aria-hidden="true"></span>Born under 16 år kjem i følgje med føresette</li>
+              <li><span class="pebble" aria-hidden="true"></span>All bruk av badstua og bading skjer på eige ansvar</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gift" id="gift">
+    <div class="wrap">
+      <figure class="reveal"><img src="../img/gift-card.png" width="587" height="624" loading="lazy" alt="Gåvekort frå Vanylven Sauna"></figure>
+      <div class="reveal">
+        <h2>Gi nokre stille timar ved fjorden</h2>
+        <p class="lead">Eit gåvekort er noko å gjere, ikkje noko å ha. Du vel sjølv kor mange timar. Fint til bursdag, jul eller berre som ein takk.</p>
+        <a class="btn btn-ghost" href="mailto:vanylvensauna@gmail.com?subject=G%C3%A5vekort">Bestill gåvekort <i class="ph ph-envelope-simple" aria-hidden="true"></i></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="find" id="find">
+    <div class="wrap">
+      <div class="find-card reveal">
+        <img src="../img/fiska-harbour.jpg" width="1536" height="2048" loading="lazy" alt="" style="object-position:50% 70%">
+        <div class="find-body">
+          <h2>Finn oss på Fiskå</h2>
+          <p>Nedanfor Fiskå Brygge Gjestgiveri, i sjøkanten ved Vanylvsfjorden.</p>
+          <div class="row">
+            <a class="btn btn-light" href="https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6" target="_blank" rel="noopener"><i class="ph ph-map-pin" aria-hidden="true"></i> Vegbeskriving</a>
+            <a class="btn btn-outline-light" href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i> vanylvensauna@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap row">
+    <a class="brand" href="#top"><img src="../img/logo-mark.png" alt="" width="46" height="46">Vanylven Sauna</a>
+    <nav aria-label="Kontakt og sosiale medium">
+      <a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i>E-post</a>
+      <a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i>Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener"><i class="ph ph-facebook-logo" aria-hidden="true"></i>Facebook</a>
+      <a href="../" hreflang="en" lang="en">English</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="mbar" aria-hidden="true">
+  <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener" tabindex="-1">Book ei økt <i class="ph ph-arrow-up-right"></i></a>
+</div>
+
+<script>
+  document.documentElement.classList.add('js');
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px' });
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+  // Nav turns to fogged glass, and the mobile booking bar appears, once the hero is left behind
+  const nav = document.getElementById('nav');
+  const bar = document.querySelector('.mbar');
+  new IntersectionObserver(([e]) => {
+    nav.classList.toggle('solid', !e.isIntersecting);
+    bar.classList.toggle('show', !e.isIntersecting);
+  }, { rootMargin: '-68px 0px 0px 0px' }).observe(document.querySelector('.hero .ctas'));
+
+  // Fogged-glass menu
+  const fog = document.getElementById('fog');
+  const openBtn = nav.querySelector('.menu-btn');
+  const setMenu = (open) => {
+    fog.classList.toggle('open', open);
+    document.body.classList.toggle('locked', open);
+    openBtn.setAttribute('aria-expanded', open);
+    (open ? fog.querySelector('nav a') : openBtn).focus({ preventScroll: true });
+  };
+  openBtn.addEventListener('click', () => setMenu(true));
+  fog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', (e) => { if (e.key === 'Escape' && fog.classList.contains('open')) setMenu(false); });
+
+  // Steam puff when someone heads off to book
+  document.querySelectorAll('.book').forEach((btn) => btn.addEventListener('click', () => {
+    if (calm) return;
+    const r = btn.getBoundingClientRect();
+    for (let i = 0; i < 5; i++) {
+      const p = document.createElement('span');
+      p.className = 'puff';
+      p.style.left = (r.left + r.width * (0.3 + i * 0.1)) + 'px';
+      p.style.top = (r.top - 4) + 'px';
+      p.style.setProperty('--dx', ((i - 2) * 9) + 'px');
+      p.style.animationDelay = (i * 70) + 'ms';
+      document.body.appendChild(p);
+      p.addEventListener('animationend', () => p.remove());
+    }
+  }));
+
+  // Carousel arrows and lightbox
+  const track = document.getElementById('track');
+  const arrows = document.querySelectorAll('.arrow');
+  const step = () => track.querySelector('button').getBoundingClientRect().width + 16;
+  arrows.forEach((a) => a.addEventListener('click', () => track.scrollBy({ left: step() * a.dataset.dir, behavior: calm ? 'auto' : 'smooth' })));
+  const syncArrows = () => {
+    arrows[0].disabled = track.scrollLeft < 8;
+    arrows[1].disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 8;
+  };
+  track.addEventListener('scrollend', syncArrows);
+  track.addEventListener('scroll', () => requestAnimationFrame(syncArrows), { passive: true });
+  syncArrows();
+
+  const box = document.getElementById('lightbox');
+  const boxImg = box.querySelector('img');
+  track.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+    const img = b.querySelector('img');
+    boxImg.src = img.src; boxImg.alt = img.alt;
+    box.showModal();
+  }));
+  box.addEventListener('click', () => box.close());
+</script>
+</body>
+</html>
