@@ -1,1 +1,3 @@
 .claude/
+# Raw photos and videos from the operator; only optimised copies go into img/
+_source/
