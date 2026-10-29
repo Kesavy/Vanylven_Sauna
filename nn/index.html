@@ -427,6 +427,8 @@
     .shore .track { padding: 0 18px; }
     .shore .intro { flex-basis: 78vw; }
     .ritual .arrows { top: 72px; right: 18px; }
+    /* The booking bar is always on screen on phones, so the last act does not need its own button */
+    .act-book { display: none; }
     .plan { padding: 110px 0 80px; }
     .option { padding: 30px 24px; }
     .groups { grid-template-columns: 1fr; gap: 32px; }
@@ -570,7 +572,7 @@
             <span class="count">6 av 6</span>
             <h2>Igjen</h2>
             <p>To timar gir tid til fleire rundar. Varme, kulde, kvile. Gjenta til du er heilt roleg.</p>
-            <div><a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></div>
+            <div class="act-book"><a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></div>
           </div>
         </article>
       </div>
