@@ -47,15 +47,8 @@
   .btn-heat { background: var(--heat); color: var(--on-heat); }
   .btn-heat:hover { background: #ff7a42; }
 
-  header .wrap { height: 80px; display: flex; align-items: center; gap: 20px; }
-  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; }
-  .brand img { width: 44px; height: 44px; }
-  header .spacer { flex: 1; }
-  header nav { display: flex; gap: 22px; color: var(--muted); font-size: .95rem; }
-  header nav a { text-decoration: none; }
-  header nav a:hover { color: var(--ink); }
 
-  main { flex: 1; padding: 56px 0 120px; }
+  main { flex: 1; padding: 128px 0 120px; }
   .layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: start; }
   .head h1 { font-size: clamp(2.6rem, 5.5vw, 4.4rem); max-width: 12ch; }
   .head p { margin-top: 18px; color: var(--muted); font-size: 1.12rem; max-width: 44ch; }
@@ -119,13 +112,19 @@
   .how .pebble { width: 34px; height: 31px; background: var(--ink); color: var(--night); font-weight: 800; font-size: .85rem; }
   .how a { color: var(--heat-soft); }
 
-  footer { background: var(--brand); color: #f3eee9; padding: 28px 0; font-size: .9rem; }
-  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; }
+  /* Steam: you fill in the card while sitting in the sauna. Faded behind the form so the text stays clean, fuller around the card. */
+  canvas.steam {
+    position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+    -webkit-mask-image: linear-gradient(to right, rgb(0 0 0 / .18) 0%, rgb(0 0 0 / .18) 42%, #000 72%);
+    mask-image: linear-gradient(to right, rgb(0 0 0 / .18) 0%, rgb(0 0 0 / .18) 42%, #000 72%);
+  }
+  main, footer { position: relative; z-index: 1; }
+  input[type="text"], textarea { background-color: rgb(18 26 29 / .72); }
+  .choice label { background-color: rgb(18 26 29 / .55); }
 
   @media (max-width: 900px) {
     .wrap { padding: 0 18px; }
-    header nav .hide-sm { display: none; }
-    main { padding-top: 28px; }
+    main { padding-top: 92px; }
     .layout { grid-template-columns: 1fr; gap: 40px; }
     .side { position: static; order: -1; }
     .card { transform: rotate(-1.5deg); }
@@ -134,23 +133,87 @@
     .two { grid-template-columns: 1fr; }
     .how { display: none; }
     .how.after { display: grid; }
+    canvas.steam { -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / .5) 30%, rgb(0 0 0 / .12) 55%); mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / .5) 30%, rgb(0 0 0 / .12) 55%); }
   }
   @media (min-width: 901px) { .how.after { display: none; } }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ---- Shared shell: header, menu, footer (identical on every page) ---- */
+  .nav .wrap, .fog .wrap, footer .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .nav { position: fixed; inset: 0 0 auto; z-index: 60; transition: background-color .4s, backdrop-filter .4s; }
+  .nav.solid { background: rgb(11 16 18 / .55); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
+  .nav .wrap { height: 72px; display: flex; align-items: center; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; letter-spacing: -0.01em; }
+  .brand img { width: 44px; height: 44px; }
+  .nav .spacer { flex: 1; }
+  .nav .btn { padding: 12px 20px; font-size: .95rem; }
+  .menu-btn { width: 48px; height: 46px; border: 0; cursor: pointer; background: rgb(255 255 255 / .1); font-size: 1.35rem; display: inline-grid; place-items: center; }
+  .menu-btn:hover { background: rgb(255 255 255 / .18); }
+  body.locked { overflow: hidden; }
+  .fog {
+    position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column; padding: 0 0 40px;
+    background: rgb(11 16 18 / .55); backdrop-filter: blur(28px) saturate(1.2); -webkit-backdrop-filter: blur(28px) saturate(1.2);
+    opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility 0s .5s;
+  }
+  .fog.open { opacity: 1; visibility: visible; transition: opacity .5s var(--ease); }
+  .fog > .wrap { width: 100%; }
+  .fog .top { height: 72px; display: flex; align-items: center; justify-content: space-between; }
+  .fog nav { display: grid; gap: 2px; margin-top: 6vh; }
+  .fog nav a {
+    font-size: clamp(2.2rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.04em; text-decoration: none; line-height: 1.15;
+    opacity: 0; filter: blur(12px); transform: translateY(14px);
+    transition: opacity .7s, filter .7s, transform .7s var(--ease), color .2s; transition-delay: calc(var(--i) * 60ms + 100ms);
+  }
+  .fog nav a:hover, .fog nav a[aria-current] { color: var(--heat-soft); }
+  .fog.open nav a { opacity: 1; filter: blur(0); transform: none; }
+  .fog .foot { margin-top: auto; padding-top: 36px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; color: var(--muted); }
+  footer { background: var(--brand); color: #f3eee9; padding: 40px 0; }
+  footer .credit { margin-top: 24px; font-size: .85rem; color: rgb(243 238 233 / .6); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer .credit a { display: inline; text-decoration: underline; text-underline-offset: 3px; }
+  footer .row { display: flex; flex-wrap: wrap; gap: 28px; justify-content: space-between; align-items: center; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 24px; }
+  footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; opacity: .9; }
+  footer a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  @media (max-width: 767px) {
+    .nav .wrap, .fog .wrap, footer .wrap { padding: 0 18px; }
+    .nav .wrap { height: 64px; }
+    .nav .btn { display: none; }
+  }
 </style>
 </head>
 <body>
+<canvas class="steam" aria-hidden="true"></canvas>
 
-<header>
+<header class="nav solid" id="nav">
   <div class="wrap">
     <a class="brand" href="../"><img src="../../img/badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
     <span class="spacer"></span>
-    <nav aria-label="Lenker">
-      <a class="hide-sm" href="../#plan">Prisar</a>
-      <a href="../../gift/" hreflang="en" lang="en">English</a>
-    </nav>
+    <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt</a>
+    <button class="menu-btn pebble" type="button" aria-label="Opne meny" aria-controls="fog" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
   </div>
 </header>
+
+<div class="fog" id="fog" role="dialog" aria-modal="true" aria-label="Meny">
+  <div class="wrap" style="display:flex;flex-direction:column;height:100%">
+    <div class="top">
+      <a class="brand" href="../" data-close><img src="../../img/badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+      <button class="menu-btn pebble p3" type="button" aria-label="Lukk meny" data-close><i class="ph ph-x" aria-hidden="true"></i></button>
+    </div>
+    <nav aria-label="Hovudmeny">
+      <a href="../#ritual" style="--i:0" data-close>Ritualet</a>
+      <a href="../#plan" style="--i:1" data-close>Prisar og booking</a>
+      <a href="../pay/" style="--i:2" data-close>Slik betaler du</a>
+      <a href="../gift/" style="--i:3" data-close aria-current="page">Gåvekort</a>
+      <a href="../#rules" style="--i:4" data-close>Før du kjem</a>
+      <a href="../#find" style="--i:5" data-close>Finn oss</a>
+    </nav>
+    <div class="foot">
+      <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>
+      <a href="../../gift/" hreflang="en" lang="en">English</a>
+    </div>
+  </div>
+</div>
 
 <main>
   <div class="wrap layout">
@@ -208,13 +271,50 @@
 </main>
 
 <footer>
-  <div class="wrap">
-    <span>Vanylven Sauna, Fiskå</span>
-    <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>
+  <div class="wrap row">
+    <a class="brand" href="../"><img src="../../img/badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+    <nav aria-label="Kontakt og sosiale medium">
+      <a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i>E-post</a>
+      <a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i>Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener"><i class="ph ph-facebook-logo" aria-hidden="true"></i>Facebook</a>
+      <a href="../../gift/" hreflang="en" lang="en">English</a>
+    </nav>
   </div>
+  <p class="wrap credit"><span>Bygd av Stad Kystbygg. Drifta av frivillige frå Vanylven.</span><span>Design av <a href="https://lossless.cz" target="_blank" rel="noopener">Lossless</a></span></p>
 </footer>
 
 <script>
+  // Steam: soft sprites rising on a half-resolution canvas (same recipe as the main page, without the water mode)
+  (() => {
+    const c = document.querySelector('canvas.steam');
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sprite = document.createElement('canvas'); sprite.width = sprite.height = 128;
+    const sg = sprite.getContext('2d'), rg = sg.createRadialGradient(64, 64, 0, 64, 64, 64);
+    rg.addColorStop(0, 'rgba(240,244,244,1)'); rg.addColorStop(.45, 'rgba(240,244,244,.45)'); rg.addColorStop(1, 'rgba(240,244,244,0)');
+    sg.fillStyle = rg; sg.fillRect(0, 0, 128, 128);
+    const g = c.getContext('2d'); let w, h, parts = [], tick = 0;
+    const size = () => { w = c.width = Math.round(innerWidth * .5); h = c.height = Math.round(innerHeight * .5); if (calm) still(); };
+    const spawn = (y) => parts.push({ x: Math.random() * w, y: y ?? h + 40, seed: Math.random() * 1000, vy: -(.2 + Math.random() * .35) * (h / 500),
+      r: 34 + Math.random() * 44, grow: .22 + Math.random() * .3, life: 0, max: 520 + Math.random() * 260, a: .26 + Math.random() * .16 });
+    function still() { g.clearRect(0, 0, w, h); g.globalAlpha = .3; for (let i = 0; i < 12; i++) { const r = 90 + i * 8; g.drawImage(sprite, (i / 12) * w - r, h * .45 + Math.sin(i) * 50 - r, r * 2, r * 2); } g.globalAlpha = 1; }
+    function frame() {
+      tick++;
+      if (parts.length < 46 && tick % 3 === 0) spawn();
+      g.clearRect(0, 0, w, h);
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i]; p.life++; p.y += p.vy; p.r += p.grow;
+        p.x += Math.sin(p.seed + p.life * .012) * .45 + Math.sin(p.seed * 2 + tick * .004) * .25;
+        const k = p.life / p.max;
+        if (k >= 1 || p.y + p.r < -20) { parts.splice(i, 1); continue; }
+        g.globalAlpha = Math.sin(Math.PI * k) * p.a; g.drawImage(sprite, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+      }
+      g.globalAlpha = 1;
+      if (!document.hidden) requestAnimationFrame(frame); else addEventListener('visibilitychange', () => requestAnimationFrame(frame), { once: true });
+    }
+    size(); addEventListener('resize', size);
+    if (!calm) { for (let i = 0; i < 24; i++) { spawn(Math.random() * h * 1.1); parts[i].life = Math.random() * 300; } requestAnimationFrame(frame); }
+  })();
+
   const t = {"subject": "Bestilling av gåvekort", "mailHello": "Hei, eg vil gjerne bestille eit gåvekort.", "mailGift": "Gåve", "mailTo": "Til", "mailFrom": "Frå", "mailMsg": "Helsing på kortet", "mailPay": "Eg betaler {amount} kr med Vipps til 943550, med meldinga «{ref}».", "refWord": "Gåvekort", "mailThanks": "Takk!", value: (h) => h + " timar"};
   const form = document.getElementById('order');
   const out = (k) => document.querySelector('[data-out="' + k + '"]');
@@ -245,6 +345,19 @@
     ];
     location.href = 'mailto:vanylvensauna@gmail.com?subject=' + encodeURIComponent(t.subject) + '&body=' + encodeURIComponent(lines.join('\r\n'));
   });
+
+  // Shared shell: fogged menu
+  (() => {
+    const nav = document.getElementById('nav'), fog = document.getElementById('fog'), openBtn = nav.querySelector('.menu-btn');
+    const setMenu = (open) => {
+      fog.classList.toggle('open', open); document.body.classList.toggle('locked', open);
+      openBtn.setAttribute('aria-expanded', open);
+      (open ? fog.querySelector('nav a') : openBtn).focus({ preventScroll: true });
+    };
+    openBtn.addEventListener('click', () => setMenu(true));
+    fog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', () => setMenu(false)));
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && fog.classList.contains('open')) setMenu(false); });
+  })();
 </script>
 </body>
 </html>

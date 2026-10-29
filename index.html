@@ -96,6 +96,7 @@
     opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility 0s .5s;
   }
   .fog.open { opacity: 1; visibility: visible; transition: opacity .5s var(--ease); }
+  .fog > .wrap { width: 100%; }
   .fog .top { height: 72px; display: flex; align-items: center; justify-content: space-between; }
   .fog nav { display: grid; gap: 2px; margin-top: 6vh; }
   .fog nav a {
@@ -334,10 +335,11 @@
     </div>
     <nav aria-label="Main">
       <a href="#ritual" style="--i:0" data-close>The ritual</a>
-      <a href="#shore" style="--i:1" data-close>The shore</a>
-      <a href="#plan" style="--i:2" data-close>Prices and booking</a>
-      <a href="#rules" style="--i:3" data-close>Before you come</a>
-      <a href="#find" style="--i:4" data-close>Find us</a>
+      <a href="#plan" style="--i:1" data-close>Prices and booking</a>
+      <a href="pay/" style="--i:2" data-close>How to pay</a>
+      <a href="gift/" style="--i:3" data-close>Gift cards</a>
+      <a href="#rules" style="--i:4" data-close>Before you come</a>
+      <a href="#find" style="--i:5" data-close>Find us</a>
     </nav>
     <div class="foot">
       <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>

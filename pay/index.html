@@ -49,15 +49,8 @@
   .btn-glass { background: rgb(255 255 255 / .08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .22); }
   .btn-glass:hover { background: rgb(255 255 255 / .14); }
 
-  header .wrap { height: 80px; display: flex; align-items: center; gap: 20px; }
-  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; }
-  .brand img { width: 44px; height: 44px; }
-  header .spacer { flex: 1; }
-  header nav { display: flex; gap: 22px; color: var(--muted); font-size: .95rem; }
-  header nav a { text-decoration: none; }
-  header nav a:hover { color: var(--ink); }
 
-  main { flex: 1; padding: 64px 0 120px; }
+  main { flex: 1; padding: 136px 0 120px; }
   .head h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); max-width: 14ch; }
   .head p { margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
 
@@ -111,16 +104,12 @@
   .after p { margin-top: 8px; color: var(--muted); max-width: 46ch; }
   .after .btn { margin-top: 18px; }
 
-  footer { background: var(--brand); color: #f3eee9; padding: 28px 0; font-size: .9rem; }
-  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 28px; justify-content: space-between; align-items: center; }
-  footer a { opacity: .9; }
 
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   @media (max-width: 860px) {
     .wrap { padding: 0 18px; }
-    header nav .hide-sm { display: none; }
-    main { padding-top: 32px; }
+    main { padding-top: 96px; }
     .panel { grid-template-columns: 1fr; gap: 32px; }
     .qr { display: none; }
     .after { grid-template-columns: 1fr; }
@@ -129,20 +118,82 @@
     .amount { flex: 1 1 100%; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  /* ---- Shared shell: header, menu, footer (identical on every page) ---- */
+  .nav .wrap, .fog .wrap, footer .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .nav { position: fixed; inset: 0 0 auto; z-index: 60; transition: background-color .4s, backdrop-filter .4s; }
+  .nav.solid { background: rgb(11 16 18 / .55); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
+  .nav .wrap { height: 72px; display: flex; align-items: center; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; letter-spacing: -0.01em; }
+  .brand img { width: 44px; height: 44px; }
+  .nav .spacer { flex: 1; }
+  .nav .btn { padding: 12px 20px; font-size: .95rem; }
+  .menu-btn { width: 48px; height: 46px; border: 0; cursor: pointer; background: rgb(255 255 255 / .1); font-size: 1.35rem; display: inline-grid; place-items: center; }
+  .menu-btn:hover { background: rgb(255 255 255 / .18); }
+  body.locked { overflow: hidden; }
+  .fog {
+    position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column; padding: 0 0 40px;
+    background: rgb(11 16 18 / .55); backdrop-filter: blur(28px) saturate(1.2); -webkit-backdrop-filter: blur(28px) saturate(1.2);
+    opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility 0s .5s;
+  }
+  .fog.open { opacity: 1; visibility: visible; transition: opacity .5s var(--ease); }
+  .fog > .wrap { width: 100%; }
+  .fog .top { height: 72px; display: flex; align-items: center; justify-content: space-between; }
+  .fog nav { display: grid; gap: 2px; margin-top: 6vh; }
+  .fog nav a {
+    font-size: clamp(2.2rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.04em; text-decoration: none; line-height: 1.15;
+    opacity: 0; filter: blur(12px); transform: translateY(14px);
+    transition: opacity .7s, filter .7s, transform .7s var(--ease), color .2s; transition-delay: calc(var(--i) * 60ms + 100ms);
+  }
+  .fog nav a:hover, .fog nav a[aria-current] { color: var(--heat-soft); }
+  .fog.open nav a { opacity: 1; filter: blur(0); transform: none; }
+  .fog .foot { margin-top: auto; padding-top: 36px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; color: var(--muted); }
+  footer { background: var(--brand); color: #f3eee9; padding: 40px 0; }
+  footer .credit { margin-top: 24px; font-size: .85rem; color: rgb(243 238 233 / .6); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer .credit a { display: inline; text-decoration: underline; text-underline-offset: 3px; }
+  footer .row { display: flex; flex-wrap: wrap; gap: 28px; justify-content: space-between; align-items: center; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 24px; }
+  footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; opacity: .9; }
+  footer a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  @media (max-width: 767px) {
+    .nav .wrap, .fog .wrap, footer .wrap { padding: 0 18px; }
+    .nav .wrap { height: 64px; }
+    .nav .btn { display: none; }
+  }
 </style>
 </head>
 <body>
 
-<header>
+<header class="nav solid" id="nav">
   <div class="wrap">
     <a class="brand" href="../"><img src="../img/badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
     <span class="spacer"></span>
-    <nav aria-label="Page links">
-      <a class="hide-sm" href="../#plan">Prices</a>
-      <a href="../nn/pay/" hreflang="nn" lang="nn">Norsk</a>
-    </nav>
+    <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session</a>
+    <button class="menu-btn pebble" type="button" aria-label="Open menu" aria-controls="fog" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
   </div>
 </header>
+
+<div class="fog" id="fog" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="wrap" style="display:flex;flex-direction:column;height:100%">
+    <div class="top">
+      <a class="brand" href="../" data-close><img src="../img/badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+      <button class="menu-btn pebble p3" type="button" aria-label="Close menu" data-close><i class="ph ph-x" aria-hidden="true"></i></button>
+    </div>
+    <nav aria-label="Main">
+      <a href="../#ritual" style="--i:0" data-close>The ritual</a>
+      <a href="../#plan" style="--i:1" data-close>Prices and booking</a>
+      <a href="../pay/" style="--i:2" data-close aria-current="page">How to pay</a>
+      <a href="../gift/" style="--i:3" data-close>Gift cards</a>
+      <a href="../#rules" style="--i:4" data-close>Before you come</a>
+      <a href="../#find" style="--i:5" data-close>Find us</a>
+    </nav>
+    <div class="foot">
+      <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>
+      <a href="../nn/pay/" hreflang="nn" lang="nn">Norsk</a>
+    </div>
+  </div>
+</div>
 
 <main>
   <div class="wrap">
@@ -214,10 +265,16 @@
 </main>
 
 <footer>
-  <div class="wrap">
-    <span>Vanylven Sauna, Fiskå</span>
-    <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>
+  <div class="wrap row">
+    <a class="brand" href="../"><img src="../img/badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+    <nav aria-label="Contact and social">
+      <a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i>Email</a>
+      <a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i>Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener"><i class="ph ph-facebook-logo" aria-hidden="true"></i>Facebook</a>
+      <a href="../nn/pay/" hreflang="nn" lang="nn">Norsk</a>
+    </nav>
   </div>
+  <p class="wrap credit"><span>Built by Stad Kystbygg. Run by volunteers from Vanylven.</span><span>Design by <a href="https://lossless.cz" target="_blank" rel="noopener">Lossless</a></span></p>
 </footer>
 
 <p class="sr" aria-live="polite" id="live"></p>
@@ -254,6 +311,19 @@
       setTimeout(() => { b.classList.remove('done'); label.textContent = text; icon.className = 'ph ph-copy'; }, 1800);
     });
   });
+
+  // Shared shell: fogged menu
+  (() => {
+    const nav = document.getElementById('nav'), fog = document.getElementById('fog'), openBtn = nav.querySelector('.menu-btn');
+    const setMenu = (open) => {
+      fog.classList.toggle('open', open); document.body.classList.toggle('locked', open);
+      openBtn.setAttribute('aria-expanded', open);
+      (open ? fog.querySelector('nav a') : openBtn).focus({ preventScroll: true });
+    };
+    openBtn.addEventListener('click', () => setMenu(true));
+    fog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', () => setMenu(false)));
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && fog.classList.contains('open')) setMenu(false); });
+  })();
 </script>
 </body>
 </html>
