@@ -285,6 +285,8 @@
   .shore.swipe .track { height: auto; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 12px; padding-right: 18px; transform: none !important; }
   .shore.swipe .track::-webkit-scrollbar { display: none; }
   .shore.swipe .intro { scroll-snap-align: start; }
+  /* Snapping lines items up with the page margin, not the screen edge */
+  .shore.swipe .track { scroll-padding-left: max(32px, calc((100vw - var(--max)) / 2 + 32px)); }
   .shore.swipe figure, .shore.swipe figure.up, .shore.swipe figure.down { height: 58vh; margin: 0; align-self: center; scroll-snap-align: start; }
   .shore .arrows { justify-content: flex-end; margin-top: 22px; }
   /* Steam in the finale stays low, under the words */
@@ -425,6 +427,7 @@
     .act h2 { font-size: clamp(3.6rem, 19vw, 6rem); }
     .shore.swipe { padding: 100px 0; }
     .shore .track { padding: 0 18px; }
+    .shore.swipe .track { scroll-padding-left: 18px; }
     .shore .intro { flex-basis: 78vw; }
     .ritual .arrows { top: 72px; right: 18px; }
     /* The booking bar is always on screen on phones, so the last act does not need its own button */
