@@ -59,6 +59,8 @@ T = r'''<!doctype html>
   main {{ flex: 1; padding: 136px 0 120px; }}
   .head h1 {{ font-size: clamp(2.6rem, 6vw, 4.6rem); max-width: 14ch; }}
   .head p {{ margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }}
+  .head p.pre {{ margin-top: 14px; font-size: .98rem; }}
+  .head p.pre a {{ color: var(--heat-soft); }}
 
   .amounts {{ margin-top: 44px; display: flex; flex-wrap: wrap; gap: 14px; }}
   .amount {{ display: flex; align-items: center; gap: 16px; padding: 14px 26px 14px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); }}
@@ -135,6 +137,7 @@ T = r'''<!doctype html>
     <div class="head">
       <h1>{h1}</h1>
       <p>{lead}</p>
+      <p class="pre">{pre}</p>
     </div>
 
     <div class="amounts">
@@ -244,6 +247,7 @@ en = dict(
   lang='en', title='Pay for your sauna | Vanylven Sauna',
   desc='How to pay for your session at Vanylven Sauna, with Vipps or by bank transfer from abroad.',
   alt_lang='nn', alt_name='Norsk', nav_label='Page links', nav_prices='Prices',
+  pre='Not booked yet? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Pick a time first</a>. Have a gift card? No need to pay, just <a href="mailto:vanylvensauna@gmail.com">email us</a> the name on the card.',
   h1='Pay for your session', lead='Pay before you come. Once your payment is in, we send you the door code the day before your visit.',
   private_price='NOK 600', private_label='Private sauna, 2 hours', open_price='NOK 100', open_label='Open sauna, per person',
   switch_label='How do you want to pay?', tab_vipps='I have Vipps', tab_abroad='From abroad',
@@ -265,6 +269,7 @@ nn = dict(
   lang='nn', title='Betal for badstua | Vanylven Sauna',
   desc='Slik betaler du for økta i Vanylven Sauna, med Vipps eller med bankoverføring frå utlandet.',
   alt_lang='en', alt_name='English', nav_label='Lenker', nav_prices='Prisar',
+  pre='Ikkje booka enno? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Vel ei tid først</a>. Har du gåvekort? Då treng du ikkje betale, berre <a href="mailto:vanylvensauna@gmail.com">send oss</a> namnet på kortet.',
   h1='Betal for økta', lead='Betal før du kjem. Når betalinga er komen inn, sender vi deg koden til døra dagen før besøket.',
   private_price='600 kr', private_label='Privat badstue, 2 timar', open_price='100 kr', open_label='Open badstue, per person',
   switch_label='Korleis vil du betale?', tab_vipps='Eg har Vipps', tab_abroad='Frå utlandet',

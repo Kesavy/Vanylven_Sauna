@@ -64,7 +64,9 @@
   }
   input[type="text"]:hover, textarea:hover { background: rgb(255 255 255 / .08); }
   input[type="text"]:focus, textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--heat); }
-  textarea { resize: vertical; min-height: 92px; }
+  textarea { resize: none; min-height: 92px; }
+  .field .count { justify-self: end; margin-top: -4px; color: var(--faint); font-size: .85rem; font-variant-numeric: tabular-nums; }
+  .field .count.near { color: var(--heat-soft); }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
   .choices { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
@@ -94,11 +96,11 @@
   }
   .card:hover { transform: rotate(0); }
   .card .title { position: absolute; top: 9%; left: 0; right: 0; text-align: center; font-family: "Italiana", serif; font-weight: 400; font-size: 12.5cqi; letter-spacing: .06em; line-height: 1; }
-  .card dl { position: absolute; left: 7%; top: 33%; width: 50%; margin: 0; display: grid; gap: 4.6cqi; }
+  .card dl { position: absolute; left: 7%; top: 29%; width: 50%; margin: 0; display: grid; gap: 3.8cqi; }
   .card dl div { display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 2cqi; border-bottom: 1px solid rgb(243 238 233 / .55); padding-bottom: .6cqi; }
   .card dt { font-family: "Italiana", serif; font-size: 3.4cqi; line-height: 1; opacity: .9; }
   .card dd { margin: 0; font-size: 3.3cqi; font-weight: 500; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.1em; }
-  .card .msg { position: absolute; left: 7%; bottom: 7%; width: 50%; font-size: 2.8cqi; font-style: italic; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .card .msg { position: absolute; left: 7%; bottom: 6%; width: 50%; font-size: 2.8cqi; font-style: italic; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
   .card .mark { position: absolute; right: 8%; bottom: 10%; display: grid; justify-items: center; gap: 1cqi; }
   .card .mark img { width: 13cqi; height: auto; }
   .card .mark b { font-family: "Italiana", serif; font-weight: 400; font-size: 5.6cqi; letter-spacing: .14em; line-height: 1; }
@@ -236,7 +238,7 @@
           <label class="field"><span>Til</span><input type="text" name="to" maxlength="40" autocomplete="off" placeholder="Kven er det til?"></label>
           <label class="field"><span>Frå</span><input type="text" name="from" maxlength="40" autocomplete="name" placeholder="Namnet ditt"></label>
         </div>
-        <label class="field"><span>Ei kort helsing <small>(valfritt)</small></span><textarea name="msg" maxlength="90" placeholder="Gratulerer med dagen! Tid for å senke skuldrane."></textarea></label>
+        <label class="field"><span>Ei kort helsing <small>(valfritt)</small></span><textarea name="msg" maxlength="70" placeholder="Gratulerer med dagen! Tid for å senke skuldrane." aria-describedby="msg-count"></textarea><small class="count" id="msg-count" aria-live="polite">0 / 70</small></label>
         <div class="send">
           <button class="btn btn-heat" type="submit"><i class="ph ph-envelope-simple" aria-hidden="true"></i>Send bestillinga</button>
           <p>Dette opnar e-postprogrammet ditt med bestillinga ferdig utfylt. Ingenting blir sendt før du trykkjer send der.</p>
@@ -245,7 +247,7 @@
 
       <section class="how after" aria-label="Slik gjer du">
         <h2>Slik gjer du</h2>
-        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send bestillinga</strong> frå e-posten din.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.</p></li></ol>
+        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send bestillinga</strong> frå e-posten din.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.</p></li><li><span class="pebble" aria-hidden="true">4</span><p><strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss namnet på kortet på e-post i staden for å betale.</p></li></ol>
       </section>
     </div>
 
@@ -264,7 +266,7 @@
 
       <section class="how" aria-label="Slik gjer du">
         <h2>Slik gjer du</h2>
-        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send bestillinga</strong> frå e-posten din.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.</p></li></ol>
+        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send bestillinga</strong> frå e-posten din.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.</p></li><li><span class="pebble" aria-hidden="true">4</span><p><strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss namnet på kortet på e-post i staden for å betale.</p></li></ol>
       </section>
     </div>
   </div>
@@ -326,6 +328,11 @@
     out('to').textContent = val('to');
     out('from').textContent = val('from');
     out('msg').textContent = val('msg') ? '“' + val('msg') + '”' : '';
+    const n = form.elements.msg.value.length, cnt = document.getElementById('msg-count');
+    cnt.textContent = n + ' / 70'; cnt.classList.toggle('near', n >= 60);
+    // Shrink the message a little until it fits its two lines on the card
+    const m = out('msg'); let size = 2.8; m.style.fontSize = '';
+    while (m.scrollHeight > m.clientHeight + 1 && size > 1.9) { size -= .1; m.style.fontSize = size + 'cqi'; }
   }
   form.addEventListener('input', render);
   render();

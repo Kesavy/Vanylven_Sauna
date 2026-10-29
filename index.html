@@ -167,7 +167,7 @@
   .rail li.on .pebble { transform: scale(1.6); background: var(--heat); }
 
   /* The shore: horizontal gallery */
-  .shore { position: relative; background: var(--night); }
+  .shore { position: relative; background: var(--night); overflow: hidden; }
   .shore .track { display: flex; align-items: center; gap: 28px; height: 100dvh; padding: 0 0 0 max(32px, calc((100vw - var(--max)) / 2 + 32px)); will-change: transform; }
   .shore .intro { flex: 0 0 min(440px, 80vw); }
   .shore .intro h2 { font-size: clamp(3rem, 7vw, 6.5rem); }
@@ -211,6 +211,13 @@
   .pay { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: .95rem; color: var(--muted); }
   .pay b { color: var(--ink); font-weight: 600; margin-right: 6px; }
   .mono { font-variant-numeric: tabular-nums; }
+  /* "What happens after you book" hint under the main booking buttons */
+  .next { margin-top: 14px; font-size: .92rem; color: var(--muted); }
+  .next a { color: var(--heat-soft); }
+  .hero .next { color: rgb(238 242 241 / .8); text-shadow: 0 1px 18px rgb(0 0 0 / .5); }
+  .finale .next { margin: 18px auto 0; max-width: 40ch; }
+  .gift-note { margin-top: 16px; display: flex; gap: 10px; align-items: baseline; color: var(--muted); font-size: .95rem; }
+  .gift-note i { color: var(--heat-soft); position: relative; top: 2px; }
   .paylink { color: var(--heat-soft); font-weight: 600; text-decoration: none; white-space: nowrap; }
   .paylink:hover { text-decoration: underline; text-underline-offset: 4px; }
   .paylink i { vertical-align: -2px; }
@@ -365,6 +372,7 @@
           <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
           <a class="btn btn-glass" href="#plan">See prices</a>
         </div>
+        <p class="next">Book a time, then <a href="pay/">pay with Vipps</a>. Your door code comes the day before.</p>
       </div>
     </div>
   </section>
@@ -482,6 +490,7 @@
             <dt>Group size</dt><dd>Up to 8 people</dd>
           </dl>
           <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+          <p class="next">Book a time, then <a href="pay/">pay with Vipps</a>. Your door code comes the day before.</p>
         </article>
         <article class="option open reveal">
           <header><h3>Open sauna</h3><span class="tag">Shared<span class="pebble p4" aria-hidden="true"><i class="ph-light ph-users-three"></i></span></span></header>
@@ -504,13 +513,14 @@
               <span class="pebble p2" aria-hidden="true">2</span>
               <div>
                 <h4>Pay in advance</h4>
-                <p>Pay with Vipps, or by bank transfer if you are visiting from abroad. <a class="paylink" href="pay/">How to pay, step by step <i class="ph ph-arrow-right" aria-hidden="true"></i></a></p>
+                <p>Pay with Vipps, or by bank transfer if you are visiting from abroad. Write <strong>the date and your name</strong> in the message, so we can match it to your booking. <a class="paylink" href="pay/">How to pay, step by step <i class="ph ph-arrow-right" aria-hidden="true"></i></a></p>
                 <div class="pay">
                   <span><b>Vipps</b><span class="mono">943550</span></span>
                   <span><b>Account name</b><span class="mono">Sauna</span></span>
                   <span><b>IBAN</b><span class="mono">NO84 3905 3414 714</span></span>
                   <span><b>SWIFT</b><span class="mono">SPARNO22XXX</span></span>
                 </div>
+                <p class="gift-note"><i class="ph ph-gift" aria-hidden="true"></i><span>Have a gift card? Book as usual, then email us the name on the card instead of paying.</span></p>
               </div>
             </li>
             <li class="reveal">
@@ -594,6 +604,7 @@
       <h2 class="reveal">Your turn.</h2>
       <p class="reveal">Private sessions Thursday to Sunday. Open sauna every Wednesday evening.</p>
       <a class="btn btn-heat book reveal" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <p class="next reveal">Book a time, then <a href="pay/">pay with Vipps</a>. Your door code comes the day before.</p>
     </div>
   </section>
 </main>

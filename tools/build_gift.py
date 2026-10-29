@@ -70,7 +70,9 @@ T = r'''<!doctype html>
   }}
   input[type="text"]:hover, textarea:hover {{ background: rgb(255 255 255 / .08); }}
   input[type="text"]:focus, textarea:focus {{ outline: none; box-shadow: inset 0 0 0 2px var(--heat); }}
-  textarea {{ resize: vertical; min-height: 92px; }}
+  textarea {{ resize: none; min-height: 92px; }}
+  .field .count {{ justify-self: end; margin-top: -4px; color: var(--faint); font-size: .85rem; font-variant-numeric: tabular-nums; }}
+  .field .count.near {{ color: var(--heat-soft); }}
   .two {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
 
   .choices {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
@@ -100,11 +102,11 @@ T = r'''<!doctype html>
   }}
   .card:hover {{ transform: rotate(0); }}
   .card .title {{ position: absolute; top: 9%; left: 0; right: 0; text-align: center; font-family: "Italiana", serif; font-weight: 400; font-size: 12.5cqi; letter-spacing: .06em; line-height: 1; }}
-  .card dl {{ position: absolute; left: 7%; top: 33%; width: 50%; margin: 0; display: grid; gap: 4.6cqi; }}
+  .card dl {{ position: absolute; left: 7%; top: 29%; width: 50%; margin: 0; display: grid; gap: 3.8cqi; }}
   .card dl div {{ display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 2cqi; border-bottom: 1px solid rgb(243 238 233 / .55); padding-bottom: .6cqi; }}
   .card dt {{ font-family: "Italiana", serif; font-size: 3.4cqi; line-height: 1; opacity: .9; }}
   .card dd {{ margin: 0; font-size: 3.3cqi; font-weight: 500; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.1em; }}
-  .card .msg {{ position: absolute; left: 7%; bottom: 7%; width: 50%; font-size: 2.8cqi; font-style: italic; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }}
+  .card .msg {{ position: absolute; left: 7%; bottom: 6%; width: 50%; font-size: 2.8cqi; font-style: italic; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }}
   .card .mark {{ position: absolute; right: 8%; bottom: 10%; display: grid; justify-items: center; gap: 1cqi; }}
   .card .mark img {{ width: 13cqi; height: auto; }}
   .card .mark b {{ font-family: "Italiana", serif; font-weight: 400; font-size: 5.6cqi; letter-spacing: .14em; line-height: 1; }}
@@ -171,7 +173,7 @@ T = r'''<!doctype html>
           <label class="field"><span>{l_to}</span><input type="text" name="to" maxlength="40" autocomplete="off" placeholder="{p_to}"></label>
           <label class="field"><span>{l_from}</span><input type="text" name="from" maxlength="40" autocomplete="name" placeholder="{p_from}"></label>
         </div>
-        <label class="field"><span>{l_msg} <small>{optional}</small></span><textarea name="msg" maxlength="90" placeholder="{p_msg}"></textarea></label>
+        <label class="field"><span>{l_msg} <small>{optional}</small></span><textarea name="msg" maxlength="70" placeholder="{p_msg}" aria-describedby="msg-count"></textarea><small class="count" id="msg-count" aria-live="polite">0 / 70</small></label>
         <div class="send">
           <button class="btn btn-heat" type="submit"><i class="ph ph-envelope-simple" aria-hidden="true"></i>{send}</button>
           <p>{send_note}</p>
@@ -250,6 +252,11 @@ T = r'''<!doctype html>
     out('to').textContent = val('to');
     out('from').textContent = val('from');
     out('msg').textContent = val('msg') ? '“' + val('msg') + '”' : '';
+    const n = form.elements.msg.value.length, cnt = document.getElementById('msg-count');
+    cnt.textContent = n + ' / 70'; cnt.classList.toggle('near', n >= 60);
+    // Shrink the message a little until it fits its two lines on the card
+    const m = out('msg'); let size = 2.8; m.style.fontSize = '';
+    while (m.scrollHeight > m.clientHeight + 1 && size > 1.9) {{ size -= .1; m.style.fontSize = size + 'cqi'; }}
   }}
   form.addEventListener('input', render);
   render();
@@ -275,7 +282,7 @@ T = r'''<!doctype html>
 '''
 
 def how(items):
-    cls = ['', ' p2', ' p3']
+    cls = ['', ' p2', ' p3', '']
     return ''.join(f'<li><span class="pebble{cls[i]}" aria-hidden="true">{i+1}</span><p>{x}</p></li>' for i, x in enumerate(items))
 
 en = dict(
@@ -287,7 +294,7 @@ en = dict(
   l_to='To', p_to='Who is it for?', l_from='From', p_from='Your name', l_msg='A short message', optional='(optional)', p_msg='Happy birthday! Time to slow down.',
   send='Send the order', send_note='This opens your email app with the order filled in. Nothing is sent until you press send there.',
   how_h='How it works',
-  how_items=how(['<strong>Send the order</strong> from your email.', '<strong>Pay with Vipps</strong> to 943550, or by bank transfer. <a href="../pay/">Payment details</a>', '<strong>We send you the gift card</strong> by email, ready to print or forward.']),
+  how_items=how(['<strong>Send the order</strong> from your email.', '<strong>Pay with Vipps</strong> to 943550, or by bank transfer. <a href="../pay/">Payment details</a>', '<strong>We send you the gift card</strong> by email, ready to print or forward.', '<strong>To use it,</strong> the recipient books a time as usual and emails us the name on the card instead of paying.']),
   preview_label='Preview of your gift card', card_title='GIFT CARD', c_value='Value:', c_to='To:', c_from='From:', c_valid='Valid until:',
   strings=dict(subject='Gift card order', mailHello='Hi, I would like to order a gift card.', mailGift='Gift', mailTo='To', mailFrom='From', mailMsg='Message on the card',
     mailPay='I will pay {amount} kr with Vipps to 943550, with the message "{ref}".', refWord='Gift card', mailThanks='Thank you!'),
@@ -301,7 +308,7 @@ nn = dict(
   l_to='Til', p_to='Kven er det til?', l_from='Frå', p_from='Namnet ditt', l_msg='Ei kort helsing', optional='(valfritt)', p_msg='Gratulerer med dagen! Tid for å senke skuldrane.',
   send='Send bestillinga', send_note='Dette opnar e-postprogrammet ditt med bestillinga ferdig utfylt. Ingenting blir sendt før du trykkjer send der.',
   how_h='Slik gjer du',
-  how_items=how(['<strong>Send bestillinga</strong> frå e-posten din.', '<strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.']),
+  how_items=how(['<strong>Send bestillinga</strong> frå e-posten din.', '<strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.', '<strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss namnet på kortet på e-post i staden for å betale.']),
   preview_label='Førehandsvising av gåvekortet', card_title='GÅVEKORT', c_value='Beløp:', c_to='Til:', c_from='Frå:', c_valid='Gyldig til:',
   strings=dict(subject='Bestilling av gåvekort', mailHello='Hei, eg vil gjerne bestille eit gåvekort.', mailGift='Gåve', mailTo='Til', mailFrom='Frå', mailMsg='Helsing på kortet',
     mailPay='Eg betaler {amount} kr med Vipps til 943550, med meldinga «{ref}».', refWord='Gåvekort', mailThanks='Takk!'),
