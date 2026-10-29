@@ -90,7 +90,7 @@ def parts(lang, home, img, lang_href, here=None):
     lc = t['lang_code']
     header = f'''<header class="nav{"" if home == "" else " solid"}" id="nav">
   <div class="wrap">
-    <a class="brand" href="{brand_href}"><img src="{img}badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+    <a class="brand" href="{brand_href}"><img src="{img}logo-symbol.svg" alt="" width="35" height="44">Vanylven Sauna</a>
     <span class="spacer"></span>
     <a class="btn btn-heat book" href="{CALENDLY}" target="_blank" rel="noopener">{t['book']}</a>
     <button class="menu-btn pebble" type="button" aria-label="{t['open']}" aria-controls="fog" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
@@ -100,7 +100,7 @@ def parts(lang, home, img, lang_href, here=None):
 <div class="fog" id="fog" role="dialog" aria-modal="true" aria-label="{t['menu']}">
   <div class="wrap" style="display:flex;flex-direction:column;height:100%">
     <div class="top">
-      <a class="brand" href="{brand_href}" data-close><img src="{img}badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+      <a class="brand" href="{brand_href}" data-close><img src="{img}logo-symbol.svg" alt="" width="35" height="44">Vanylven Sauna</a>
       <button class="menu-btn pebble p3" type="button" aria-label="{t['close']}" data-close><i class="ph ph-x" aria-hidden="true"></i></button>
     </div>
     <nav aria-label="{t['main']}">
@@ -116,7 +116,7 @@ def parts(lang, home, img, lang_href, here=None):
 </div>'''
     footer = f'''<footer>
   <div class="wrap row">
-    <a class="brand" href="{brand_href}"><img src="{img}badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+    <a class="logo" href="{brand_href}"><img src="{img}logo-full.svg" alt="Vanylven Sauna" width="122" height="80"></a>
     <nav aria-label="{t['contact']}">
       <a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i>{t['email']}</a>
       <a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i>Instagram</a>
@@ -137,7 +137,7 @@ CSS = '''
   .nav.solid { background: rgb(11 16 18 / .55); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
   .nav .wrap { height: 72px; display: flex; align-items: center; gap: 16px; }
   .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; letter-spacing: -0.01em; }
-  .brand img { width: 44px; height: 44px; }
+  .brand img { width: auto; height: 44px; }
   .nav .spacer { flex: 1; }
   .nav .btn { padding: 12px 20px; font-size: .95rem; }
   .menu-btn { width: 48px; height: 46px; border: 0; cursor: pointer; background: rgb(255 255 255 / .1); font-size: 1.35rem; display: inline-grid; place-items: center; }
@@ -168,6 +168,8 @@ CSS = '''
   footer .row { display: flex; flex-wrap: wrap; gap: 28px; justify-content: space-between; align-items: center; }
   footer nav { display: flex; flex-wrap: wrap; gap: 24px; }
   footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; opacity: .9; }
+  footer .logo { opacity: 1; }
+  footer .logo img { width: auto; height: 80px; }
   footer a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
   @media (max-width: 767px) {
     .nav .wrap, .fog .wrap, footer .wrap { padding: 0 18px; }

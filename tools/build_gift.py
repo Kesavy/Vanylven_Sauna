@@ -101,16 +101,15 @@ T = r'''<!doctype html>
     transform: rotate(-2deg); transition: transform .6s var(--ease);
   }}
   .card:hover {{ transform: rotate(0); }}
-  .card .title {{ position: absolute; top: 9%; left: 0; right: 0; text-align: center; font-family: "Italiana", serif; font-weight: 400; font-size: 12.5cqi; letter-spacing: .06em; line-height: 1; }}
+  .card .title {{ position: absolute; top: 9%; left: 0; right: 0; display: flex; justify-content: center; }}
+  .card .title img {{ width: 58cqi; height: auto; }}
   .card dl {{ position: absolute; left: 7%; top: 29%; width: 50%; margin: 0; display: grid; gap: 3.8cqi; }}
   .card dl div {{ display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 2cqi; border-bottom: 1px solid rgb(243 238 233 / .55); padding-bottom: .6cqi; }}
   .card dt {{ font-family: "Italiana", serif; font-size: 3.4cqi; line-height: 1; opacity: .9; }}
   .card dd {{ margin: 0; font-size: 3.3cqi; font-weight: 500; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.1em; }}
   .card .msg {{ position: absolute; left: 7%; bottom: 6%; width: 50%; font-size: 2.8cqi; font-style: italic; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }}
-  .card .mark {{ position: absolute; right: 8%; bottom: 10%; display: grid; justify-items: center; gap: 1cqi; }}
-  .card .mark img {{ width: 13cqi; height: auto; }}
-  .card .mark b {{ font-family: "Italiana", serif; font-weight: 400; font-size: 5.6cqi; letter-spacing: .14em; line-height: 1; }}
-  .card .mark small {{ font-size: 1.7cqi; letter-spacing: .4em; text-transform: uppercase; opacity: .8; }}
+  .card .mark {{ position: absolute; right: 7%; bottom: 9%; }}
+  .card .mark img {{ display: block; width: 25cqi; height: auto; }}
 
   .how {{ display: grid; gap: 16px; padding: 26px; border-radius: var(--radius); background: var(--night-2); box-shadow: inset 0 0 0 1px var(--line); }}
   .how h2 {{ font-size: 1.2rem; letter-spacing: -0.02em; }}
@@ -188,7 +187,7 @@ T = r'''<!doctype html>
 
     <div class="side">
       <figure class="card" aria-label="{preview_label}" style="margin:0">
-        <div class="title">{card_title}</div>
+        <div class="title"><img src="{img}gavekort.svg" alt="{card_title}" width="273" height="44"></div>
         <dl>
           <div><dt>{c_value}</dt><dd data-out="value"></dd></div>
           <div><dt>{c_to}</dt><dd data-out="to"></dd></div>
@@ -196,7 +195,7 @@ T = r'''<!doctype html>
           <div><dt>{c_valid}</dt><dd></dd></div>
         </dl>
         <p class="msg" data-out="msg"></p>
-        <div class="mark"><img src="{img}badge.png" alt="" width="500" height="500"><b>VANYLVEN</b><small>Sauna</small></div>
+        <div class="mark"><img src="{img}logo-full.svg" alt="Vanylven Sauna" width="278" height="182"></div>
       </figure>
 
       <section class="how" aria-label="{how_h}">
