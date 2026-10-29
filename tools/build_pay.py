@@ -62,12 +62,15 @@ T = r'''<!doctype html>
   .head p.pre {{ margin-top: 14px; font-size: .98rem; }}
   .head p.pre a {{ color: var(--heat-soft); }}
 
-  .amounts {{ margin-top: 44px; display: flex; flex-wrap: wrap; gap: 14px; }}
-  .amount {{ display: flex; align-items: center; gap: 16px; padding: 14px 26px 14px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); }}
-  .amount .pebble {{ width: 52px; height: 48px; background: var(--brand); color: #f3eee9; font-size: 1.5rem; }}
-  .amount strong {{ display: block; font-size: 1.35rem; letter-spacing: -0.02em; line-height: 1.1; }}
-  .amount span {{ color: var(--muted); font-size: .92rem; }}
-  .amount.private {{ box-shadow: inset 0 0 0 1px rgb(239 106 50 / .35); background: rgb(239 106 50 / .06); }}
+  /* Prices read as a plain list (not pills), so nothing looks selectable */
+  .prices {{ margin: 44px 0 0; max-width: 520px; }}
+  .prices h2 {{ font-size: .9rem; font-weight: 600; letter-spacing: 0; color: var(--muted); margin-bottom: 6px; }}
+  .prices dl {{ margin: 0; }}
+  .prices div {{ display: flex; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }}
+  .prices dt {{ color: var(--ink); }}
+  .prices dt span {{ color: var(--muted); }}
+  .prices div::after {{ content: ""; order: 1; flex: 1; border-bottom: 1px dotted rgb(238 242 241 / .25); transform: translateY(-4px); }}
+  .prices dd {{ order: 2; margin: 0; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }}
 
   .switch {{ margin-top: 64px; display: inline-flex; padding: 5px; border-radius: 999px; background: rgb(255 255 255 / .06); box-shadow: inset 0 0 0 1px var(--line); }}
   .switch button {{ border: 0; background: none; cursor: pointer; padding: 12px 22px; border-radius: 999px; font-weight: 600; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; transition: background-color .3s var(--ease), color .3s; }}
@@ -123,7 +126,6 @@ T = r'''<!doctype html>
     .after {{ grid-template-columns: 1fr; }}
     .switch {{ display: flex; }}
     .switch button {{ flex: 1; justify-content: center; padding: 12px 10px; }}
-    .amount {{ flex: 1 1 100%; }}
   }}
   @media (prefers-reduced-motion: reduce) {{ * {{ transition: none !important; }} }}
 {shell_css}</style>
@@ -140,10 +142,13 @@ T = r'''<!doctype html>
       <p class="pre">{pre}</p>
     </div>
 
-    <div class="amounts">
-      <div class="amount private"><span class="pebble p2" aria-hidden="true"><i class="ph-light ph-hourglass-medium"></i></span><div><strong>{private_price}</strong><span>{private_label}</span></div></div>
-      <div class="amount"><span class="pebble p4" aria-hidden="true"><i class="ph-light ph-users-three"></i></span><div><strong>{open_price}</strong><span>{open_label}</span></div></div>
-    </div>
+    <section class="prices" aria-labelledby="prices-h">
+      <h2 id="prices-h">{prices_h}</h2>
+      <dl>
+        <div><dt>{private_name} <span>{private_unit}</span></dt><dd>{private_price}</dd></div>
+        <div><dt>{open_name} <span>{open_unit}</span></dt><dd>{open_price}</dd></div>
+      </dl>
+    </section>
 
     <div class="switch" role="tablist" aria-label="{switch_label}">
       <button type="button" role="tab" id="tab-vipps" aria-controls="vipps" aria-selected="true"><i class="ph ph-device-mobile" aria-hidden="true"></i>{tab_vipps}</button>
@@ -249,7 +254,7 @@ en = dict(
   alt_lang='nn', alt_name='Norsk', nav_label='Page links', nav_prices='Prices',
   pre='Not booked yet? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Pick a time first</a>. Have a gift card? No need to pay, just <a href="mailto:vanylvensauna@gmail.com">email us</a> the name on the card.',
   h1='Pay for your session', lead='Pay before you come. Once your payment is in, we send you the door code the day before your visit.',
-  private_price='NOK 600', private_label='Private sauna, 2 hours', open_price='NOK 100', open_label='Open sauna, per person',
+  private_price='NOK 600', prices_h='What to pay', private_name='Private sauna', private_unit='2 hours, up to 8 people', open_name='Open sauna', open_unit='per person', open_price='NOK 100',
   switch_label='How do you want to pay?', tab_vipps='I have Vipps', tab_abroad='From abroad',
   vipps_h='Pay with Vipps',
   v1='Open Vipps and tap <strong>Pay</strong>.',
@@ -271,7 +276,7 @@ nn = dict(
   alt_lang='en', alt_name='English', nav_label='Lenker', nav_prices='Prisar',
   pre='Ikkje booka enno? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Vel ei tid først</a>. Har du gåvekort? Då treng du ikkje betale, berre <a href="mailto:vanylvensauna@gmail.com">send oss</a> namnet på kortet.',
   h1='Betal for økta', lead='Betal før du kjem. Når betalinga er komen inn, sender vi deg koden til døra dagen før besøket.',
-  private_price='600 kr', private_label='Privat badstue, 2 timar', open_price='100 kr', open_label='Open badstue, per person',
+  private_price='600 kr', prices_h='Kva du betaler', private_name='Privat badstue', private_unit='2 timar, opptil 8 personar', open_name='Open badstue', open_unit='per person', open_price='100 kr',
   switch_label='Korleis vil du betale?', tab_vipps='Eg har Vipps', tab_abroad='Frå utlandet',
   vipps_h='Betal med Vipps',
   v1='Opne Vipps og trykk på <strong>Betal</strong>.',

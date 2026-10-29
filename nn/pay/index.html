@@ -56,12 +56,15 @@
   .head p.pre { margin-top: 14px; font-size: .98rem; }
   .head p.pre a { color: var(--heat-soft); }
 
-  .amounts { margin-top: 44px; display: flex; flex-wrap: wrap; gap: 14px; }
-  .amount { display: flex; align-items: center; gap: 16px; padding: 14px 26px 14px 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); }
-  .amount .pebble { width: 52px; height: 48px; background: var(--brand); color: #f3eee9; font-size: 1.5rem; }
-  .amount strong { display: block; font-size: 1.35rem; letter-spacing: -0.02em; line-height: 1.1; }
-  .amount span { color: var(--muted); font-size: .92rem; }
-  .amount.private { box-shadow: inset 0 0 0 1px rgb(239 106 50 / .35); background: rgb(239 106 50 / .06); }
+  /* Prices read as a plain list (not pills), so nothing looks selectable */
+  .prices { margin: 44px 0 0; max-width: 520px; }
+  .prices h2 { font-size: .9rem; font-weight: 600; letter-spacing: 0; color: var(--muted); margin-bottom: 6px; }
+  .prices dl { margin: 0; }
+  .prices div { display: flex; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .prices dt { color: var(--ink); }
+  .prices dt span { color: var(--muted); }
+  .prices div::after { content: ""; order: 1; flex: 1; border-bottom: 1px dotted rgb(238 242 241 / .25); transform: translateY(-4px); }
+  .prices dd { order: 2; margin: 0; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
   .switch { margin-top: 64px; display: inline-flex; padding: 5px; border-radius: 999px; background: rgb(255 255 255 / .06); box-shadow: inset 0 0 0 1px var(--line); }
   .switch button { border: 0; background: none; cursor: pointer; padding: 12px 22px; border-radius: 999px; font-weight: 600; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; transition: background-color .3s var(--ease), color .3s; }
@@ -117,7 +120,6 @@
     .after { grid-template-columns: 1fr; }
     .switch { display: flex; }
     .switch button { flex: 1; justify-content: center; padding: 12px 10px; }
-    .amount { flex: 1 1 100%; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 
@@ -205,10 +207,13 @@
       <p class="pre">Ikkje booka enno? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Vel ei tid først</a>. Har du gåvekort? Då treng du ikkje betale, berre <a href="mailto:vanylvensauna@gmail.com">send oss</a> namnet på kortet.</p>
     </div>
 
-    <div class="amounts">
-      <div class="amount private"><span class="pebble p2" aria-hidden="true"><i class="ph-light ph-hourglass-medium"></i></span><div><strong>600 kr</strong><span>Privat badstue, 2 timar</span></div></div>
-      <div class="amount"><span class="pebble p4" aria-hidden="true"><i class="ph-light ph-users-three"></i></span><div><strong>100 kr</strong><span>Open badstue, per person</span></div></div>
-    </div>
+    <section class="prices" aria-labelledby="prices-h">
+      <h2 id="prices-h">Kva du betaler</h2>
+      <dl>
+        <div><dt>Privat badstue <span>2 timar, opptil 8 personar</span></dt><dd>600 kr</dd></div>
+        <div><dt>Open badstue <span>per person</span></dt><dd>100 kr</dd></div>
+      </dl>
+    </section>
 
     <div class="switch" role="tablist" aria-label="Korleis vil du betale?">
       <button type="button" role="tab" id="tab-vipps" aria-controls="vipps" aria-selected="true"><i class="ph ph-device-mobile" aria-hidden="true"></i>Eg har Vipps</button>
