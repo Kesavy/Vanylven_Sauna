@@ -415,7 +415,9 @@
     .wrap { padding: 0 18px; }
     .nav .wrap { height: 64px; }
     .nav .btn { display: none; }
-    .hero { height: 170vh; }
+    /* No pinned hero on phones: scrolling moves the page straight away, and the height ignores the address bar */
+    .hero { height: auto; }
+    .hero .pin { position: relative; height: 100svh; min-height: 560px; }
     .hero .ctas .btn { flex: 1 1 auto; justify-content: center; }
     .manifesto { padding: 16vh 0; }
     .ritual { height: 600vh; }
@@ -940,11 +942,22 @@
     // Hero: fog lifts on load, then clears completely as you scroll; photo settles
     gsap.fromTo('.hero .fog-intro', { opacity: 1 }, { opacity: .55, duration: 2.6, ease: 'power2.out', delay: .2 });
     gsap.from('.hero .content > *', { opacity: 0, y: 30, filter: 'blur(12px)', duration: 1.4, ease: 'power3.out', stagger: .12, delay: .7 });
-    const heroTl = gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom bottom', scrub: .6,
-      onUpdate: (s) => { if (steam.hero) steam.hero.target = 1 - s.progress * .75; } } });
-    heroTl.to('.hero .fog-scroll', { opacity: 0, ease: 'none' }, 0)
-          .fromTo('.hero .photo', { scale: 1.18 }, { scale: 1, ease: 'none' }, 0)
-          .to('.hero .content', { y: -60, opacity: .0, ease: 'power1.in' }, .55);
+    // Phones: the address bar showing and hiding must not re-measure the page, or the hero jumps
+    ScrollTrigger.config({ ignoreMobileResize: true });
+    const heroMm = gsap.matchMedia();
+    heroMm.add('(min-width: 768px)', () => {
+      const heroTl = gsap.timeline({ scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom bottom', scrub: .6,
+        onUpdate: (s) => { if (steam.hero) steam.hero.target = 1 - s.progress * .75; } } });
+      heroTl.to('.hero .fog-scroll', { opacity: 0, ease: 'none' }, 0)
+            .fromTo('.hero .photo', { scale: 1.18 }, { scale: 1, ease: 'none' }, 0)
+            .to('.hero .content', { y: -60, opacity: .0, ease: 'power1.in' }, .55);
+    });
+    // Phones: the hero is a normal screen that scrolls away at once; the fog clears by itself after load
+    heroMm.add('(max-width: 767px)', () => {
+      gsap.to('.hero .fog-scroll', { opacity: 0, duration: 3, ease: 'power2.inOut', delay: 1.4 });
+      gsap.fromTo('.hero .photo', { scale: 1.12 }, { scale: 1, duration: 4, ease: 'power2.out', delay: .2 });
+      if (steam.hero) steam.hero.target = .4;
+    });
 
     // Manifesto: words light up in reading order
     ScrollTrigger.create({ trigger: '.manifesto', start: 'top 75%', end: 'bottom 55%', scrub: true,
