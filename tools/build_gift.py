@@ -12,7 +12,7 @@ T = r'''<!doctype html>
 <title>{title}</title>
 <meta name="description" content="{desc}">
 <meta name="color-scheme" content="dark">
-<link rel="alternate" hreflang="{alt_lang}" href="{alt_href}">
+{seo}
 <link rel="icon" href="{img}logo-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -164,9 +164,9 @@ T = r'''<!doctype html>
         <fieldset class="field">
           <legend>{l_gift}</legend>
           <div class="choices">
-            <div class="choice"><input type="radio" name="hours" id="h2" value="2" checked><label for="h2"><strong>{h2}</strong><span>600 kr</span></label></div>
-            <div class="choice"><input type="radio" name="hours" id="h4" value="4"><label for="h4"><strong>{h4}</strong><span>1200 kr</span></label></div>
-            <div class="choice"><input type="radio" name="hours" id="h6" value="6"><label for="h6"><strong>{h6}</strong><span>1800 kr</span></label></div>
+            <div class="choice"><input type="radio" name="hours" id="h2" value="2" checked><label for="h2"><strong>{h2}</strong><span>{p2}</span></label></div>
+            <div class="choice"><input type="radio" name="hours" id="h4" value="4"><label for="h4"><strong>{h4}</strong><span>{p4}</span></label></div>
+            <div class="choice"><input type="radio" name="hours" id="h6" value="6"><label for="h6"><strong>{h6}</strong><span>{p6}</span></label></div>
           </div>
         </fieldset>
         <div class="two">
@@ -242,6 +242,8 @@ T = r'''<!doctype html>
   }})();
 
   const t = {strings};
+  const group = (n) => String(n).replace(/\B(?=(\d{{3}})+(?!\d))/g, ' ');
+  {money_js}
   const form = document.getElementById('order');
   const out = (k) => document.querySelector('[data-out="' + k + '"]');
   const val = (n) => form.elements[n].value.trim();
@@ -267,11 +269,11 @@ T = r'''<!doctype html>
     const h = hours();
     const lines = [
       t.mailHello, '',
-      t.mailGift + ': ' + t.value(h) + ' (' + (h * 300) + ' kr)',
+      t.mailGift + ': ' + t.value(h) + ' (' + money(h * 300) + ')',
       t.mailTo + ': ' + (val('to') || '-'),
       t.mailFrom + ': ' + (val('from') || '-'),
       t.mailMsg + ': ' + (val('msg') || '-'), '',
-      t.mailPay.replace('{{amount}}', h * 300).replace('{{ref}}', t.refWord + ' ' + (val('to') || '')), '',
+      t.mailPay.replace('{{amount}}', money(h * 300)).replace('{{ref}}', t.refWord + ' ' + (val('to') || '')), '',
       t.mailThanks,
     ];
     location.href = 'mailto:vanylvensauna@gmail.com?subject=' + encodeURIComponent(t.subject) + '&body=' + encodeURIComponent(lines.join('\r\n'));
@@ -294,10 +296,10 @@ en = dict(
   l_to='To', p_to='Who is it for?', l_from='From', p_from='Your name', l_msg='A short message', optional='(optional)', p_msg='Happy birthday! Time to slow down.',
   send='Send the order', send_note='This opens your email app with the order filled in. Nothing is sent until you press send there.',
   how_h='How it works',
-  how_items=how(['<strong>Send the order</strong> from your email.', '<strong>Pay with Vipps</strong> to 943550, or by bank transfer. <a href="../pay/">Payment details</a>', '<strong>We send you the gift card</strong> by email, ready to print or forward.', '<strong>To use it,</strong> the recipient books a time as usual and emails us the name on the card instead of paying.']),
+  how_items=how(['<strong>Send the order</strong> from your email.', '<strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. <a href="../pay/">Payment details</a>', '<strong>We send you the gift card</strong> by email, with its own number, ready to print or forward.', '<strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.']),
   preview_label='Preview of your gift card', card_title='GIFT CARD', c_value='Value:', c_to='To:', c_from='From:', c_valid='Valid until:',
   strings=dict(subject='Gift card order', mailHello='Hi, I would like to order a gift card.', mailGift='Gift', mailTo='To', mailFrom='From', mailMsg='Message on the card',
-    mailPay='I will pay {amount} kr with Vipps to 943550, with the message "{ref}".', refWord='Gift card', mailThanks='Thank you!'),
+    mailPay='I will pay {amount} with Vipps or bank transfer, with the message "{ref}".', refWord='Gift card', mailThanks='Thank you!'),
 )
 nn = dict(
   lang='nn', title='Gåvekort | Vanylven Sauna',
@@ -308,11 +310,17 @@ nn = dict(
   l_to='Til', p_to='Kven er det til?', l_from='Frå', p_from='Namnet ditt', l_msg='Ei kort helsing', optional='(valfritt)', p_msg='Gratulerer med dagen! Tid for å senke skuldrane.',
   send='Send bestillinga', send_note='Dette opnar e-postprogrammet ditt med bestillinga ferdig utfylt. Ingenting blir sendt før du trykkjer send der.',
   how_h='Slik gjer du',
-  how_items=how(['<strong>Send bestillinga</strong> frå e-posten din.', '<strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.', '<strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss namnet på kortet på e-post i staden for å betale.']),
+  how_items=how(['<strong>Send bestillinga</strong> frå e-posten din.', '<strong>Betal med Vipps eller bankoverføring.</strong> Vipps-nummeret vårt er 943550. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post, med eige nummer, klart til å skrive ut eller sende vidare.', '<strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss nummeret på gåvekortet på e-post i staden for å betale.']),
   preview_label='Førehandsvising av gåvekortet', card_title='GÅVEKORT', c_value='Beløp:', c_to='Til:', c_from='Frå:', c_valid='Gyldig til:',
   strings=dict(subject='Bestilling av gåvekort', mailHello='Hei, eg vil gjerne bestille eit gåvekort.', mailGift='Gåve', mailTo='Til', mailFrom='Frå', mailMsg='Helsing på kortet',
-    mailPay='Eg betaler {amount} kr med Vipps til 943550, med meldinga «{ref}».', refWord='Gåvekort', mailThanks='Takk!'),
+    mailPay='Eg betaler {amount} med Vipps eller bankoverføring, med meldinga «{ref}».', refWord='Gåvekort', mailThanks='Takk!'),
 )
+
+def money(n, lang):
+    # NOK 1 200 in English, 1 200 kr in Nynorsk, with a non-breaking space between thousands
+    g = f'{n:,}'.replace(',', ' ')
+    return 'NOK ' + g if lang == 'en' else g + ' kr'
+
 
 for d, path, img, home, alt_href, unit in [
     (en, 'gift/index.html', '../img/', '../', '../nn/gift/', 'hours'),
@@ -321,10 +329,12 @@ for d, path, img, home, alt_href, unit in [
     s = dict(d['strings'])
     js = json.dumps(s, ensure_ascii=False)
     js = js[:-1] + ', value: (h) => h + " ' + unit + '"}'
+    money_js = 'const money = (n) => ' + ('"NOK " + group(n)' if d['lang'] == 'en' else 'group(n) + " kr"') + ';'
     d2 = {k: v for k, v in d.items() if k != 'strings'}
+    d2.update(p2=money(600, d['lang']), p4=money(1200, d['lang']), p6=money(1800, d['lang']))
     out = os.path.join(ROOT, path)
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, 'w', encoding='utf-8', newline='') as f:
         sh, sf = shared.parts(d['lang'], '../', img, alt_href, here='gift')
-        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, img=img, home=home, alt_href=alt_href, strings=js, **d2))
+        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, seo=shared.seo('gift/', d['lang'], d['title'], d['desc'], 'img/gift-card.png'), img=img, home=home, alt_href=alt_href, strings=js, money_js=money_js, **d2))
     print('wrote', path)

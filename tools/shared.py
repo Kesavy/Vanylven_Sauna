@@ -3,6 +3,10 @@
 
 CALENDLY = 'https://calendly.com/vanylvensauna/sauna'
 
+# Public address of the site. Change this one line when the site moves to its own domain,
+# then rerun all generators and update sitemap.xml and robots.txt.
+SITE = 'https://www.vanylvensauna.no/'
+
 TEXT = {
   'en': dict(book='Book a session', open='Open menu', close='Close menu', menu='Menu', main='Main', contact='Contact and social',
              email='Email', lang_name='Norsk', lang_code='nn', credit='Built by Stad Kystbygg. Run by volunteers from Vanylven.', design='Design by',
@@ -13,6 +17,63 @@ TEXT = {
              links=[('ritual', 'Ritualet', '#ritual'), ('plan', 'Prisar og booking', '#plan'), ('pay', 'Slik betaler du', 'pay/'),
                     ('gift', 'Gåvekort', 'gift/'), ('rules', 'Før du kjem', '#rules'), ('find', 'Finn oss', '#find')]),
 }
+
+
+def seo(page, lang, title, desc, image):
+    """Canonical, language alternates and share tags for one page.
+    page: path below the language root ('' for home, 'gift/', 'pay/'). image: path below the site root."""
+    en, nn = SITE + page, SITE + 'nn/' + page
+    url = en if lang == 'en' else nn
+    locale = 'en_GB' if lang == 'en' else 'nn_NO'
+    return f'''<link rel="canonical" href="{url}">
+<link rel="alternate" hreflang="en" href="{en}">
+<link rel="alternate" hreflang="nn" href="{nn}">
+<link rel="alternate" hreflang="x-default" href="{en}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Vanylven Sauna">
+<meta property="og:locale" content="{locale}">
+<meta property="og:url" content="{url}">
+<meta property="og:title" content="{title}">
+<meta property="og:description" content="{desc}">
+<meta property="og:image" content="{SITE}{image}">
+<meta name="twitter:card" content="summary_large_image">'''
+
+
+def place(lang, desc):
+    """Structured data for the home pages: what the sauna is, where, when, and what it costs.
+    Search engines and AI answers read this instead of guessing from the page design."""
+    import json
+    url = SITE if lang == 'en' else SITE + 'nn/'
+    data = {
+        '@context': 'https://schema.org',
+        '@type': ['LocalBusiness', 'SportsActivityLocation'],
+        '@id': SITE + '#sauna',
+        'name': 'Vanylven Sauna',
+        'url': url,
+        'description': desc,
+        'inLanguage': 'en' if lang == 'en' else 'nn',
+        'image': [SITE + 'img/deck-fjord.jpg', SITE + 'img/interior-bench.jpg', SITE + 'img/exterior-dock.jpg'],
+        'logo': SITE + 'img/logo-mark.png',
+        'email': 'vanylvensauna@gmail.com',
+        'address': {'@type': 'PostalAddress', 'addressLocality': 'Fiskå', 'postalCode': '6143',
+                    'addressRegion': 'Møre og Romsdal', 'addressCountry': 'NO'},
+        'hasMap': 'https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6',
+        'currenciesAccepted': 'NOK',
+        'paymentAccepted': 'Vipps, bank transfer',
+        'priceRange': 'NOK 100-600',
+        'openingHoursSpecification': [
+            {'@type': 'OpeningHoursSpecification', 'dayOfWeek': ['Thursday', 'Friday', 'Saturday', 'Sunday'], 'opens': '10:00', 'closes': '20:00'},
+            {'@type': 'OpeningHoursSpecification', 'dayOfWeek': 'Wednesday', 'opens': '17:00', 'closes': '20:00'},
+        ],
+        'makesOffer': [
+            {'@type': 'Offer', 'name': 'Private sauna, 2 hours, up to 8 people' if lang == 'en' else 'Privat badstue, 2 timar, opptil 8 personar',
+             'price': '600', 'priceCurrency': 'NOK', 'url': CALENDLY},
+            {'@type': 'Offer', 'name': 'Open sauna, Wednesday 17:00 to 20:00, per person' if lang == 'en' else 'Open badstue, onsdag 17:00 til 20:00, per person',
+             'price': '100', 'priceCurrency': 'NOK'},
+        ],
+        'sameAs': ['https://www.instagram.com/vanylvensauna/', 'https://www.facebook.com/profile.php?id=61570144756846'],
+    }
+    return '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False, indent=2) + '\n</script>'
 
 
 def parts(lang, home, img, lang_href, here=None):
@@ -47,6 +108,8 @@ def parts(lang, home, img, lang_href, here=None):
     <div class="foot">
       <a class="btn btn-heat book" href="{CALENDLY}" target="_blank" rel="noopener">{t['book']} <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
       <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>
+      <a class="social" href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener" aria-label="Instagram"><i class="ph ph-instagram-logo" aria-hidden="true"></i></a>
+      <a class="social" href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener" aria-label="Facebook"><i class="ph ph-facebook-logo" aria-hidden="true"></i></a>
       <a href="{lang_href}" hreflang="{lc}" lang="{lc}">{t['lang_name']}</a>
     </div>
   </div>
@@ -97,6 +160,8 @@ CSS = '''
   .fog nav a:hover, .fog nav a[aria-current] { color: var(--heat-soft); }
   .fog.open nav a { opacity: 1; filter: blur(0); transform: none; }
   .fog .foot { margin-top: auto; padding-top: 36px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; color: var(--muted); }
+  .fog .foot .social { font-size: 1.5rem; line-height: 1; margin-right: -14px; text-decoration: none; transition: color .2s; }
+  .fog .foot .social:hover { color: var(--heat-soft); }
   footer { background: var(--brand); color: #f3eee9; padding: 40px 0; }
   footer .credit { margin-top: 24px; font-size: .85rem; color: rgb(243 238 233 / .6); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
   footer .credit a { display: inline; text-decoration: underline; text-underline-offset: 3px; }

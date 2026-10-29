@@ -13,7 +13,7 @@ T = r'''<!doctype html>
 <meta name="description" content="{desc}">
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex">
-<link rel="alternate" hreflang="{alt_lang}" href="{alt_href}">
+{seo}
 <link rel="icon" href="{img}logo-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,8 +69,7 @@ T = r'''<!doctype html>
   .prices div {{ display: flex; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }}
   .prices dt {{ color: var(--ink); }}
   .prices dt span {{ color: var(--muted); }}
-  .prices div::after {{ content: ""; order: 1; flex: 1; border-bottom: 1px dotted rgb(238 242 241 / .25); transform: translateY(-4px); }}
-  .prices dd {{ order: 2; margin: 0; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }}
+  .prices dd {{ margin: 0 0 0 auto; font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }}
 
   .switch {{ margin-top: 64px; display: inline-flex; padding: 5px; border-radius: 999px; background: rgb(255 255 255 / .06); box-shadow: inset 0 0 0 1px var(--line); }}
   .switch button {{ border: 0; background: none; cursor: pointer; padding: 12px 22px; border-radius: 999px; font-weight: 600; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; transition: background-color .3s var(--ease), color .3s; }}
@@ -252,9 +251,9 @@ en = dict(
   lang='en', title='Pay for your sauna | Vanylven Sauna',
   desc='How to pay for your session at Vanylven Sauna, with Vipps or by bank transfer from abroad.',
   alt_lang='nn', alt_name='Norsk', nav_label='Page links', nav_prices='Prices',
-  pre='Not booked yet? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Pick a time first</a>. Have a gift card? No need to pay, just <a href="mailto:vanylvensauna@gmail.com">email us</a> the name on the card.',
+  pre='Not booked yet? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Pick a time first</a>. Have a gift card? No need to pay, just <a href="mailto:vanylvensauna@gmail.com">email us</a> the number of your gift card.',
   h1='Pay for your session', lead='Pay before you come. Once your payment is in, we send you the door code the day before your visit.',
-  private_price='NOK 600', prices_h='What to pay', private_name='Private sauna', private_unit='2 hours, up to 8 people', open_name='Open sauna', open_unit='per person', open_price='NOK 100',
+  private_price='NOK 600', prices_h='What to pay', private_name='Private sauna', private_unit='2 hours, up to 8 people', open_name='Open sauna', open_unit='per person, paid when you arrive', open_price='NOK 100',
   switch_label='How do you want to pay?', tab_vipps='I have Vipps', tab_abroad='From abroad',
   vipps_h='Pay with Vipps',
   v1='Open Vipps and tap <strong>Pay</strong>.',
@@ -264,7 +263,7 @@ en = dict(
   l_vipps='Vipps number', copy='Copy', copied='Copied',
   msg_note='In the message, write <strong>the date of your session and your name</strong>, for example <em>12 June, Kari Nordmann</em>. <span>That is how we match your payment to your booking.</span>',
   qr_alt='QR code for Vipps number 943550', qr_h='Scan to pay', qr_p='Point your phone camera at the code and Vipps opens with our number filled in.',
-  abroad_h='Pay by bank transfer', l_name='Account name', l_amount='Amount', amount_value='NOK 600 (private) or NOK 100 per person (open)',
+  abroad_h='Pay by bank transfer', l_name='Account name', l_amount='Amount', amount_value='NOK 600 (Private Sauna) or NOK 100 per person (Open Sauna)',
   ref_note='In the payment reference, write <strong>the date of your session and your name</strong>. <span>That is how we match your payment to your booking.</span>',
   abroad_side='Most visitors from abroad do not have Vipps, so a bank transfer is the way to go. International transfers can take a few working days, so pay as soon as you have booked. Questions? Email <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>.',
   after_h='What happens next', after_p='When your payment has come in, we send you the code to the sauna door the day before your visit.',
@@ -274,9 +273,9 @@ nn = dict(
   lang='nn', title='Betal for badstua | Vanylven Sauna',
   desc='Slik betaler du for økta i Vanylven Sauna, med Vipps eller med bankoverføring frå utlandet.',
   alt_lang='en', alt_name='English', nav_label='Lenker', nav_prices='Prisar',
-  pre='Ikkje booka enno? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Vel ei tid først</a>. Har du gåvekort? Då treng du ikkje betale, berre <a href="mailto:vanylvensauna@gmail.com">send oss</a> namnet på kortet.',
+  pre='Ikkje booka enno? <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Vel ei tid først</a>. Har du gåvekort? Då treng du ikkje betale, berre <a href="mailto:vanylvensauna@gmail.com">send oss</a> nummeret på gåvekortet.',
   h1='Betal for økta', lead='Betal før du kjem. Når betalinga er komen inn, sender vi deg koden til døra dagen før besøket.',
-  private_price='600 kr', prices_h='Kva du betaler', private_name='Privat badstue', private_unit='2 timar, opptil 8 personar', open_name='Open badstue', open_unit='per person', open_price='100 kr',
+  private_price='600 kr', prices_h='Kva du betaler', private_name='Privat badstue', private_unit='2 timar, opptil 8 personar', open_name='Open badstue', open_unit='per person, betal når du kjem', open_price='100 kr',
   switch_label='Korleis vil du betale?', tab_vipps='Eg har Vipps', tab_abroad='Frå utlandet',
   vipps_h='Betal med Vipps',
   v1='Opne Vipps og trykk på <strong>Betal</strong>.',
@@ -286,7 +285,7 @@ nn = dict(
   l_vipps='Vipps-nummer', copy='Kopier', copied='Kopiert',
   msg_note='I meldinga skriv du <strong>datoen for økta og namnet ditt</strong>, til dømes <em>12. juni, Kari Nordmann</em>. <span>Slik finn vi ut kva booking betalinga høyrer til.</span>',
   qr_alt='QR-kode for Vipps-nummer 943550', qr_h='Skann og betal', qr_p='Hald kameraet på telefonen mot koden, så opnar Vipps seg med nummeret vårt.',
-  abroad_h='Betal med bankoverføring', l_name='Kontonamn', l_amount='Beløp', amount_value='600 kr (privat) eller 100 kr per person (open)',
+  abroad_h='Betal med bankoverføring', l_name='Kontonamn', l_amount='Beløp', amount_value='600 kr (privat badstue) eller 100 kr per person (open badstue)',
   ref_note='I referansefeltet skriv du <strong>datoen for økta og namnet ditt</strong>. <span>Slik finn vi ut kva booking betalinga høyrer til.</span>',
   abroad_side='Dei fleste som kjem frå utlandet har ikkje Vipps, så då er bankoverføring vegen å gå. Utanlandske overføringar kan ta nokre arbeidsdagar, så betal så snart du har booka. Spørsmål? Send e-post til <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>.',
   after_h='Kva skjer så', after_p='Når betalinga er komen inn, sender vi deg koden til badstudøra dagen før besøket.',
@@ -300,5 +299,5 @@ for d, path, img, home, alt_href in [
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, 'w', encoding='utf-8', newline='') as f:
         sh, sf = shared.parts(d['lang'], '../', img, alt_href, here='pay')
-        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, img=img, home=home, alt_href=alt_href, **d))
+        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, seo=shared.seo('pay/', d['lang'], d['title'], d['desc'], 'img/deck-fjord.jpg'), img=img, home=home, alt_href=alt_href, **d))
     print('wrote', path)

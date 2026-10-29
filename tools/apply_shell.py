@@ -1,4 +1,4 @@
-# Writes the shared header, menu and footer from shared.py into the two home pages.
+# Writes the shared header, menu, footer and SEO tags from shared.py into the two home pages.
 # The pay and gift pages get theirs when build_pay.py / build_gift.py run.
 import os, re, sys
 
@@ -13,7 +13,11 @@ for path, lang, img, lang_href in [('index.html', 'en', 'img/', 'nn/'), ('nn/ind
     header, footer = shared.parts(lang, '', img, lang_href)
     s, n1 = re.subn(r'<header class="nav" id="nav">.*?(?=\n\n<main)', lambda m: header, s, count=1, flags=re.S)
     s, n2 = re.subn(r'<footer>.*?</footer>', lambda m: footer, s, count=1, flags=re.S)
-    assert (n1, n2) == (1, 1), (path, n1, n2)
+    title = re.search(r'<title>(.*?)</title>', s).group(1)
+    desc = re.search(r'<meta name="description" content="(.*?)">', s).group(1)
+    block = '\n'.join(['<!-- seo -->', shared.seo('', lang, title, desc, 'img/deck-fjord.jpg'), shared.place(lang, desc), '<!-- /seo -->'])
+    s, n3 = re.subn(r'<!-- seo -->.*?<!-- /seo -->', lambda m: block, s, count=1, flags=re.S)
+    assert (n1, n2, n3) == (1, 1, 1), (path, n1, n2, n3)
     with open(p, 'w', encoding='utf-8', newline='') as f:
         f.write(s)
     print('updated', path)
