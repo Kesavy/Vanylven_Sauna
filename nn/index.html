@@ -258,6 +258,38 @@
   .shore figure.down { align-self: flex-end; margin-bottom: 10vh; height: 52vh; }
   .shore .end { flex: 0 0 32px; }
 
+  /* Swipe mode (phones, and anyone who turned motion off): the ritual and the shore become rows you swipe left.
+     Each act carries its own photo, so the picture moves with the finger. */
+  .ritual.swipe { height: auto; }
+  .ritual.swipe .stage { position: relative; height: 100svh; min-height: 560px; }
+  .ritual.swipe .layer, .ritual.swipe .warm, .ritual.swipe .chill, .ritual.swipe canvas.steam, .ritual.swipe .stage > .shade { display: none; }
+  .ritual.swipe .acts { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .ritual.swipe .acts::-webkit-scrollbar { display: none; }
+  .ritual.swipe .act { position: relative; flex: 0 0 100%; height: 100%; display: flex; align-items: flex-end; scroll-snap-align: start; scroll-snap-stop: always; pointer-events: auto; }
+  .ritual.swipe .act > .wrap { position: relative; z-index: 1; width: 100%; }
+  .ritual.swipe .act > .wrap > * { opacity: 1; filter: none; transform: none; transition: none; }
+  .act .bg { display: none; }
+  .ritual.swipe .act .bg { display: block; position: absolute; inset: 0; }
+  .act .bg img { width: 100%; height: 100%; object-fit: cover; }
+  .act .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgb(8 13 15 / .9), rgb(8 13 15 / .25) 55%, rgb(8 13 15 / .45)); }
+  .arrows { display: none; gap: 10px; }
+  .swipe .arrows { display: flex; }
+  .arrows button { width: 50px; height: 46px; border: 0; cursor: pointer; font-size: 1.25rem; color: var(--ink); background: rgb(255 255 255 / .14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: background-color .2s, color .2s, opacity .3s; }
+  .arrows button:hover { background: rgb(255 255 255 / .24); }
+  .arrows .go-next:not(:disabled) { background: var(--heat); color: var(--on-heat); }
+  .arrows button:disabled { opacity: .28; cursor: default; }
+  .arrows .go-next:not(:disabled) i { animation: nudge 1.8s var(--ease) infinite; }
+  @keyframes nudge { 0%, 60%, 100% { transform: none; } 30% { transform: translateX(4px); } }
+  .ritual .arrows { position: absolute; z-index: 5; top: 92px; right: 32px; }
+  .shore.swipe { padding: 120px 0; }
+  .shore.swipe .track { height: auto; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; gap: 12px; padding-right: 18px; transform: none !important; }
+  .shore.swipe .track::-webkit-scrollbar { display: none; }
+  .shore.swipe .intro { scroll-snap-align: start; }
+  .shore.swipe figure, .shore.swipe figure.up, .shore.swipe figure.down { height: 58vh; margin: 0; align-self: center; scroll-snap-align: start; }
+  .shore .arrows { justify-content: flex-end; margin-top: 22px; }
+  /* Steam in the finale stays low, under the words */
+  .finale canvas.steam { -webkit-mask-image: linear-gradient(to top, #000 12%, transparent 45%); mask-image: linear-gradient(to top, #000 12%, transparent 45%); }
+
   /* Plan your visit */
   .plan { padding: 160px 0 120px; background: linear-gradient(to bottom, var(--night), var(--night-2)); }
   .plan-head { max-width: 760px; }
@@ -365,6 +397,7 @@
     .act > .wrap > * { transition: none; filter: none; }
     .stage .layer, .stage .warm, .stage .chill { transition: none; }
     .puff { display: none; }
+    .arrows .go-next:not(:disabled) i { animation: none; }
     .hero .fog-intro { display: none; }
   }
 
@@ -387,12 +420,10 @@
     .ritual { height: 600vh; }
     .rail { left: 18px; top: 80px; }
     .act h2 { font-size: clamp(3.6rem, 19vw, 6rem); }
-    /* Shore turns into a swipeable row on phones */
-    .shore { padding: 100px 0; }
-    .shore .track { height: auto; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 0 18px; gap: 12px; transform: none !important; }
-    .shore .track::-webkit-scrollbar { display: none; }
-    .shore .intro { flex-basis: 78vw; scroll-snap-align: start; }
-    .shore figure, .shore figure.up, .shore figure.down { height: 58vh; margin: 0; align-self: center; scroll-snap-align: start; }
+    .shore.swipe { padding: 100px 0; }
+    .shore .track { padding: 0 18px; }
+    .shore .intro { flex-basis: 78vw; }
+    .ritual .arrows { top: 72px; right: 18px; }
     .plan { padding: 110px 0 80px; }
     .option { padding: 30px 24px; }
     .groups { grid-template-columns: 1fr; gap: 32px; }
@@ -493,6 +524,8 @@
         <li>Igjen<span class="pebble p2"></span></li>
       </ol>
 
+      <div class="arrows" role="group" aria-label="Bla gjennom ritualet"><button class="pebble go-prev" type="button" aria-label="Førre"><i class="ph ph-arrow-left" aria-hidden="true"></i></button><button class="pebble p2 go-next" type="button" aria-label="Neste"><i class="ph ph-arrow-right" aria-hidden="true"></i></button></div>
+
       <div class="acts">
         <article class="act on">
           <div class="wrap">
@@ -554,6 +587,7 @@
       <figure><img src="../img/deck-reflection.jpg" width="1536" height="1155" loading="lazy" alt="Fjell og naust speglar seg i glasveggen på badstua"></figure>
       <span class="end"></span>
     </div>
+    <div class="wrap"><div class="arrows" role="group" aria-label="Bla gjennom bileta"><button class="pebble go-prev" type="button" aria-label="Førre"><i class="ph ph-arrow-left" aria-hidden="true"></i></button><button class="pebble p2 go-next" type="button" aria-label="Neste"><i class="ph ph-arrow-right" aria-hidden="true"></i></button></div></div>
   </section>
 
   <!-- PLAN YOUR VISIT -->
@@ -759,10 +793,10 @@
       });
     }
     burst(n = 38) { for (let i = 0; i < n; i++) this.spawn(true); }
-    still() { // one static frame for reduced motion
+    still() { // one static frame for reduced motion: a low bank of steam along the bottom edge, away from the words
       const { g, w, h } = this; g.clearRect(0, 0, w, h);
-      g.globalAlpha = .35 * this.level;
-      for (let i = 0; i < 14; i++) { const r = 80 + i * 10; g.drawImage(sprite, (i / 14) * w - r, h * .55 + Math.sin(i) * 40 - r, r * 2, r * 2); }
+      g.globalAlpha = .3 * this.level;
+      for (let i = 0; i < 14; i++) { const r = 60 + (i % 4) * 14; g.drawImage(sprite, (i / 13) * w - r, h - r * .7, r * 2, r * 2); }
       g.globalAlpha = 1;
     }
     loop() {
@@ -915,20 +949,20 @@
     ScrollTrigger.create({ trigger: '.manifesto', start: 'top 75%', end: 'bottom 55%', scrub: true,
       onUpdate: (s) => { const n = Math.round(s.progress * words.length); words.forEach((w, i) => { w.style.opacity = i < n ? 1 : .14; }); } });
 
-    // Ritual: one act per slice of scroll, with a slow push-in on the active photo
-    ScrollTrigger.create({ trigger: '.ritual', start: 'top top', end: 'bottom bottom',
-      onUpdate: (s) => {
-        const f = s.progress * acts.length;
-        const i = Math.min(acts.length - 1, Math.floor(f));
-        setAct(i);
-        const local = f - i;
-        const img = layers[i].querySelector('img');
-        img.style.transform = `scale(${1.12 - local * .1})`;
-      } });
-
-    // Shore: vertical scroll pans the gallery sideways on wider screens
+    // Wider screens: the ritual plays one act per slice of scroll, with a slow push-in on the active photo,
+    // and vertical scroll pans the shore sideways. Phones swipe both instead (see swipe mode below).
     const mm = gsap.matchMedia();
     mm.add('(min-width: 768px)', () => {
+      ScrollTrigger.create({ trigger: '.ritual', start: 'top top', end: 'bottom bottom',
+        onUpdate: (s) => {
+          const f = s.progress * acts.length;
+          const i = Math.min(acts.length - 1, Math.floor(f));
+          setAct(i);
+          const local = f - i;
+          const img = layers[i].querySelector('img');
+          img.style.transform = `scale(${1.12 - local * .1})`;
+        } });
+
       const track = document.getElementById('track');
       const dist = () => track.scrollWidth - innerWidth;
       gsap.to(track, { x: () => -dist(), ease: 'none',
@@ -946,15 +980,54 @@
     ScrollTrigger.create({ trigger: '.finale', start: 'top bottom', end: 'center center', scrub: true,
       onUpdate: (s) => { if (steam.finale) steam.finale.target = .3 + s.progress * .8; } });
   } else {
-    // Without motion: everything visible, first act shown, other acts stacked as plain text
+    // Without motion: everything visible; the ritual and the shore use swipe mode below
     words.forEach((w) => (w.style.opacity = 1));
     nav.classList.add('solid');
-    document.querySelector('.ritual').style.height = 'auto';
-    document.querySelector('.stage').style.position = 'relative';
-    acts.forEach((a) => { a.classList.add('on'); a.style.position = 'relative'; });
-    document.querySelector('.acts').style.position = 'relative';
-    document.querySelector('.rail').style.display = 'none';
   }
+
+  /* ---------- Swipe mode: phones, and anyone who turned motion off ---------- */
+  const ritual = document.querySelector('.ritual');
+  const actsBox = document.querySelector('.acts');
+  const shore = document.querySelector('.shore');
+  const track = document.getElementById('track');
+  const narrow = matchMedia('(max-width: 767px)');
+  // Each act gets its own copy of its photo, so it slides with the text
+  acts.forEach((a, i) => {
+    const src = layers[i].querySelector('img');
+    const img = src.cloneNode();
+    img.removeAttribute('style'); img.style.objectPosition = src.style.objectPosition; img.loading = 'lazy';
+    const bg = document.createElement('div'); bg.className = 'bg'; bg.appendChild(img); a.prepend(bg);
+  });
+  const arrows = (box, group, step) => {
+    const [prev, next] = group.querySelectorAll('button');
+    const update = () => {
+      prev.disabled = box.scrollLeft < 8;
+      next.disabled = box.scrollLeft > box.scrollWidth - box.clientWidth - 8;
+    };
+    const go = (d) => box.scrollBy({ left: d * step(), behavior: calm ? 'auto' : 'smooth' });
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    box.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    return update;
+  };
+  const updates = [
+    arrows(actsBox, ritual.querySelector('.arrows'), () => actsBox.clientWidth),
+    arrows(track, shore.querySelector('.arrows'), () => track.clientWidth * .8),
+  ];
+  actsBox.addEventListener('scroll', () => {
+    if (ritual.classList.contains('swipe')) setAct(Math.min(acts.length - 1, Math.round(actsBox.scrollLeft / actsBox.clientWidth)));
+  }, { passive: true });
+  const applySwipe = () => {
+    const on = calm || narrow.matches;
+    ritual.classList.toggle('swipe', on);
+    shore.classList.toggle('swipe', on);
+    if (on) { actsBox.scrollLeft = 0; setAct(0); }
+    updates.forEach((u) => u());
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  };
+  applySwipe();
+  narrow.addEventListener('change', applySwipe);
 })();
 </script>
 </body>
