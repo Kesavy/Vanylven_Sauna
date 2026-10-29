@@ -9,11 +9,11 @@ SITE = 'https://www.vanylvensauna.no/'
 
 TEXT = {
   'en': dict(book='Book a session', open='Open menu', close='Close menu', menu='Menu', main='Main', contact='Contact and social',
-             email='Email', lang_name='Norsk', lang_code='nn', credit='Built by Stad Kystbygg. Run by volunteers from Vanylven.', design='Design by',
+             email='Email', lang_name='Norsk', lang_code='nn', credit='Vanylven Sauna is built by Stad Kystbygg and run by volunteers from Vanylven.', design='Website design and coding by',
              links=[('ritual', 'The ritual', '#ritual'), ('plan', 'Prices and booking', '#plan'), ('pay', 'How to pay', 'pay/'),
                     ('gift', 'Gift cards', 'gift/'), ('rules', 'Before you come', '#rules'), ('find', 'Find us', '#find')]),
   'nn': dict(book='Book ei økt', open='Opne meny', close='Lukk meny', menu='Meny', main='Hovudmeny', contact='Kontakt og sosiale medium',
-             email='E-post', lang_name='English', lang_code='en', credit='Bygd av Stad Kystbygg. Drifta av frivillige frå Vanylven.', design='Design av',
+             email='E-post', lang_name='English', lang_code='en', credit='Vanylven Sauna er bygd av Stad Kystbygg og drifta av frivillige frå Vanylven.', design='Design og koding av nettsida:',
              links=[('ritual', 'Ritualet', '#ritual'), ('plan', 'Prisar og booking', '#plan'), ('pay', 'Slik betaler du', 'pay/'),
                     ('gift', 'Gåvekort', 'gift/'), ('rules', 'Før du kjem', '#rules'), ('find', 'Finn oss', '#find')]),
 }
