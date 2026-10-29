@@ -1,0 +1,323 @@
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import shared, json
+
+ROOT = sys.argv[1]
+
+T = r'''<!doctype html>
+<html lang="{lang}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+<meta name="description" content="{desc}">
+<meta name="color-scheme" content="dark">
+<link rel="alternate" hreflang="{alt_lang}" href="{alt_href}">
+<link rel="icon" href="{img}logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<style>
+  /*
+    Gift card page: the buyer designs the card, sees it live, and sends the order from their own email app.
+    Nothing is stored or sent by the site. The card face copies the printed card (taupe, thin display title, ruled fields).
+  */
+  :root {{
+    --night: #0b1012; --night-2: #121a1d; --ink: #eef2f1; --muted: #a7b4b4; --faint: #6b7a7b;
+    --line: rgb(238 242 241 / .12); --heat: #ef6a32; --heat-soft: #ffb48f; --on-heat: #1a1310;
+    --brand: #5a4d44; --card: #716a64; --card-ink: #f3eee9; --radius: 16px; --max: 1180px; --ease: cubic-bezier(.16, 1, .3, 1);
+  }}
+  *, *::before, *::after {{ box-sizing: border-box; }}
+  html {{ background: var(--night); }}
+  body {{
+    margin: 0; color: var(--ink); font-family: "Schibsted Grotesk", system-ui, sans-serif; font-size: 17px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: clip; min-height: 100dvh; display: flex; flex-direction: column;
+    background: radial-gradient(55% 45% at 80% 10%, rgb(113 106 100 / .35), transparent 70%), var(--night);
+  }}
+  img {{ display: block; max-width: 100%; height: auto; }}
+  a {{ color: inherit; }}
+  button, input, select, textarea {{ font: inherit; color: inherit; }}
+  :focus-visible {{ outline: 3px solid var(--heat); outline-offset: 3px; }}
+  .wrap {{ max-width: var(--max); margin: 0 auto; padding: 0 32px; }}
+  h1, h2, h3 {{ margin: 0; font-weight: 800; letter-spacing: -0.035em; line-height: 1; }}
+  p {{ margin: 0; }}
+  .pebble {{ display: inline-grid; place-items: center; border-radius: 58% 42% 55% 45% / 47% 58% 42% 53%; }}
+  .pebble.p2 {{ border-radius: 45% 55% 40% 60% / 60% 45% 55% 40%; }}
+  .pebble.p3 {{ border-radius: 62% 38% 48% 52% / 52% 40% 60% 48%; }}
+  .btn {{
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 17px 28px; border-radius: 999px; border: 0; cursor: pointer;
+    font-weight: 700; font-size: 1rem; line-height: 1; text-decoration: none; white-space: nowrap; transition: transform .25s var(--ease), background-color .25s;
+  }}
+  .btn:active {{ transform: scale(.97); }}
+  .btn-heat {{ background: var(--heat); color: var(--on-heat); }}
+  .btn-heat:hover {{ background: #ff7a42; }}
+
+
+  main {{ flex: 1; padding: 128px 0 120px; }}
+  .layout {{ display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: start; }}
+  .head h1 {{ font-size: clamp(2.6rem, 5.5vw, 4.4rem); max-width: 12ch; }}
+  .head p {{ margin-top: 18px; color: var(--muted); font-size: 1.12rem; max-width: 44ch; }}
+
+  form {{ margin-top: 44px; display: grid; gap: 26px; }}
+  .field {{ display: grid; gap: 10px; }}
+  .field > span, .field legend {{ font-weight: 600; font-size: .95rem; padding: 0; }}
+  .field small {{ color: var(--faint); font-weight: 400; }}
+  fieldset {{ border: 0; margin: 0; padding: 0; }}
+  input[type="text"], textarea {{
+    width: 100%; padding: 15px 18px; border-radius: 12px; border: 0; background: rgb(255 255 255 / .06);
+    box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .2s, background-color .2s;
+  }}
+  input[type="text"]:hover, textarea:hover {{ background: rgb(255 255 255 / .08); }}
+  input[type="text"]:focus, textarea:focus {{ outline: none; box-shadow: inset 0 0 0 2px var(--heat); }}
+  textarea {{ resize: vertical; min-height: 92px; }}
+  .two {{ display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }}
+
+  .choices {{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }}
+  .choice {{ position: relative; }}
+  .choice input {{ position: absolute; opacity: 0; inset: 0; cursor: pointer; }}
+  .choice label {{
+    display: grid; gap: 2px; padding: 16px 16px 14px; border-radius: 14px; cursor: pointer;
+    box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .2s, background-color .2s;
+  }}
+  .choice label strong {{ font-size: 1.2rem; letter-spacing: -0.02em; }}
+  .choice label span {{ color: var(--muted); font-size: .9rem; }}
+  .choice input:checked + label {{ background: rgb(239 106 50 / .1); box-shadow: inset 0 0 0 2px var(--heat); }}
+  .choice input:focus-visible + label {{ outline: 3px solid var(--heat); outline-offset: 3px; }}
+
+  .send {{ display: grid; gap: 14px; padding-top: 8px; }}
+  .send .btn {{ width: 100%; }}
+  .send p {{ color: var(--faint); font-size: .88rem; }}
+
+  .side {{ position: sticky; top: 28px; display: grid; gap: 28px; }}
+
+  /* The card face */
+  .card {{
+    container-type: inline-size; aspect-ratio: 1.55; border-radius: 10px; position: relative; overflow: hidden; color: var(--card-ink);
+    background: radial-gradient(120% 90% at 20% 0%, rgb(255 255 255 / .08), transparent 60%), var(--card);
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / .7), 0 2px 0 rgb(255 255 255 / .06) inset;
+    transform: rotate(-2deg); transition: transform .6s var(--ease);
+  }}
+  .card:hover {{ transform: rotate(0); }}
+  .card .title {{ position: absolute; top: 9%; left: 0; right: 0; text-align: center; font-family: "Italiana", serif; font-weight: 400; font-size: 12.5cqi; letter-spacing: .06em; line-height: 1; }}
+  .card dl {{ position: absolute; left: 7%; top: 33%; width: 50%; margin: 0; display: grid; gap: 4.6cqi; }}
+  .card dl div {{ display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 2cqi; border-bottom: 1px solid rgb(243 238 233 / .55); padding-bottom: .6cqi; }}
+  .card dt {{ font-family: "Italiana", serif; font-size: 3.4cqi; line-height: 1; opacity: .9; }}
+  .card dd {{ margin: 0; font-size: 3.3cqi; font-weight: 500; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.1em; }}
+  .card .msg {{ position: absolute; left: 7%; bottom: 7%; width: 50%; font-size: 2.8cqi; font-style: italic; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }}
+  .card .mark {{ position: absolute; right: 8%; bottom: 10%; display: grid; justify-items: center; gap: 1cqi; }}
+  .card .mark img {{ width: 13cqi; height: auto; }}
+  .card .mark b {{ font-family: "Italiana", serif; font-weight: 400; font-size: 5.6cqi; letter-spacing: .14em; line-height: 1; }}
+  .card .mark small {{ font-size: 1.7cqi; letter-spacing: .4em; text-transform: uppercase; opacity: .8; }}
+
+  .how {{ display: grid; gap: 16px; padding: 26px; border-radius: var(--radius); background: var(--night-2); box-shadow: inset 0 0 0 1px var(--line); }}
+  .how h2 {{ font-size: 1.2rem; letter-spacing: -0.02em; }}
+  .how ol {{ list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }}
+  .how li {{ display: grid; grid-template-columns: 38px 1fr; gap: 14px; color: var(--muted); font-size: .97rem; }}
+  .how li strong {{ color: var(--ink); font-weight: 600; }}
+  .how .pebble {{ width: 34px; height: 31px; background: var(--ink); color: var(--night); font-weight: 800; font-size: .85rem; }}
+  .how a {{ color: var(--heat-soft); }}
+
+  /* Steam: you fill in the card while sitting in the sauna. Faded behind the form so the text stays clean, fuller around the card. */
+  canvas.steam {{
+    position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0;
+    -webkit-mask-image: linear-gradient(to right, rgb(0 0 0 / .18) 0%, rgb(0 0 0 / .18) 42%, #000 72%);
+    mask-image: linear-gradient(to right, rgb(0 0 0 / .18) 0%, rgb(0 0 0 / .18) 42%, #000 72%);
+  }}
+  main, footer {{ position: relative; z-index: 1; }}
+  input[type="text"], textarea {{ background-color: rgb(18 26 29 / .72); }}
+  .choice label {{ background-color: rgb(18 26 29 / .55); }}
+
+  @media (max-width: 900px) {{
+    .wrap {{ padding: 0 18px; }}
+    main {{ padding-top: 92px; }}
+    .layout {{ grid-template-columns: 1fr; gap: 40px; }}
+    .side {{ position: static; order: -1; }}
+    .card {{ transform: rotate(-1.5deg); }}
+    .choices {{ grid-template-columns: 1fr 1fr 1fr; }}
+    .choice label {{ padding: 14px 12px 12px; }}
+    .two {{ grid-template-columns: 1fr; }}
+    .how {{ display: none; }}
+    .how.after {{ display: grid; }}
+    canvas.steam {{ -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / .5) 30%, rgb(0 0 0 / .12) 55%); mask-image: linear-gradient(to bottom, #000 0%, rgb(0 0 0 / .5) 30%, rgb(0 0 0 / .12) 55%); }}
+  }}
+  @media (min-width: 901px) {{ .how.after {{ display: none; }} }}
+  @media (prefers-reduced-motion: reduce) {{ * {{ transition: none !important; }} }}
+{shell_css}</style>
+</head>
+<body>
+<canvas class="steam" aria-hidden="true"></canvas>
+
+{shell_header}
+
+<main>
+  <div class="wrap layout">
+    <div>
+      <div class="head">
+        <h1>{h1}</h1>
+        <p>{lead}</p>
+      </div>
+
+      <form id="order" novalidate>
+        <fieldset class="field">
+          <legend>{l_gift}</legend>
+          <div class="choices">
+            <div class="choice"><input type="radio" name="hours" id="h2" value="2" checked><label for="h2"><strong>{h2}</strong><span>600 kr</span></label></div>
+            <div class="choice"><input type="radio" name="hours" id="h4" value="4"><label for="h4"><strong>{h4}</strong><span>1200 kr</span></label></div>
+            <div class="choice"><input type="radio" name="hours" id="h6" value="6"><label for="h6"><strong>{h6}</strong><span>1800 kr</span></label></div>
+          </div>
+        </fieldset>
+        <div class="two">
+          <label class="field"><span>{l_to}</span><input type="text" name="to" maxlength="40" autocomplete="off" placeholder="{p_to}"></label>
+          <label class="field"><span>{l_from}</span><input type="text" name="from" maxlength="40" autocomplete="name" placeholder="{p_from}"></label>
+        </div>
+        <label class="field"><span>{l_msg} <small>{optional}</small></span><textarea name="msg" maxlength="90" placeholder="{p_msg}"></textarea></label>
+        <div class="send">
+          <button class="btn btn-heat" type="submit"><i class="ph ph-envelope-simple" aria-hidden="true"></i>{send}</button>
+          <p>{send_note}</p>
+        </div>
+      </form>
+
+      <section class="how after" aria-label="{how_h}">
+        <h2>{how_h}</h2>
+        <ol>{how_items}</ol>
+      </section>
+    </div>
+
+    <div class="side">
+      <figure class="card" aria-label="{preview_label}" style="margin:0">
+        <div class="title">{card_title}</div>
+        <dl>
+          <div><dt>{c_value}</dt><dd data-out="value"></dd></div>
+          <div><dt>{c_to}</dt><dd data-out="to"></dd></div>
+          <div><dt>{c_from}</dt><dd data-out="from"></dd></div>
+          <div><dt>{c_valid}</dt><dd></dd></div>
+        </dl>
+        <p class="msg" data-out="msg"></p>
+        <div class="mark"><img src="{img}badge.png" alt="" width="500" height="500"><b>VANYLVEN</b><small>Sauna</small></div>
+      </figure>
+
+      <section class="how" aria-label="{how_h}">
+        <h2>{how_h}</h2>
+        <ol>{how_items}</ol>
+      </section>
+    </div>
+  </div>
+</main>
+
+{shell_footer}
+
+<script>
+  // Steam: soft sprites rising on a half-resolution canvas (same recipe as the main page, without the water mode)
+  (() => {{
+    const c = document.querySelector('canvas.steam');
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sprite = document.createElement('canvas'); sprite.width = sprite.height = 128;
+    const sg = sprite.getContext('2d'), rg = sg.createRadialGradient(64, 64, 0, 64, 64, 64);
+    rg.addColorStop(0, 'rgba(240,244,244,1)'); rg.addColorStop(.45, 'rgba(240,244,244,.45)'); rg.addColorStop(1, 'rgba(240,244,244,0)');
+    sg.fillStyle = rg; sg.fillRect(0, 0, 128, 128);
+    const g = c.getContext('2d'); let w, h, parts = [], tick = 0;
+    const size = () => {{ w = c.width = Math.round(innerWidth * .5); h = c.height = Math.round(innerHeight * .5); if (calm) still(); }};
+    const spawn = (y) => parts.push({{ x: Math.random() * w, y: y ?? h + 40, seed: Math.random() * 1000, vy: -(.2 + Math.random() * .35) * (h / 500),
+      r: 34 + Math.random() * 44, grow: .22 + Math.random() * .3, life: 0, max: 520 + Math.random() * 260, a: .26 + Math.random() * .16 }});
+    function still() {{ g.clearRect(0, 0, w, h); g.globalAlpha = .3; for (let i = 0; i < 12; i++) {{ const r = 90 + i * 8; g.drawImage(sprite, (i / 12) * w - r, h * .45 + Math.sin(i) * 50 - r, r * 2, r * 2); }} g.globalAlpha = 1; }}
+    function frame() {{
+      tick++;
+      if (parts.length < 46 && tick % 3 === 0) spawn();
+      g.clearRect(0, 0, w, h);
+      for (let i = parts.length - 1; i >= 0; i--) {{
+        const p = parts[i]; p.life++; p.y += p.vy; p.r += p.grow;
+        p.x += Math.sin(p.seed + p.life * .012) * .45 + Math.sin(p.seed * 2 + tick * .004) * .25;
+        const k = p.life / p.max;
+        if (k >= 1 || p.y + p.r < -20) {{ parts.splice(i, 1); continue; }}
+        g.globalAlpha = Math.sin(Math.PI * k) * p.a; g.drawImage(sprite, p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+      }}
+      g.globalAlpha = 1;
+      if (!document.hidden) requestAnimationFrame(frame); else addEventListener('visibilitychange', () => requestAnimationFrame(frame), {{ once: true }});
+    }}
+    size(); addEventListener('resize', size);
+    if (!calm) {{ for (let i = 0; i < 24; i++) {{ spawn(Math.random() * h * 1.1); parts[i].life = Math.random() * 300; }} requestAnimationFrame(frame); }}
+  }})();
+
+  const t = {strings};
+  const form = document.getElementById('order');
+  const out = (k) => document.querySelector('[data-out="' + k + '"]');
+  const val = (n) => form.elements[n].value.trim();
+  const hours = () => form.querySelector('input[name="hours"]:checked').value;
+
+  function render() {{
+    out('value').textContent = t.value(hours());
+    out('to').textContent = val('to');
+    out('from').textContent = val('from');
+    out('msg').textContent = val('msg') ? '“' + val('msg') + '”' : '';
+  }}
+  form.addEventListener('input', render);
+  render();
+
+  // Opens the buyer's own email app with the order filled in. Nothing is sent by the website itself.
+  form.addEventListener('submit', (e) => {{
+    e.preventDefault();
+    const h = hours();
+    const lines = [
+      t.mailHello, '',
+      t.mailGift + ': ' + t.value(h) + ' (' + (h * 300) + ' kr)',
+      t.mailTo + ': ' + (val('to') || '-'),
+      t.mailFrom + ': ' + (val('from') || '-'),
+      t.mailMsg + ': ' + (val('msg') || '-'), '',
+      t.mailPay.replace('{{amount}}', h * 300).replace('{{ref}}', t.refWord + ' ' + (val('to') || '')), '',
+      t.mailThanks,
+    ];
+    location.href = 'mailto:vanylvensauna@gmail.com?subject=' + encodeURIComponent(t.subject) + '&body=' + encodeURIComponent(lines.join('\r\n'));
+  }});
+{shell_js}</script>
+</body>
+</html>
+'''
+
+def how(items):
+    cls = ['', ' p2', ' p3']
+    return ''.join(f'<li><span class="pebble{cls[i]}" aria-hidden="true">{i+1}</span><p>{x}</p></li>' for i, x in enumerate(items))
+
+en = dict(
+  lang='en', title='Gift cards | Vanylven Sauna',
+  desc='Give a few quiet hours by the fjord. Design a Vanylven Sauna gift card and order it by email.',
+  alt_lang='nn', alt_name='Norsk', nav_label='Page links', nav_prices='Prices',
+  h1='Give a few quiet hours', lead='A gift card is something to do, not something to keep. Fill in the card and see it take shape, then send us the order.',
+  l_gift='How long?', h2='2 hours', h4='4 hours', h6='6 hours',
+  l_to='To', p_to='Who is it for?', l_from='From', p_from='Your name', l_msg='A short message', optional='(optional)', p_msg='Happy birthday! Time to slow down.',
+  send='Send the order', send_note='This opens your email app with the order filled in. Nothing is sent until you press send there.',
+  how_h='How it works',
+  how_items=how(['<strong>Send the order</strong> from your email.', '<strong>Pay with Vipps</strong> to 943550, or by bank transfer. <a href="../pay/">Payment details</a>', '<strong>We send you the gift card</strong> by email, ready to print or forward.']),
+  preview_label='Preview of your gift card', card_title='GIFT CARD', c_value='Value:', c_to='To:', c_from='From:', c_valid='Valid until:',
+  strings=dict(subject='Gift card order', mailHello='Hi, I would like to order a gift card.', mailGift='Gift', mailTo='To', mailFrom='From', mailMsg='Message on the card',
+    mailPay='I will pay {amount} kr with Vipps to 943550, with the message "{ref}".', refWord='Gift card', mailThanks='Thank you!'),
+)
+nn = dict(
+  lang='nn', title='Gåvekort | Vanylven Sauna',
+  desc='Gi nokre stille timar ved fjorden. Lag eit gåvekort frå Vanylven Sauna og bestill det på e-post.',
+  alt_lang='en', alt_name='English', nav_label='Lenker', nav_prices='Prisar',
+  h1='Gi nokre stille timar', lead='Eit gåvekort er noko å gjere, ikkje noko å ha. Fyll ut kortet og sjå det ta form, og send oss så bestillinga.',
+  l_gift='Kor lenge?', h2='2 timar', h4='4 timar', h6='6 timar',
+  l_to='Til', p_to='Kven er det til?', l_from='Frå', p_from='Namnet ditt', l_msg='Ei kort helsing', optional='(valfritt)', p_msg='Gratulerer med dagen! Tid for å senke skuldrane.',
+  send='Send bestillinga', send_note='Dette opnar e-postprogrammet ditt med bestillinga ferdig utfylt. Ingenting blir sendt før du trykkjer send der.',
+  how_h='Slik gjer du',
+  how_items=how(['<strong>Send bestillinga</strong> frå e-posten din.', '<strong>Betal med Vipps</strong> til 943550, eller med bankoverføring. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post, klart til å skrive ut eller sende vidare.']),
+  preview_label='Førehandsvising av gåvekortet', card_title='GÅVEKORT', c_value='Beløp:', c_to='Til:', c_from='Frå:', c_valid='Gyldig til:',
+  strings=dict(subject='Bestilling av gåvekort', mailHello='Hei, eg vil gjerne bestille eit gåvekort.', mailGift='Gåve', mailTo='Til', mailFrom='Frå', mailMsg='Helsing på kortet',
+    mailPay='Eg betaler {amount} kr med Vipps til 943550, med meldinga «{ref}».', refWord='Gåvekort', mailThanks='Takk!'),
+)
+
+for d, path, img, home, alt_href, unit in [
+    (en, 'gift/index.html', '../img/', '../', '../nn/gift/', 'hours'),
+    (nn, 'nn/gift/index.html', '../../img/', '../', '../../gift/', 'timar'),
+]:
+    s = dict(d['strings'])
+    js = json.dumps(s, ensure_ascii=False)
+    js = js[:-1] + ', value: (h) => h + " ' + unit + '"}'
+    d2 = {k: v for k, v in d.items() if k != 'strings'}
+    out = os.path.join(ROOT, path)
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, 'w', encoding='utf-8', newline='') as f:
+        sh, sf = shared.parts(d['lang'], '../', img, alt_href, here='gift')
+        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, img=img, home=home, alt_href=alt_href, strings=js, **d2))
+    print('wrote', path)

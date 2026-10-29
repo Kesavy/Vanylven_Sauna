@@ -1,0 +1,127 @@
+# One header, menu and footer for every page. The home page is the source of truth;
+# subpages get the same markup with paths adjusted, and the header starts in its "solid" state.
+
+CALENDLY = 'https://calendly.com/vanylvensauna/sauna'
+
+TEXT = {
+  'en': dict(book='Book a session', open='Open menu', close='Close menu', menu='Menu', main='Main', contact='Contact and social',
+             email='Email', lang_name='Norsk', lang_code='nn', credit='Built by Stad Kystbygg. Run by volunteers from Vanylven.', design='Design by',
+             links=[('ritual', 'The ritual', '#ritual'), ('plan', 'Prices and booking', '#plan'), ('pay', 'How to pay', 'pay/'),
+                    ('gift', 'Gift cards', 'gift/'), ('rules', 'Before you come', '#rules'), ('find', 'Find us', '#find')]),
+  'nn': dict(book='Book ei økt', open='Opne meny', close='Lukk meny', menu='Meny', main='Hovudmeny', contact='Kontakt og sosiale medium',
+             email='E-post', lang_name='English', lang_code='en', credit='Bygd av Stad Kystbygg. Drifta av frivillige frå Vanylven.', design='Design av',
+             links=[('ritual', 'Ritualet', '#ritual'), ('plan', 'Prisar og booking', '#plan'), ('pay', 'Slik betaler du', 'pay/'),
+                    ('gift', 'Gåvekort', 'gift/'), ('rules', 'Før du kjem', '#rules'), ('find', 'Finn oss', '#find')]),
+}
+
+
+def parts(lang, home, img, lang_href, here=None):
+    """home: path to this language's home ('' on the home page itself, '../' on a subpage).
+    lang_href: link to the same page in the other language. here: id of the current page, marked aria-current."""
+    t = TEXT[lang]
+    brand_href = '#top' if home == '' else home
+    def href(target):
+        return target if home == '' else home + target
+    cur = ' aria-current="page"'
+    links = ''.join(
+        f'      <a href="{href(u)}" style="--i:{i}" data-close{cur if k == here else ""}>{label}</a>\n'
+        for i, (k, label, u) in enumerate(t['links']))
+    lc = t['lang_code']
+    header = f'''<header class="nav{"" if home == "" else " solid"}" id="nav">
+  <div class="wrap">
+    <a class="brand" href="{brand_href}"><img src="{img}badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+    <span class="spacer"></span>
+    <a class="btn btn-heat book" href="{CALENDLY}" target="_blank" rel="noopener">{t['book']}</a>
+    <button class="menu-btn pebble" type="button" aria-label="{t['open']}" aria-controls="fog" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+  </div>
+</header>
+
+<div class="fog" id="fog" role="dialog" aria-modal="true" aria-label="{t['menu']}">
+  <div class="wrap" style="display:flex;flex-direction:column;height:100%">
+    <div class="top">
+      <a class="brand" href="{brand_href}" data-close><img src="{img}badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+      <button class="menu-btn pebble p3" type="button" aria-label="{t['close']}" data-close><i class="ph ph-x" aria-hidden="true"></i></button>
+    </div>
+    <nav aria-label="{t['main']}">
+{links}    </nav>
+    <div class="foot">
+      <a class="btn btn-heat book" href="{CALENDLY}" target="_blank" rel="noopener">{t['book']} <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
+      <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a>
+      <a href="{lang_href}" hreflang="{lc}" lang="{lc}">{t['lang_name']}</a>
+    </div>
+  </div>
+</div>'''
+    footer = f'''<footer>
+  <div class="wrap row">
+    <a class="brand" href="{brand_href}"><img src="{img}badge.png" alt="" width="44" height="44">Vanylven Sauna</a>
+    <nav aria-label="{t['contact']}">
+      <a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i>{t['email']}</a>
+      <a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i>Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener"><i class="ph ph-facebook-logo" aria-hidden="true"></i>Facebook</a>
+      <a href="{lang_href}" hreflang="{lc}" lang="{lc}">{t['lang_name']}</a>
+    </nav>
+  </div>
+  <p class="wrap credit"><span>{t['credit']}</span><span>{t['design']} <a href="https://lossless.cz" target="_blank" rel="noopener">Lossless</a></span></p>
+</footer>'''
+    return header, footer
+
+
+# Same rules as the home page; the shell always uses the home page's 1280px width and 32/18px gutters.
+CSS = '''
+  /* ---- Shared shell: header, menu, footer (identical on every page) ---- */
+  .nav .wrap, .fog .wrap, footer .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .nav { position: fixed; inset: 0 0 auto; z-index: 60; transition: background-color .4s, backdrop-filter .4s; }
+  .nav.solid { background: rgb(11 16 18 / .55); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); }
+  .nav .wrap { height: 72px; display: flex; align-items: center; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 700; letter-spacing: -0.01em; }
+  .brand img { width: 44px; height: 44px; }
+  .nav .spacer { flex: 1; }
+  .nav .btn { padding: 12px 20px; font-size: .95rem; }
+  .menu-btn { width: 48px; height: 46px; border: 0; cursor: pointer; background: rgb(255 255 255 / .1); font-size: 1.35rem; display: inline-grid; place-items: center; }
+  .menu-btn:hover { background: rgb(255 255 255 / .18); }
+  body.locked { overflow: hidden; }
+  .fog {
+    position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column; padding: 0 0 40px;
+    background: rgb(11 16 18 / .55); backdrop-filter: blur(28px) saturate(1.2); -webkit-backdrop-filter: blur(28px) saturate(1.2);
+    opacity: 0; visibility: hidden; transition: opacity .5s var(--ease), visibility 0s .5s;
+  }
+  .fog.open { opacity: 1; visibility: visible; transition: opacity .5s var(--ease); }
+  .fog > .wrap { width: 100%; }
+  .fog .top { height: 72px; display: flex; align-items: center; justify-content: space-between; }
+  .fog nav { display: grid; gap: 2px; margin-top: 6vh; }
+  .fog nav a {
+    font-size: clamp(2.2rem, 6vw, 4.2rem); font-weight: 800; letter-spacing: -0.04em; text-decoration: none; line-height: 1.15;
+    opacity: 0; filter: blur(12px); transform: translateY(14px);
+    transition: opacity .7s, filter .7s, transform .7s var(--ease), color .2s; transition-delay: calc(var(--i) * 60ms + 100ms);
+  }
+  .fog nav a:hover, .fog nav a[aria-current] { color: var(--heat-soft); }
+  .fog.open nav a { opacity: 1; filter: blur(0); transform: none; }
+  .fog .foot { margin-top: auto; padding-top: 36px; display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: center; color: var(--muted); }
+  footer { background: var(--brand); color: #f3eee9; padding: 40px 0; }
+  footer .credit { margin-top: 24px; font-size: .85rem; color: rgb(243 238 233 / .6); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer .credit a { display: inline; text-decoration: underline; text-underline-offset: 3px; }
+  footer .row { display: flex; flex-wrap: wrap; gap: 28px; justify-content: space-between; align-items: center; }
+  footer nav { display: flex; flex-wrap: wrap; gap: 24px; }
+  footer a { text-decoration: none; display: inline-flex; align-items: center; gap: 8px; opacity: .9; }
+  footer a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  @media (max-width: 767px) {
+    .nav .wrap, .fog .wrap, footer .wrap { padding: 0 18px; }
+    .nav .wrap { height: 64px; }
+    .nav .btn { display: none; }
+  }
+'''
+
+JS = '''
+  // Shared shell: fogged menu
+  (() => {
+    const nav = document.getElementById('nav'), fog = document.getElementById('fog'), openBtn = nav.querySelector('.menu-btn');
+    const setMenu = (open) => {
+      fog.classList.toggle('open', open); document.body.classList.toggle('locked', open);
+      openBtn.setAttribute('aria-expanded', open);
+      (open ? fog.querySelector('nav a') : openBtn).focus({ preventScroll: true });
+    };
+    openBtn.addEventListener('click', () => setMenu(true));
+    fog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', () => setMenu(false)));
+    addEventListener('keydown', (e) => { if (e.key === 'Escape' && fog.classList.contains('open')) setMenu(false); });
+  })();
+'''
