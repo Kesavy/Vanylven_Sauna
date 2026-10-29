@@ -288,9 +288,8 @@
   .shore.swipe figure, .shore.swipe figure.up, .shore.swipe figure.down { height: 58vh; margin: 0; align-self: center; scroll-snap-align: start; }
   .shore .arrows { justify-content: flex-end; margin-top: 22px; }
   /* Steam in the finale stays low, under the words */
-  .finale canvas.steam { -webkit-mask-image: linear-gradient(to top, #000 25%, transparent 70%); mask-image: linear-gradient(to top, #000 25%, transparent 70%); }
+  .finale canvas.steam { -webkit-mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / .85) 12%, rgb(0 0 0 / .55) 24%, rgb(0 0 0 / .25) 36%, rgb(0 0 0 / .08) 46%, transparent 56%); mask-image: linear-gradient(to top, #000 0%, rgb(0 0 0 / .85) 12%, rgb(0 0 0 / .55) 24%, rgb(0 0 0 / .25) 36%, rgb(0 0 0 / .08) 46%, transparent 56%); }
   @media (max-width: 767px) { .finale canvas.steam { -webkit-mask-image: linear-gradient(to top, #000 6%, transparent 28%); mask-image: linear-gradient(to top, #000 6%, transparent 28%); } }
-  .finale p { text-shadow: 0 1px 18px rgb(8 13 15 / .9); }
 
   /* Plan your visit */
   .plan { padding: 160px 0 120px; background: linear-gradient(to bottom, var(--night), var(--night-2)); }
@@ -995,7 +994,7 @@
 
     // Finale steam builds as it comes into view
     ScrollTrigger.create({ trigger: '.finale', start: 'top bottom', end: 'center center', scrub: true,
-      onUpdate: (s) => { if (steam.finale) steam.finale.target = innerWidth < 768 ? .25 + s.progress * .45 : .3 + s.progress * .8; } });
+      onUpdate: (s) => { if (steam.finale) steam.finale.target = innerWidth < 768 ? .25 + s.progress * .45 : .3 + s.progress * .6; } });
   } else {
     // Without motion: everything visible; the ritual and the shore use swipe mode below
     words.forEach((w) => (w.style.opacity = 1));
