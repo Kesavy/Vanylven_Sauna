@@ -100,11 +100,12 @@ T = r'''<!doctype html>
   .note p {{ color: var(--ink); font-size: .98rem; }}
   .note p span {{ color: var(--muted); }}
 
-  /* QR: placeholder until the operator downloads the code from the Vipps portal. Shown on wide screens only: you scan it with the phone you pay from. */
+  /* QR for Vipps number 943550 (from the Vipps portal). Shown on wide screens only: you scan it with the phone you pay from. */
   .qr {{ position: sticky; top: 32px; border-radius: var(--radius); padding: 28px; background: var(--night-2); box-shadow: inset 0 0 0 1px var(--line); text-align: center; }}
   .qr .slot {{ aspect-ratio: 1; display: grid; place-items: center; border-radius: 12px; background: repeating-linear-gradient(45deg, rgb(255 255 255 / .03) 0 10px, transparent 10px 20px); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .16); color: var(--faint); }}
   .qr .slot i {{ font-size: 4rem; }}
-  .qr .slot img {{ width: 100%; height: auto; border-radius: 12px; background: #fff; padding: 14px; }}
+  .qr .slot {{ background: none; box-shadow: none; }}
+  .qr .slot img {{ display: block; width: 100%; height: auto; border-radius: 6.5%; }}
   .qr h3 {{ margin-top: 22px; font-size: 1.15rem; letter-spacing: -0.02em; }}
   .qr p {{ margin-top: 6px; color: var(--muted); font-size: .92rem; }}
   .side p.small {{ color: var(--muted); font-size: .95rem; }}
@@ -169,8 +170,7 @@ T = r'''<!doctype html>
         <div class="note"><i class="ph ph-chat-text" aria-hidden="true"></i><p>{msg_note}</p></div>
       </div>
       <aside class="qr">
-        <!-- QR WANTED: download the QR code for Vipps number 943550 from portal.vippsmobilepay.com, save it as img/vipps-qr.png and replace the icon below with: <img src="{img}vipps-qr.png" alt="{qr_alt}" width="400" height="400"> -->
-        <div class="slot"><i class="ph-light ph-qr-code" aria-hidden="true"></i></div>
+        <div class="slot"><img src="{img}vipps-qr.jpg" alt="{qr_alt}" width="800" height="800"></div>
         <h3>{qr_h}</h3>
         <p>{qr_p}</p>
       </aside>
