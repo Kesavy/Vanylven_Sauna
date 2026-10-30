@@ -124,7 +124,7 @@ def parts(lang, home, img, lang_href, here=None):
       <a href="{lang_href}" hreflang="{lc}" lang="{lc}">{t['lang_name']}</a>
     </nav>
   </div>
-  <p class="wrap credit"><span>{t['credit']}</span><span>{t['design']} <a href="https://lossless.cz" target="_blank" rel="noopener">Lossless</a></span></p>
+  <p class="wrap credit"><span>{t['credit']}</span><span>{t['design']} <a href="https://lossless.cz" target="_blank" rel="noopener">Lossless</a>.</span></p>
 </footer>'''
     return header, footer
 
