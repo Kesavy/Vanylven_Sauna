@@ -90,6 +90,25 @@ T = r'''<!doctype html>
   .send {{ display: grid; gap: 14px; padding-top: 8px; }}
   .send .btn {{ width: 100%; }}
   .send p {{ color: var(--faint); font-size: .88rem; }}
+  .send .noapp {{ justify-self: start; border: 0; background: none; padding: 0; color: var(--heat-soft); font: inherit; font-size: .88rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }}
+
+  /* Fallback when no email app opens: the order in the card's look, ready to copy */
+  .copybox {{ border: 0; padding: 0; max-width: min(560px, calc(100vw - 32px)); width: 100%; background: none; color: var(--card-ink); }}
+  .copybox::backdrop {{ background: rgb(8 13 15 / .75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }}
+  .copybox .face {{ position: relative; border-radius: 14px; padding: 30px 30px 26px; display: grid; gap: 18px;
+    background: radial-gradient(120% 90% at 20% 0%, rgb(255 255 255 / .08), transparent 60%), var(--card); box-shadow: 0 40px 80px -30px rgb(0 0 0 / .8); }}
+  .copybox .face > img {{ width: 52%; height: auto; justify-self: center; }}
+  .copybox h2 {{ font-size: 1.35rem; letter-spacing: -0.02em; }}
+  .copybox .lead {{ font-size: .98rem; line-height: 1.5; }}
+  .copybox .lead strong {{ white-space: nowrap; }}
+  .copybox .order {{ margin: 0; padding: 16px 18px; border-radius: 10px; background: rgb(0 0 0 / .18); box-shadow: inset 0 0 0 1px rgb(243 238 233 / .25);
+    font-family: inherit; font-size: .92rem; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 40vh; overflow: auto; font-weight: 400; }}
+  .copybox .order b {{ font-weight: 800; color: #fff; }}
+  .copybox .actions {{ display: flex; flex-wrap: wrap; gap: 10px; }}
+  .copybox .actions .btn {{ flex: 1 1 auto; }}
+  .copybox .btn-light {{ background: rgb(243 238 233 / .14); color: var(--card-ink); box-shadow: inset 0 0 0 1px rgb(243 238 233 / .35); }}
+  .copybox .btn-light:hover {{ background: rgb(243 238 233 / .22); }}
+  .copybox .close {{ position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border: 0; border-radius: 50%; cursor: pointer; background: rgb(0 0 0 / .18); color: var(--card-ink); font-size: 1.2rem; display: grid; place-items: center; }}
 
   .side {{ position: sticky; top: 28px; display: grid; gap: 28px; }}
 
@@ -106,8 +125,8 @@ T = r'''<!doctype html>
   .card dl {{ position: absolute; left: 7%; top: 29%; width: 50%; margin: 0; display: grid; gap: 3.8cqi; }}
   .card dl div {{ display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 2cqi; border-bottom: 1px solid rgb(243 238 233 / .55); padding-bottom: .6cqi; }}
   .card dt {{ font-family: "Italiana", serif; font-size: 3.4cqi; line-height: 1; opacity: .9; }}
-  .card dd {{ margin: 0; font-size: 3.3cqi; font-weight: 500; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.1em; }}
-  .card .msg {{ position: absolute; left: 7%; bottom: 6%; width: 50%; font-size: 2.8cqi; font-style: italic; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }}
+  .card dd {{ margin: 0; font-size: 3.3cqi; font-weight: 700; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.1em; }}
+  .card .msg {{ position: absolute; left: 7%; bottom: 6%; width: 50%; font-size: 2.8cqi; font-style: italic; font-weight: 700; line-height: 1.35; opacity: .9; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }}
   .card .mark {{ position: absolute; right: 7%; bottom: 9%; }}
   .card .mark img {{ display: block; width: 25cqi; height: auto; }}
 
@@ -176,8 +195,23 @@ T = r'''<!doctype html>
         <div class="send">
           <button class="btn btn-heat" type="submit"><i class="ph ph-envelope-simple" aria-hidden="true"></i>{send}</button>
           <p>{send_note}</p>
+          <button class="noapp" type="button">{noapp}</button>
         </div>
       </form>
+
+      <dialog class="copybox" aria-labelledby="copy-h">
+        <div class="face">
+          <button class="close" type="button" aria-label="{close}"><i class="ph ph-x" aria-hidden="true"></i></button>
+          <img src="{img}gavekort.svg" alt="" width="273" height="44">
+          <h2 id="copy-h">{pop_h}</h2>
+          <p class="lead">{pop_p}</p>
+          <pre class="order"></pre>
+          <div class="actions">
+            <button class="btn btn-heat" type="button" data-copy="order"><i class="ph ph-copy" aria-hidden="true"></i><span>{copy_order}</span></button>
+            <button class="btn btn-light" type="button" data-copy="email"><i class="ph ph-at" aria-hidden="true"></i><span>{copy_email}</span></button>
+          </div>
+        </div>
+      </dialog>
 
       <section class="how after" aria-label="{how_h}">
         <h2>{how_h}</h2>
@@ -192,7 +226,7 @@ T = r'''<!doctype html>
           <div><dt>{c_value}</dt><dd data-out="value"></dd></div>
           <div><dt>{c_to}</dt><dd data-out="to"></dd></div>
           <div><dt>{c_from}</dt><dd data-out="from"></dd></div>
-          <div><dt>{c_valid}</dt><dd></dd></div>
+          <div><dt>{c_valid}</dt><dd data-out="valid"></dd></div>
         </dl>
         <p class="msg" data-out="msg"></p>
         <div class="mark"><img src="{img}logo-full.svg" alt="Vanylven Sauna" width="278" height="182"></div>
@@ -248,6 +282,12 @@ T = r'''<!doctype html>
   const val = (n) => form.elements[n].value.trim();
   const hours = () => form.querySelector('input[name="hours"]:checked').value;
 
+  // Valid for one year from the day the card is filled in
+  const until = new Date(); until.setFullYear(until.getFullYear() + 1);
+  // Month names are spelled out here: browsers without Nynorsk would otherwise fall back to their own language
+  const validText = t.date.replace('{{d}}', until.getDate()).replace('{{m}}', t.months[until.getMonth()]).replace('{{y}}', until.getFullYear());
+  out('valid').textContent = validText;
+
   function render() {{
     out('value').textContent = t.value(hours());
     out('to').textContent = val('to');
@@ -262,20 +302,59 @@ T = r'''<!doctype html>
   form.addEventListener('input', render);
   render();
 
-  // Opens the buyer's own email app with the order filled in. Nothing is sent by the website itself.
-  form.addEventListener('submit', (e) => {{
-    e.preventDefault();
-    const h = hours();
-    const lines = [
+  // The order as lines; [label, customer's own text] pairs are shown bold in the copy dialog
+  const EMAIL = 'vanylvensauna@gmail.com';
+  function order() {{
+    const h = hours(), amount = money(h * 300);
+    return [
       t.mailHello, '',
-      t.mailGift + ': ' + t.value(h) + ' (' + money(h * 300) + ')',
-      t.mailTo + ': ' + (val('to') || '-'),
-      t.mailFrom + ': ' + (val('from') || '-'),
-      t.mailMsg + ': ' + (val('msg') || '-'), '',
-      t.mailPay.replace('{{amount}}', money(h * 300)).replace('{{ref}}', t.refWord + ' ' + (val('to') || '')), '',
+      [t.mailGift + ': ', t.value(h) + ' (' + amount + ')'],
+      [t.mailTo + ': ', val('to') || '-'],
+      [t.mailFrom + ': ', val('from') || '-'],
+      [t.mailMsg + ': ', val('msg') || '-'],
+      [t.mailValid + ': ', validText], '',
+      t.mailPay.replace('{{amount}}', amount).replace('{{ref}}', t.refWord + ' ' + (val('to') || '')), '',
       t.mailThanks,
     ];
-    location.href = 'mailto:vanylvensauna@gmail.com?subject=' + encodeURIComponent(t.subject) + '&body=' + encodeURIComponent(lines.join('\r\n'));
+  }}
+  const plain = () => order().map((l) => (Array.isArray(l) ? l.join('') : l)).join('\r\n');
+
+  const box = document.querySelector('.copybox');
+  const pre = box.querySelector('.order');
+  function showCopy() {{
+    pre.replaceChildren();
+    order().forEach((l, i) => {{
+      if (i) pre.append('\n');
+      if (Array.isArray(l)) {{ const b = document.createElement('b'); b.textContent = l[1]; pre.append(l[0], b); }}
+      else pre.append(l);
+    }});
+    if (!box.open) box.showModal();
+  }}
+  box.querySelector('.close').addEventListener('click', () => box.close());
+  box.addEventListener('click', (e) => {{ if (e.target === box) box.close(); }});
+  box.querySelectorAll('[data-copy]').forEach((b) => b.addEventListener('click', async () => {{
+    const label = b.querySelector('span'), text = label.textContent;
+    try {{ await navigator.clipboard.writeText(b.dataset.copy === 'order' ? plain() : EMAIL); }}
+    catch (e) {{ const r = document.createRange(); r.selectNodeContents(b.dataset.copy === 'order' ? pre : label); getSelection().removeAllRanges(); getSelection().addRange(r); return; }}
+    label.textContent = t.copied;
+    setTimeout(() => {{ label.textContent = text; }}, 1800);
+  }}));
+  document.querySelector('.noapp').addEventListener('click', showCopy);
+
+  // Opens the buyer's own email app with the order filled in. Nothing is sent by the website itself.
+  // If no email app takes over (the page keeps focus), the order is shown to copy instead.
+  form.addEventListener('submit', (e) => {{
+    e.preventDefault();
+    let left = false;
+    const away = () => {{ left = true; }};
+    addEventListener('blur', away, {{ once: true }});
+    document.addEventListener('visibilitychange', away, {{ once: true }});
+    location.href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent(t.subject) + '&body=' + encodeURIComponent(plain());
+    setTimeout(() => {{
+      removeEventListener('blur', away);
+      document.removeEventListener('visibilitychange', away);
+      if (!left && document.visibilityState === 'visible' && document.hasFocus()) showCopy();
+    }}, 1600);
   }});
 {shell_js}</script>
 </body>
@@ -294,10 +373,13 @@ en = dict(
   l_gift='How long?', h2='2 hours', h4='4 hours', h6='6 hours',
   l_to='To', p_to='Who is it for?', l_from='From', p_from='Your name', l_msg='A short message', optional='(optional)', p_msg='Happy birthday! Time to slow down.',
   send='Send the order', send_note='This opens your email app with the order filled in. Nothing is sent until you press send there.',
+  noapp='No email app opened? Copy the order instead',
+  pop_h='Copy your order and email it to us', pop_p='Your email app did not open, so the order is not sent yet. Copy the text below and send it by email to <strong>vanylvensauna@gmail.com</strong>.',
+  copy_order='Copy the order', copy_email='Copy email address', close='Close',
   how_h='How it works',
   how_items=how(['<strong>Send the order</strong> from your email.', '<strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. <a href="../pay/">Payment details</a>', '<strong>We send you the gift card</strong> by email, with its own number, ready to print or forward.', '<strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.']),
   preview_label='Preview of your gift card', card_title='GIFT CARD', c_value='Value:', c_to='To:', c_from='From:', c_valid='Valid until:',
-  strings=dict(subject='Gift card order', mailHello='Hi, I would like to order a gift card.', mailGift='Gift', mailTo='To', mailFrom='From', mailMsg='Message on the card',
+  strings=dict(subject='Gift card order', mailHello='Hi, I would like to order a gift card.', mailGift='Gift', mailTo='To', mailFrom='From', mailMsg='Message on the card', mailValid='Valid until', copied='Copied', date='{d} {m} {y}', months=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     mailPay='I will pay {amount} with Vipps or bank transfer, with the message "{ref}".', refWord='Gift card', mailThanks='Thank you!'),
 )
 nn = dict(
@@ -308,10 +390,13 @@ nn = dict(
   l_gift='Kor lenge?', h2='2 timar', h4='4 timar', h6='6 timar',
   l_to='Til', p_to='Kven er det til?', l_from='Frå', p_from='Namnet ditt', l_msg='Ei kort helsing', optional='(valfritt)', p_msg='Gratulerer med dagen! Tid for å senke skuldrane.',
   send='Send bestillinga', send_note='Dette opnar e-postprogrammet ditt med bestillinga ferdig utfylt. Ingenting blir sendt før du trykkjer send der.',
+  noapp='Opna ikkje e-postprogrammet seg? Kopier bestillinga i staden',
+  pop_h='Kopier bestillinga og send ho til oss på e-post', pop_p='E-postprogrammet ditt opna seg ikkje, så bestillinga er ikkje send enno. Kopier teksten under og send han på e-post til <strong>vanylvensauna@gmail.com</strong>.',
+  copy_order='Kopier bestillinga', copy_email='Kopier e-postadressa', close='Lukk',
   how_h='Slik gjer du',
   how_items=how(['<strong>Send bestillinga</strong> frå e-posten din.', '<strong>Betal med Vipps eller bankoverføring.</strong> Vipps-nummeret vårt er 943550. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post, med eige nummer, klart til å skrive ut eller sende vidare.', '<strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss nummeret på gåvekortet på e-post i staden for å betale.']),
   preview_label='Førehandsvising av gåvekortet', card_title='GÅVEKORT', c_value='Beløp:', c_to='Til:', c_from='Frå:', c_valid='Gyldig til:',
-  strings=dict(subject='Bestilling av gåvekort', mailHello='Hei, eg vil gjerne bestille eit gåvekort.', mailGift='Gåve', mailTo='Til', mailFrom='Frå', mailMsg='Helsing på kortet',
+  strings=dict(subject='Bestilling av gåvekort', mailHello='Hei, eg vil gjerne bestille eit gåvekort.', mailGift='Gåve', mailTo='Til', mailFrom='Frå', mailMsg='Helsing på kortet', mailValid='Gyldig til', copied='Kopiert', date='{d}. {m} {y}', months=['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'],
     mailPay='Eg betaler {amount} med Vipps eller bankoverføring, med meldinga «{ref}».', refWord='Gåvekort', mailThanks='Takk!'),
 )
 
