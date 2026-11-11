@@ -42,4 +42,18 @@
     <xhtml:link rel="alternate" hreflang="nn" href="https://www.vanylvensauna.no/nn/find/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.vanylvensauna.no/find/"/>
   </url>
+  <url>
+    <loc>https://www.vanylvensauna.no/privacy/</loc>
+    <lastmod>2026-11-11</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.vanylvensauna.no/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="nn" href="https://www.vanylvensauna.no/nn/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.vanylvensauna.no/privacy/"/>
+  </url>
+  <url>
+    <loc>https://www.vanylvensauna.no/nn/privacy/</loc>
+    <lastmod>2026-11-11</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.vanylvensauna.no/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="nn" href="https://www.vanylvensauna.no/nn/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.vanylvensauna.no/privacy/"/>
+  </url>
 </urlset>

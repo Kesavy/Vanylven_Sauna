@@ -11,11 +11,11 @@ SITE = 'https://www.vanylvensauna.no/'
 
 TEXT = {
   'en': dict(book='Book a session', open='Open menu', close='Close menu', menu='Menu', main='Main', contact='Contact and social',
-             email='Email', lang_name='Norsk', lang_code='nn', credit='Vanylven Sauna is built by Stad Kystbygg and run by volunteers from Vanylven.', design='Website design and coding by',
+             email='Email', lang_name='Norsk', lang_code='nn', privacy='Privacy', credit='Vanylven Sauna is built by Stad Kystbygg and run by volunteers from Vanylven.', design='Website design and coding by',
              links=[('ritual', 'The ritual', '#ritual'), ('plan', 'Prices and booking', '#plan'), ('pay', 'How to pay', 'pay/'),
                     ('gift', 'Gift cards', 'gift/'), ('rules', 'Before you come', '#rules'), ('find', 'Find us', 'find/')]),
   'nn': dict(book='Book ei økt', open='Opne meny', close='Lukk meny', menu='Meny', main='Hovudmeny', contact='Kontakt og sosiale medium',
-             email='E-post', lang_name='English', lang_code='en', credit='Vanylven Sauna er bygd av Stad Kystbygg og drifta av frivillige frå Vanylven.', design='Design og koding av nettsida:',
+             email='E-post', lang_name='English', lang_code='en', privacy='Personvern', credit='Vanylven Sauna er bygd av Stad Kystbygg og drifta av frivillige frå Vanylven.', design='Design og koding av nettsida:',
              links=[('ritual', 'Ritualet', '#ritual'), ('plan', 'Prisar og booking', '#plan'), ('pay', 'Slik betaler du', 'pay/'),
                     ('gift', 'Gåvekort', 'gift/'), ('rules', 'Før du kjem', '#rules'), ('find', 'Finn oss', 'find/')]),
 }
@@ -133,6 +133,7 @@ def parts(lang, home, img, lang_href, here=None):
       <a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i>{t['email']}</a>
       <a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i>Instagram</a>
       <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener"><i class="ph ph-facebook-logo" aria-hidden="true"></i>Facebook</a>
+      <a href="{href('privacy/')}"><i class="ph ph-shield-check" aria-hidden="true"></i>{t['privacy']}</a>
       <a href="{lang_href}" hreflang="{lc}" lang="{lc}">{t['lang_name']}</a>
     </nav>
   </div>

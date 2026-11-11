@@ -90,6 +90,7 @@ T = r'''<!doctype html>
   .send {{ display: grid; gap: 14px; padding-top: 8px; }}
   .send .btn {{ width: 100%; }}
   .send p {{ color: var(--faint); font-size: .88rem; }}
+  .send p a {{ color: var(--muted); }}
   .send .err {{ color: #ffb48f; font-size: .92rem; font-weight: 600; }}
   .send .btn:disabled {{ opacity: .6; cursor: progress; }}
   [hidden] {{ display: none !important; }}
@@ -434,7 +435,7 @@ en = dict(
   l_gift='How long?', h2='2 hours', h4='4 hours', h6='6 hours',
   l_to='To', p_to='Who is it for?', l_from='From', p_from='Your name', l_msg='A short message', optional='(optional)', p_msg='Happy birthday! Time to slow down.',
   l_email='Your email', p_email='So we can send you the card',
-  send='Send the order', send_note='We keep your name, email and the card details only to issue and redeem the gift card, and delete them once the card has expired.',
+  send='Send the order', send_note='We keep your name, email and the card details only to issue and redeem the gift card, and delete them once the card has expired. <a href="../privacy/">Privacy</a>',
   again='Order another gift card',
   pop_h='Copy your order and email it to us', pop_p='Your email app did not open, so the order is not sent yet. Copy the text below and send it by email to <strong>vanylvensauna@gmail.com</strong>.',
   copy_order='Copy the order', copy_email='Copy email address', close='Close',
@@ -455,7 +456,7 @@ nn = dict(
   l_gift='Kor lenge?', h2='2 timar', h4='4 timar', h6='6 timar',
   l_to='Til', p_to='Kven er det til?', l_from='Frå', p_from='Namnet ditt', l_msg='Ei kort helsing', optional='(valfritt)', p_msg='Gratulerer med dagen! Tid for å senke skuldrane.',
   l_email='E-posten din', p_email='Så vi kan sende deg kortet',
-  send='Send bestillinga', send_note='Vi tek vare på namn, e-post og opplysningane på kortet berre for å skrive ut og løyse inn gåvekortet, og slettar dei når kortet har gått ut.',
+  send='Send bestillinga', send_note='Vi tek vare på namn, e-post og opplysningane på kortet berre for å skrive ut og løyse inn gåvekortet, og slettar dei når kortet har gått ut. <a href="../privacy/">Personvern</a>',
   again='Bestill eit gåvekort til',
   pop_h='Kopier bestillinga og send ho til oss på e-post', pop_p='E-postprogrammet ditt opna seg ikkje, så bestillinga er ikkje send enno. Kopier teksten under og send han på e-post til <strong>vanylvensauna@gmail.com</strong>.',
   copy_order='Kopier bestillinga', copy_email='Kopier e-postadressa', close='Lukk',
