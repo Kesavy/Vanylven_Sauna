@@ -9,8 +9,8 @@ LAT, LON = 62.0973003, 5.5577698
 PLACE = 'https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6'
 DIRECTIONS = f'https://www.google.com/maps/dir/?api=1&destination={LAT},{LON}'
 APPLE = f'https://maps.apple.com/?daddr={LAT},{LON}&q=Vanylven%20Sauna'
-# OpenStreetMap: no cookies or tracking, unlike an embedded Google map
-OSM = f'https://www.openstreetmap.org/export/embed.html?bbox={LON-.012:.5f},{LAT-.0045:.5f},{LON+.012:.5f},{LAT+.0045:.5f}&layer=mapnik&marker={LAT},{LON}'
+# Embedded Google map, zoomed in on Fiskå harbour (no API key needed)
+GMAP = f'https://maps.google.com/maps?q=Vanylven%20Sauna&ll={LAT+.0009:.7f},{LON}&z=16&hl={{hl}}&output=embed'
 REVIEW = 'https://g.page/r/CasW7u5nZ30fEBM/review'
 
 T = r'''<!doctype html>
@@ -75,10 +75,10 @@ T = r'''<!doctype html>
   address .label {{ font-size: .85rem; color: var(--faint); font-weight: 600; margin-bottom: 4px; }}
   address .gps {{ margin-top: 6px; color: var(--muted); font-size: .9rem; }}
 
-  /* The map: OpenStreetMap, darkened to sit in the night palette */
+  /* The map: embedded Google Maps */
   .map {{ margin: 0; border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; background: var(--night-2);
     box-shadow: inset 0 0 0 1px var(--line), 0 40px 80px -40px rgb(0 0 0 / .8); }}
-  .map iframe {{ display: block; width: 100%; flex: 1; min-height: 540px; border: 0; filter: invert(.92) hue-rotate(180deg) saturate(.7) brightness(.95); }}
+  .map iframe {{ display: block; width: 100%; flex: 1; min-height: 540px; border: 0; }}
   .map figcaption {{ display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; font-size: .82rem; color: var(--faint); border-top: 1px solid var(--line); }}
   .map figcaption a {{ color: var(--muted); }}
 
@@ -143,8 +143,8 @@ T = r'''<!doctype html>
         </address>
       </div>
       <figure class="map">
-        <iframe src="{osm}" title="{map_title}" loading="lazy" referrerpolicy="no-referrer"></iframe>
-        <figcaption><span>© OpenStreetMap</span><a href="{place}" target="_blank" rel="noopener">{open_google}</a></figcaption>
+        <iframe src="{gmap}" title="{map_title}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        <figcaption><span>Google Maps</span><a href="{place}" target="_blank" rel="noopener">{open_google}</a></figcaption>
       </figure>
     </section>
 
@@ -226,5 +226,5 @@ for d, path, img, alt_href in [
         sh, sf = shared.parts(d['lang'], '../', img, alt_href, here='find')
         f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS,
                          seo=shared.seo('find/', d['lang'], d['title'], d['desc'], 'img/harbour-reflection.jpg'), icons=shared.icons(img),
-                         directions=DIRECTIONS, apple=APPLE, osm=OSM, place=PLACE, review=REVIEW, lat=LAT, lon=LON, **d))
+                         directions=DIRECTIONS, apple=APPLE, gmap=GMAP.replace('{hl}', 'no' if d['lang'] == 'nn' else 'en'), place=PLACE, review=REVIEW, lat=LAT, lon=LON, **d))
     print('wrote', path)
