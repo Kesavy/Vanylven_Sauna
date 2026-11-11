@@ -60,44 +60,61 @@ T = r'''<!doctype html>
   .btn-glass {{ background: rgb(255 255 255 / .08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .22); }}
   .btn-glass:hover {{ background: rgb(255 255 255 / .14); }}
 
-  main {{ flex: 1; padding: 136px 0 120px; }}
-  .layout {{ display: grid; grid-template-columns: 1fr 1.25fr; gap: 64px; align-items: start; }}
-  .head h1 {{ font-size: clamp(2.6rem, 6vw, 4.6rem); max-width: 12ch; }}
-  .head p {{ margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 40ch; }}
-  .go {{ margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }}
+  main {{ flex: 1; padding: 128px 0 120px; }}
+  .eyebrow {{ display: inline-flex; gap: 8px; align-items: center; font-size: .9rem; font-weight: 600; color: var(--cold, #8fd0e0); }}
+  .sec-h {{ font-size: clamp(1.8rem, 3.4vw, 2.6rem); letter-spacing: -0.035em; }}
+  .sec-lead {{ margin-top: 12px; color: var(--muted); font-size: 1.05rem; max-width: 52ch; }}
 
-  .info {{ margin-top: 56px; display: grid; gap: 36px; }}
-  .info h2 {{ font-size: .9rem; font-weight: 600; letter-spacing: 0; color: var(--muted); margin-bottom: 10px; }}
-  address {{ font-style: normal; font-size: 1.1rem; line-height: 1.55; }}
-  address small {{ display: block; margin-top: 8px; color: var(--muted); font-size: .9rem; }}
-  .contact {{ list-style: none; margin: 0; padding: 0; display: grid; border-radius: var(--radius); box-shadow: inset 0 0 0 1px var(--line); overflow: hidden; }}
-  .contact li + li {{ border-top: 1px solid var(--line); }}
-  .contact a {{ display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: center; padding: 16px 20px; text-decoration: none; transition: background-color .2s; }}
-  .contact a:hover {{ background: rgb(255 255 255 / .05); }}
-  .contact i {{ font-size: 1.35rem; color: var(--heat-soft); }}
-  .contact span small {{ display: block; color: var(--muted); font-size: .85rem; }}
-  .contact .ph-arrow-up-right {{ font-size: 1rem; color: var(--faint); }}
-  .note {{ color: var(--muted); font-size: .95rem; max-width: 46ch; }}
-  .note a {{ color: var(--heat-soft); }}
+  /* 1. Where: the answer first, map beside it */
+  .where {{ display: grid; grid-template-columns: 5fr 7fr; gap: 56px; align-items: stretch; }}
+  .where .text {{ display: flex; flex-direction: column; padding: 8px 0; }}
+  .where h1 {{ margin-top: 14px; font-size: clamp(2.8rem, 6vw, 4.8rem); max-width: 10ch; }}
+  .where .lead {{ margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 34ch; }}
+  .go {{ margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }}
+  address {{ margin-top: auto; padding-top: 40px; font-style: normal; display: grid; gap: 4px; }}
+  address .label {{ font-size: .85rem; color: var(--faint); font-weight: 600; margin-bottom: 4px; }}
+  address .gps {{ margin-top: 6px; color: var(--muted); font-size: .9rem; }}
 
   /* The map: OpenStreetMap, darkened to sit in the night palette */
-  .map {{ position: sticky; top: 104px; border-radius: var(--radius); overflow: hidden; box-shadow: inset 0 0 0 1px var(--line), 0 40px 80px -40px rgb(0 0 0 / .8); background: var(--night-2); }}
-  .map iframe {{ display: block; width: 100%; height: min(72vh, 640px); border: 0; filter: invert(.92) hue-rotate(180deg) saturate(.7) brightness(.95); }}
+  .map {{ margin: 0; border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; background: var(--night-2);
+    box-shadow: inset 0 0 0 1px var(--line), 0 40px 80px -40px rgb(0 0 0 / .8); }}
+  .map iframe {{ display: block; width: 100%; flex: 1; min-height: 540px; border: 0; filter: invert(.92) hue-rotate(180deg) saturate(.7) brightness(.95); }}
   .map figcaption {{ display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; font-size: .82rem; color: var(--faint); border-top: 1px solid var(--line); }}
   .map figcaption a {{ color: var(--muted); }}
 
-  .review {{ margin-top: 80px; padding: 30px; border-radius: var(--radius); display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;
+  /* 2. Getting here: three steps in order */
+  .arrive {{ margin-top: 120px; padding-top: 56px; border-top: 1px solid var(--line); }}
+  .steps {{ list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }}
+  .steps li {{ padding: 28px; border-radius: var(--radius); background: var(--night-2); box-shadow: inset 0 0 0 1px var(--line); display: grid; gap: 12px; align-content: start; }}
+  .steps .pebble {{ width: 44px; height: 40px; background: var(--ink); color: var(--night); font-weight: 800; }}
+  .steps h3 {{ font-size: 1.2rem; letter-spacing: -0.02em; line-height: 1.2; margin-top: 6px; }}
+  .steps p {{ color: var(--muted); font-size: .98rem; }}
+
+  /* 3. Contact: one card per channel */
+  .contact {{ margin-top: 120px; padding-top: 56px; border-top: 1px solid var(--line); }}
+  .channels {{ list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }}
+  .channels a {{ height: 100%; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; padding: 24px; border-radius: var(--radius); text-decoration: none;
+    box-shadow: inset 0 0 0 1px var(--line); transition: background-color .2s, box-shadow .2s; }}
+  .channels a:hover {{ background: rgb(255 255 255 / .04); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .25); }}
+  .channels .ico {{ font-size: 1.6rem; color: var(--heat-soft); line-height: 1; }}
+  .channels strong {{ display: block; font-size: 1.05rem; overflow-wrap: anywhere; }}
+  .channels small {{ display: block; margin-top: 4px; color: var(--muted); font-size: .9rem; line-height: 1.45; }}
+  .channels .ph-arrow-up-right {{ color: var(--faint); }}
+
+  /* 4. Review */
+  .review {{ margin-top: 96px; padding: 32px; border-radius: var(--radius); display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between;
     background: rgb(239 106 50 / .07); box-shadow: inset 0 0 0 1px rgb(239 106 50 / .25); }}
   .review h2 {{ font-size: 1.4rem; letter-spacing: -0.02em; }}
   .review p {{ margin-top: 6px; color: var(--muted); }}
 
-  @media (max-width: 900px) {{
+  @media (max-width: 960px) {{
     .wrap {{ padding: 0 18px; }}
     main {{ padding-top: 96px; }}
-    .layout {{ grid-template-columns: 1fr; gap: 40px; }}
-    .map {{ position: static; }}
-    .map iframe {{ height: 360px; }}
+    .where {{ grid-template-columns: 1fr; gap: 32px; }}
+    .map iframe {{ min-height: 340px; }}
     .go .btn {{ flex: 1 1 auto; justify-content: center; }}
+    .steps, .channels {{ grid-template-columns: 1fr; }}
+    .arrive, .contact {{ margin-top: 80px; padding-top: 44px; }}
   }}
   @media (prefers-reduced-motion: reduce) {{ * {{ transition: none !important; }} }}
 {shell_css}</style>
@@ -108,39 +125,47 @@ T = r'''<!doctype html>
 
 <main>
   <div class="wrap">
-    <div class="layout">
-      <div>
-        <div class="head">
-          <h1>{h1}</h1>
-          <p>{lead}</p>
-        </div>
+    <section class="where" aria-labelledby="where-h">
+      <div class="text">
+        <span class="eyebrow"><i class="ph ph-map-pin" aria-hidden="true"></i>{eyebrow}</span>
+        <h1 id="where-h">{h1}</h1>
+        <p class="lead">{lead}</p>
         <div class="go">
           <a class="btn btn-heat" href="{directions}" target="_blank" rel="noopener"><i class="ph ph-navigation-arrow" aria-hidden="true"></i>{go_google}</a>
           <a class="btn btn-glass" href="{apple}" target="_blank" rel="noopener"><i class="ph ph-apple-logo" aria-hidden="true"></i>{go_apple}</a>
         </div>
-
-        <div class="info">
-          <section>
-            <h2>{addr_h}</h2>
-            <address>Vanylven Sauna<br>{addr_line}<br>6143 Fiskå, {country}<small>{coords} {lat:.5f}, {lon:.5f}</small></address>
-          </section>
-          <section>
-            <h2>{contact_h}</h2>
-            <ul class="contact">
-              <li><a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple" aria-hidden="true"></i><span>vanylvensauna@gmail.com<small>{email_note}</small></span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></li>
-              <li><a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener"><i class="ph ph-messenger-logo" aria-hidden="true"></i><span>Messenger<small>{messenger_note}</small></span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></li>
-              <li><a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo" aria-hidden="true"></i><span>Instagram<small>@vanylvensauna</small></span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></li>
-            </ul>
-          </section>
-          <p class="note">{note}</p>
-        </div>
+        <address>
+          <span class="label">{addr_h}</span>
+          <span>Vanylven Sauna</span>
+          <span>{addr_line}</span>
+          <span>6143 Fiskå, {country}</span>
+          <span class="gps">{coords} {lat:.5f}, {lon:.5f}</span>
+        </address>
       </div>
-
-      <figure class="map" style="margin:0">
+      <figure class="map">
         <iframe src="{osm}" title="{map_title}" loading="lazy" referrerpolicy="no-referrer"></iframe>
         <figcaption><span>© OpenStreetMap</span><a href="{place}" target="_blank" rel="noopener">{open_google}</a></figcaption>
       </figure>
-    </div>
+    </section>
+
+    <section class="arrive" aria-labelledby="arrive-h">
+      <h2 class="sec-h" id="arrive-h">{arrive_h}</h2>
+      <ol class="steps">
+        <li><span class="pebble" aria-hidden="true">1</span><h3>{s1_h}</h3><p>{s1_p}</p></li>
+        <li><span class="pebble p2" aria-hidden="true">2</span><h3>{s2_h}</h3><p>{s2_p}</p></li>
+        <li><span class="pebble p3" aria-hidden="true">3</span><h3>{s3_h}</h3><p>{s3_p}</p></li>
+      </ol>
+    </section>
+
+    <section class="contact" aria-labelledby="contact-h">
+      <h2 class="sec-h" id="contact-h">{contact_h}</h2>
+      <p class="sec-lead">{contact_lead}</p>
+      <ul class="channels">
+        <li><a href="mailto:vanylvensauna@gmail.com"><i class="ph ph-envelope-simple ico" aria-hidden="true"></i><span><strong>{email_h}</strong><small>vanylvensauna@gmail.com<br>{email_note}</small></span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener"><i class="ph ph-messenger-logo ico" aria-hidden="true"></i><span><strong>Messenger</strong><small>{messenger_note}</small></span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></li>
+        <li><a href="https://www.instagram.com/vanylvensauna/" target="_blank" rel="noopener"><i class="ph ph-instagram-logo ico" aria-hidden="true"></i><span><strong>Instagram</strong><small>@vanylvensauna<br>{insta_note}</small></span><i class="ph ph-arrow-up-right" aria-hidden="true"></i></a></li>
+      </ul>
+    </section>
 
     <section class="review">
       <div>
@@ -163,22 +188,30 @@ T = r'''<!doctype html>
 en = dict(
   lang='en', title='Find us | Vanylven Sauna',
   desc='Vanylven Sauna is on the shore below Fiskå Brygge Gjestgiveri in Fiskå, Vanylven. Map, directions and contact.',
-  h1='Find us in Fiskå', lead='On the shore below Fiskå Brygge Gjestgiveri, right by the Vanylvsfjord.',
+  eyebrow='Fiskå, Vanylven', h1='Find us in Fiskå', lead='On the shore below Fiskå Brygge Gjestgiveri, right by the Vanylvsfjord.',
   go_google='Directions in Google Maps', go_apple='Apple Maps',
   addr_h='Address', addr_line='Below Fiskå Brygge Gjestgiveri', country='Norway', coords='GPS',
-  contact_h='Get in touch', email_note='Questions, bookings outside opening hours, gift cards', messenger_note='Message us on Facebook',
-  note='We have no phone, but we answer email and messages quickly. Booked a session? Your door code comes the day before. <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session</a>',
+  arrive_h='Getting here',
+  s1_h='Head for Fiskå Brygge Gjestgiveri', s1_p='The sauna is in the centre of Fiskå, by the harbour. The directions buttons above take you there.',
+  s2_h='Walk down to the shore', s2_p='The sauna sits on the rocks right below the guesthouse, at the water’s edge.',
+  s3_h='Enter your door code', s3_p='For private sessions, the code comes by email the day before. Open sauna on Wednesdays needs no booking.',
+  contact_h='Questions?', contact_lead='We have no phone, but we answer emails and messages quickly.',
+  email_h='Email', email_note='Questions, sessions outside opening hours, gift cards', messenger_note='Message us on our Facebook page', insta_note='Photos and news from the shore',
   map_title='Map showing Vanylven Sauna in Fiskå', open_google='Open in Google Maps',
   review_h='Been with us?', review_p='A few words on Google help other people find the sauna.', review_btn='Leave a review on Google',
 )
 nn = dict(
   lang='nn', title='Finn oss | Vanylven Sauna',
   desc='Vanylven Sauna ligg i sjøkanten nedanfor Fiskå Brygge Gjestgiveri på Fiskå i Vanylven. Kart, vegbeskriving og kontakt.',
-  h1='Finn oss på Fiskå', lead='I sjøkanten nedanfor Fiskå Brygge Gjestgiveri, rett ved Vanylvsfjorden.',
+  eyebrow='Fiskå, Vanylven', h1='Finn oss på Fiskå', lead='I sjøkanten nedanfor Fiskå Brygge Gjestgiveri, rett ved Vanylvsfjorden.',
   go_google='Vegbeskriving i Google Maps', go_apple='Apple Kart',
   addr_h='Adresse', addr_line='Nedanfor Fiskå Brygge Gjestgiveri', country='Noreg', coords='GPS',
-  contact_h='Ta kontakt', email_note='Spørsmål, booking utanom opningstidene, gåvekort', messenger_note='Send oss ei melding på Facebook',
-  note='Vi har ikkje telefon, men vi svarar raskt på e-post og meldingar. Har du booka? Koden til døra kjem dagen før. <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt</a>',
+  arrive_h='Slik finn du fram',
+  s1_h='Køyr eller gå til Fiskå Brygge Gjestgiveri', s1_p='Badstua ligg midt på Fiskå, ved hamna. Knappane for vegbeskriving over tek deg dit.',
+  s2_h='Gå ned til sjøkanten', s2_p='Badstua står på svaberget rett nedanfor gjestgiveriet, heilt nede ved vatnet.',
+  s3_h='Tast inn koden', s3_p='For privat badstue kjem koden på e-post dagen før. Open badstue på onsdagar treng ikkje booking.',
+  contact_h='Spørsmål?', contact_lead='Vi har ikkje telefon, men vi svarar raskt på e-post og meldingar.',
+  email_h='E-post', email_note='Spørsmål, økter utanom opningstidene, gåvekort', messenger_note='Send oss ei melding på Facebook-sida vår', insta_note='Bilete og nytt frå sjøkanten',
   map_title='Kart som viser Vanylven Sauna på Fiskå', open_google='Opne i Google Maps',
   review_h='Har du vore hos oss?', review_p='Nokre ord på Google hjelper andre å finne badstua.', review_btn='Skriv ei omtale på Google',
 )
