@@ -13,7 +13,7 @@ T = r'''<!doctype html>
 <meta name="description" content="{desc}">
 <meta name="color-scheme" content="dark">
 {seo}
-<link rel="icon" href="{img}logo-mark.png">
+{icons}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
@@ -64,12 +64,12 @@ T = r'''<!doctype html>
   .field > span, .field legend {{ font-weight: 600; font-size: .95rem; padding: 0; }}
   .field small {{ color: var(--faint); font-weight: 400; }}
   fieldset {{ border: 0; margin: 0; padding: 0; }}
-  input[type="text"], textarea {{
+  input[type="text"], input[type="email"], textarea {{
     width: 100%; padding: 15px 18px; border-radius: 12px; border: 0; background: rgb(255 255 255 / .06);
     box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .2s, background-color .2s;
   }}
-  input[type="text"]:hover, textarea:hover {{ background: rgb(255 255 255 / .08); }}
-  input[type="text"]:focus, textarea:focus {{ outline: none; box-shadow: inset 0 0 0 2px var(--heat); }}
+  input[type="text"]:hover, input[type="email"]:hover, textarea:hover {{ background: rgb(255 255 255 / .08); }}
+  input[type="text"]:focus, input[type="email"]:focus, textarea:focus {{ outline: none; box-shadow: inset 0 0 0 2px var(--heat); }}
   textarea {{ resize: none; min-height: 92px; }}
   .field .count {{ justify-self: end; margin-top: -4px; color: var(--faint); font-size: .85rem; font-variant-numeric: tabular-nums; }}
   .field .count.near {{ color: var(--heat-soft); }}
@@ -90,7 +90,19 @@ T = r'''<!doctype html>
   .send {{ display: grid; gap: 14px; padding-top: 8px; }}
   .send .btn {{ width: 100%; }}
   .send p {{ color: var(--faint); font-size: .88rem; }}
-  .send .noapp {{ justify-self: start; border: 0; background: none; padding: 0; color: var(--heat-soft); font: inherit; font-size: .88rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }}
+  .send .err {{ color: #ffb48f; font-size: .92rem; font-weight: 600; }}
+  .send .btn:disabled {{ opacity: .6; cursor: progress; }}
+  [hidden] {{ display: none !important; }}
+  .hp {{ position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }}
+
+  /* After a successful order: the number and what to do next */
+  .done {{ margin-top: 44px; display: grid; gap: 16px; padding: 30px; border-radius: var(--radius); background: rgb(239 106 50 / .08); box-shadow: inset 0 0 0 1px rgb(239 106 50 / .35); }}
+  .done h2 {{ font-size: 1.6rem; letter-spacing: -0.03em; }}
+  .done p {{ color: var(--muted); line-height: 1.6; }}
+  .done p strong {{ color: var(--ink); }}
+  .done a {{ color: var(--heat-soft); }}
+  .done .again {{ justify-self: start; border: 0; background: none; padding: 0; color: var(--heat-soft); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }}
+  .card .no {{ position: absolute; top: 4.5%; right: 4%; font-size: 2.2cqi; letter-spacing: .08em; opacity: .8; }}
 
   /* Fallback when no email app opens: the order in the card's look, ready to copy */
   .copybox {{ border: 0; padding: 0; max-width: min(560px, calc(100vw - 32px)); width: 100%; background: none; color: var(--card-ink); }}
@@ -145,7 +157,7 @@ T = r'''<!doctype html>
     mask-image: linear-gradient(to right, rgb(0 0 0 / .18) 0%, rgb(0 0 0 / .18) 42%, #000 72%);
   }}
   main, footer {{ position: relative; z-index: 1; }}
-  input[type="text"], textarea {{ background-color: rgb(18 26 29 / .72); }}
+  input[type="text"], input[type="email"], textarea {{ background-color: rgb(18 26 29 / .72); }}
   .choice label {{ background-color: rgb(18 26 29 / .55); }}
 
   @media (max-width: 900px) {{
@@ -191,13 +203,21 @@ T = r'''<!doctype html>
           <label class="field"><span>{l_to}</span><input type="text" name="to" maxlength="40" autocomplete="off" placeholder="{p_to}"></label>
           <label class="field"><span>{l_from}</span><input type="text" name="from" maxlength="40" autocomplete="name" placeholder="{p_from}"></label>
         </div>
+        <label class="field"><span>{l_email}</span><input type="email" name="email" maxlength="120" autocomplete="email" placeholder="{p_email}" required></label>
+        <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
         <label class="field"><span>{l_msg} <small>{optional}</small></span><textarea name="msg" maxlength="70" placeholder="{p_msg}" aria-describedby="msg-count"></textarea><small class="count" id="msg-count" aria-live="polite">0 / 70</small></label>
         <div class="send">
-          <button class="btn btn-heat" type="submit"><i class="ph ph-envelope-simple" aria-hidden="true"></i>{send}</button>
+          <p class="err" role="alert" hidden></p>
+          <button class="btn btn-heat" type="submit"><i class="ph ph-paper-plane-tilt" aria-hidden="true"></i><span>{send}</span></button>
           <p>{send_note}</p>
-          <button class="noapp" type="button">{noapp}</button>
         </div>
       </form>
+
+      <section class="done" aria-live="polite" hidden>
+        <h2></h2>
+        <p></p>
+        <button class="again" type="button">{again}</button>
+      </section>
 
       <dialog class="copybox" aria-labelledby="copy-h">
         <div class="face">
@@ -221,6 +241,7 @@ T = r'''<!doctype html>
 
     <div class="side">
       <figure class="card" aria-label="{preview_label}" style="margin:0">
+        <span class="no" data-out="no"></span>
         <div class="title"><img src="{img}gavekort.svg" alt="{card_title}" width="273" height="44"></div>
         <dl>
           <div><dt>{c_value}</dt><dd data-out="value"></dd></div>
@@ -312,7 +333,8 @@ T = r'''<!doctype html>
       [t.mailTo + ': ', val('to') || '-'],
       [t.mailFrom + ': ', val('from') || '-'],
       [t.mailMsg + ': ', val('msg') || '-'],
-      [t.mailValid + ': ', validText], '',
+      [t.mailEmail + ': ', val('email') || '-'], '',
+      // No validity date here: we set it ourselves when we issue the card, so an edited email cannot change it
       t.mailPay.replace('{{amount}}', amount).replace('{{ref}}', t.refWord + ' ' + (val('to') || '')), '',
       t.mailThanks,
     ];
@@ -336,15 +358,54 @@ T = r'''<!doctype html>
     const label = b.querySelector('span'), text = label.textContent;
     try {{ await navigator.clipboard.writeText(b.dataset.copy === 'order' ? plain() : EMAIL); }}
     catch (e) {{ const r = document.createRange(); r.selectNodeContents(b.dataset.copy === 'order' ? pre : label); getSelection().removeAllRanges(); getSelection().addRange(r); return; }}
+    // Keep the button the same size while it says "Copied"
+    b.style.flex = '0 0 ' + b.offsetWidth + 'px';
     label.textContent = t.copied;
-    setTimeout(() => {{ label.textContent = text; }}, 1800);
+    setTimeout(() => {{ label.textContent = text; b.style.flex = ''; }}, 1800);
   }}));
-  document.querySelector('.noapp').addEventListener('click', showCopy);
 
-  // Opens the buyer's own email app with the order filled in. Nothing is sent by the website itself.
-  // If no email app takes over (the page keeps focus), the order is shown to copy instead.
-  form.addEventListener('submit', (e) => {{
+  // The order goes to our gift card service, which stores it and answers with its number.
+  // If the service cannot be reached, the buyer's email app opens with the order instead.
+  const API = '{api}';
+  const err = form.querySelector('.err'), sendBtn = form.querySelector('button[type="submit"]'), done = document.querySelector('.done');
+  const pad = (n) => String(n).padStart(4, '0');
+  const fill = (s, v) => s.replace(/\{{(\w+)\}}/g, (m, k) => v[k] ?? m);
+  const escape = (s) => s.replace(/[&<>"]/g, (c) => ({{ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }}[c]));
+  const fail = (msg) => {{ err.textContent = msg; err.hidden = false; form.elements.email.focus(); }};
+
+  form.addEventListener('submit', async (e) => {{
     e.preventDefault();
+    err.hidden = true;
+    const email = val('email');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail(t.errEmail);
+    const label = sendBtn.querySelector('span'), text = label.textContent;
+    sendBtn.disabled = true; label.textContent = t.sending;
+    try {{
+      const r = await fetch(API, {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }},
+        body: JSON.stringify({{ hours: Number(hours()), to: val('to'), from: val('from'), msg: val('msg'), email, lang: t.lang, website: form.elements.website.value }}) }});
+      if (r.status === 400) return fail(t.errEmail);
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      const v = {{ n: pad(d.number), amount: money(d.amount), ref: t.refWord + ' ' + pad(d.number), email: escape(email) }};
+      done.querySelector('h2').textContent = fill(t.doneH, v);
+      done.querySelector('p').innerHTML = fill(t.doneP, v);
+      out('no').textContent = t.no + ' ' + v.n;
+      form.hidden = true; done.hidden = false;
+      done.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
+    }} catch (e2) {{
+      mailFallback();
+    }} finally {{
+      sendBtn.disabled = false; label.textContent = text;
+    }}
+  }});
+  done.querySelector('.again').addEventListener('click', () => {{
+    form.reset(); render(); out('no').textContent = '';
+    done.hidden = true; form.hidden = false; form.elements.to.focus();
+  }});
+
+  // Fallback: the buyer's own email app with the order filled in.
+  // If no email app takes over either (the page keeps focus), the order is shown to copy instead.
+  function mailFallback() {{
     let left = false;
     const away = () => {{ left = true; }};
     addEventListener('blur', away, {{ once: true }});
@@ -355,7 +416,7 @@ T = r'''<!doctype html>
       document.removeEventListener('visibilitychange', away);
       if (!left && document.visibilityState === 'visible' && document.hasFocus()) showCopy();
     }}, 1600);
-  }});
+  }}
 {shell_js}</script>
 </body>
 </html>
@@ -372,14 +433,18 @@ en = dict(
   h1='Give a few quiet hours', lead='A gift card is something to do, not something to keep. Fill in the card and see it take shape, then send us the order.',
   l_gift='How long?', h2='2 hours', h4='4 hours', h6='6 hours',
   l_to='To', p_to='Who is it for?', l_from='From', p_from='Your name', l_msg='A short message', optional='(optional)', p_msg='Happy birthday! Time to slow down.',
-  send='Send the order', send_note='This opens your email app with the order filled in. Nothing is sent until you press send there.',
-  noapp='No email app opened? Copy the order instead',
+  l_email='Your email', p_email='So we can send you the card',
+  send='Send the order', send_note='We keep your name, email and the card details only to issue and redeem the gift card, and delete them once the card has expired.',
+  again='Order another gift card',
   pop_h='Copy your order and email it to us', pop_p='Your email app did not open, so the order is not sent yet. Copy the text below and send it by email to <strong>vanylvensauna@gmail.com</strong>.',
   copy_order='Copy the order', copy_email='Copy email address', close='Close',
   how_h='How it works',
-  how_items=how(['<strong>Send the order</strong> from your email.', '<strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. <a href="../pay/">Payment details</a>', '<strong>We send you the gift card</strong> by email, with its own number, ready to print or forward.', '<strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.']),
+  how_items=how(['<strong>Send the order</strong> here on the page. You get an order number straight away.', '<strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. Put the order number in the message. <a href="../pay/">Payment details</a>', '<strong>We email you the gift card</strong> once the payment is in, with its own number and valid for one year, ready to print or forward.', '<strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.']),
   preview_label='Preview of your gift card', card_title='GIFT CARD', c_value='Value:', c_to='To:', c_from='From:', c_valid='Valid until:',
-  strings=dict(subject='Gift card order', mailHello='Hi, I would like to order a gift card.', mailGift='Gift', mailTo='To', mailFrom='From', mailMsg='Message on the card', mailValid='Valid until', copied='Copied', date='{d} {m} {y}', months=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+  strings=dict(subject='Gift card order', mailHello='Hi, I would like to order a gift card.', mailGift='Gift', mailTo='To', mailFrom='From', mailMsg='Message on the card', mailEmail='My email', lang='en', no='No.', sending='Sending…',
+    errEmail='Please enter your email, so we can send you the gift card.',
+    doneH='Thank you! Your order number is {n}.',
+    doneP='Pay <strong>{amount}</strong> with Vipps to 943550 or by <a href="../pay/#abroad">bank transfer</a>, and write <strong>{ref}</strong> in the message. Once the payment is in, we email the gift card to <strong>{email}</strong>.', copied='Copied', date='{d} {m} {y}', months=['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     mailPay='I will pay {amount} with Vipps or bank transfer, with the message "{ref}".', refWord='Gift card', mailThanks='Thank you!'),
 )
 nn = dict(
@@ -389,14 +454,18 @@ nn = dict(
   h1='Gi nokre stille timar', lead='Eit gåvekort er noko å gjere, ikkje noko å ha. Fyll ut kortet og sjå det ta form, og send oss så bestillinga.',
   l_gift='Kor lenge?', h2='2 timar', h4='4 timar', h6='6 timar',
   l_to='Til', p_to='Kven er det til?', l_from='Frå', p_from='Namnet ditt', l_msg='Ei kort helsing', optional='(valfritt)', p_msg='Gratulerer med dagen! Tid for å senke skuldrane.',
-  send='Send bestillinga', send_note='Dette opnar e-postprogrammet ditt med bestillinga ferdig utfylt. Ingenting blir sendt før du trykkjer send der.',
-  noapp='Opna ikkje e-postprogrammet seg? Kopier bestillinga i staden',
+  l_email='E-posten din', p_email='Så vi kan sende deg kortet',
+  send='Send bestillinga', send_note='Vi tek vare på namn, e-post og opplysningane på kortet berre for å skrive ut og løyse inn gåvekortet, og slettar dei når kortet har gått ut.',
+  again='Bestill eit gåvekort til',
   pop_h='Kopier bestillinga og send ho til oss på e-post', pop_p='E-postprogrammet ditt opna seg ikkje, så bestillinga er ikkje send enno. Kopier teksten under og send han på e-post til <strong>vanylvensauna@gmail.com</strong>.',
   copy_order='Kopier bestillinga', copy_email='Kopier e-postadressa', close='Lukk',
   how_h='Slik gjer du',
-  how_items=how(['<strong>Send bestillinga</strong> frå e-posten din.', '<strong>Betal med Vipps eller bankoverføring.</strong> Vipps-nummeret vårt er 943550. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post, med eige nummer, klart til å skrive ut eller sende vidare.', '<strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss nummeret på gåvekortet på e-post i staden for å betale.']),
+  how_items=how(['<strong>Send bestillinga</strong> her på sida. Du får eit bestillingsnummer med ein gong.', '<strong>Betal med Vipps eller bankoverføring.</strong> Vipps-nummeret vårt er 943550. Skriv bestillingsnummeret i meldinga. <a href="../pay/">Betalingsinfo</a>', '<strong>Vi sender deg gåvekortet</strong> på e-post når betalinga er komen, med eige nummer og gyldig i eitt år, klart til å skrive ut eller sende vidare.', '<strong>For å bruke det</strong> bookar mottakaren ei tid som vanleg, og sender oss nummeret på gåvekortet på e-post i staden for å betale.']),
   preview_label='Førehandsvising av gåvekortet', card_title='GÅVEKORT', c_value='Beløp:', c_to='Til:', c_from='Frå:', c_valid='Gyldig til:',
-  strings=dict(subject='Bestilling av gåvekort', mailHello='Hei, eg vil gjerne bestille eit gåvekort.', mailGift='Gåve', mailTo='Til', mailFrom='Frå', mailMsg='Helsing på kortet', mailValid='Gyldig til', copied='Kopiert', date='{d}. {m} {y}', months=['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'],
+  strings=dict(subject='Bestilling av gåvekort', mailHello='Hei, eg vil gjerne bestille eit gåvekort.', mailGift='Gåve', mailTo='Til', mailFrom='Frå', mailMsg='Helsing på kortet', mailEmail='E-posten min', lang='nn', no='Nr.', sending='Sender…',
+    errEmail='Skriv inn e-posten din, så vi kan sende deg gåvekortet.',
+    doneH='Takk! Bestillingsnummeret ditt er {n}.',
+    doneP='Betal <strong>{amount}</strong> med Vipps til 943550 eller med <a href="../../pay/#abroad">bankoverføring</a>, og skriv <strong>{ref}</strong> i meldinga. Når betalinga er komen, sender vi gåvekortet til <strong>{email}</strong>.', copied='Kopiert', date='{d}. {m} {y}', months=['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'],
     mailPay='Eg betaler {amount} med Vipps eller bankoverføring, med meldinga «{ref}».', refWord='Gåvekort', mailThanks='Takk!'),
 )
 
@@ -420,5 +489,5 @@ for d, path, img, home, alt_href, unit in [
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, 'w', encoding='utf-8', newline='') as f:
         sh, sf = shared.parts(d['lang'], '../', img, alt_href, here='gift')
-        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, seo=shared.seo('gift/', d['lang'], d['title'], d['desc'], 'img/gift-card.png'), img=img, home=home, alt_href=alt_href, strings=js, money_js=money_js, **d2))
+        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, icons=shared.icons(img), seo=shared.seo('gift/', d['lang'], d['title'], d['desc'], 'img/gift-card.png'), img=img, home=home, alt_href=alt_href, strings=js, money_js=money_js, api=shared.VOUCHER_API, **d2))
     print('wrote', path)

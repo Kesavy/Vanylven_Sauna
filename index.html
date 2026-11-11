@@ -46,6 +46,11 @@
     "addressCountry": "NO"
   },
   "hasMap": "https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6",
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 62.0973003,
+    "longitude": 5.5577698
+  },
   "currenciesAccepted": "NOK",
   "paymentAccepted": "Vipps, bank transfer",
   "priceRange": "NOK 100-600",
@@ -90,7 +95,9 @@
 }
 </script>
 <!-- /seo -->
-<link rel="icon" href="img/logo-mark.png">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="img/favicon.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
@@ -334,6 +341,9 @@
   .next a { color: var(--heat-soft); }
   .hero .next { color: rgb(238 242 241 / .8); text-shadow: 0 1px 18px rgb(0 0 0 / .5); }
   .finale .next { margin: 18px auto 0; max-width: 40ch; }
+  .finale .review { margin: 34px auto 0; font-size: .95rem; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; }
+  .finale .review i { color: var(--heat-soft); }
+  .finale .review a { color: var(--heat-soft); }
   .gift-note { margin-top: 16px; display: flex; gap: 10px; align-items: baseline; color: var(--muted); font-size: .95rem; }
   .gift-note i { color: var(--heat-soft); position: relative; top: 2px; }
   .paylink { color: var(--heat-soft); font-weight: 600; text-decoration: none; white-space: nowrap; }
@@ -468,7 +478,7 @@
       <a href="pay/" style="--i:2" data-close>How to pay</a>
       <a href="gift/" style="--i:3" data-close>Gift cards</a>
       <a href="#rules" style="--i:4" data-close>Before you come</a>
-      <a href="#find" style="--i:5" data-close>Find us</a>
+      <a href="find/" style="--i:5" data-close>Find us</a>
     </nav>
     <div class="foot">
       <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
@@ -719,7 +729,7 @@
         <div class="body">
           <h2>Find us in Fiskå</h2>
           <p>Below Fiskå Brygge Gjestgiveri, on the shore of the Vanylvsfjord.</p>
-          <div class="row"><a class="btn btn-glass" href="https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6" target="_blank" rel="noopener"><i class="ph ph-map-pin" aria-hidden="true"></i> Get directions</a></div>
+          <div class="row"><a class="btn btn-glass" href="https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6" target="_blank" rel="noopener"><i class="ph ph-map-pin" aria-hidden="true"></i> Get directions</a><a class="btn btn-glass" href="find/">Map and contact <i class="ph ph-arrow-right" aria-hidden="true"></i></a></div>
         </div>
       </article>
     </div>
@@ -733,6 +743,7 @@
       <p class="reveal">Private sessions Thursday to Sunday. Open sauna every Wednesday evening.</p>
       <a class="btn btn-heat book reveal" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
       <p class="next reveal">Book a time, then <a href="pay/">pay with Vipps or bank transfer</a>. Your door code comes the day before.</p>
+      <p class="review reveal"><i class="ph ph-star" aria-hidden="true"></i><span>Been with us? <a href="https://g.page/r/CasW7u5nZ30fEBM/review" target="_blank" rel="noopener">Leave a review on Google</a></span></p>
     </div>
   </section>
 </main>

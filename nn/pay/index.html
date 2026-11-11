@@ -19,7 +19,9 @@
 <meta property="og:description" content="Slik betaler du for økta i Vanylven Sauna, med Vipps eller med bankoverføring frå utlandet.">
 <meta property="og:image" content="https://www.vanylvensauna.no/img/deck-fjord.jpg">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="../../img/logo-mark.png">
+<link rel="icon" href="../../img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../img/favicon.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="../../img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
@@ -204,7 +206,7 @@
       <a href="../pay/" style="--i:2" data-close aria-current="page">Slik betaler du</a>
       <a href="../gift/" style="--i:3" data-close>Gåvekort</a>
       <a href="../#rules" style="--i:4" data-close>Før du kjem</a>
-      <a href="../#find" style="--i:5" data-close>Finn oss</a>
+      <a href="../find/" style="--i:5" data-close>Finn oss</a>
     </nav>
     <div class="foot">
       <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book ei økt <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
@@ -330,9 +332,10 @@
     const label = b.querySelector('span'), icon = b.querySelector('i'), text = label.textContent;
     b.addEventListener('click', async () => {
       try { await navigator.clipboard.writeText(b.dataset.copy); } catch (e) { return; }
+      b.style.width = b.offsetWidth + 'px'; // same size while it says "Copied"
       b.classList.add('done'); label.textContent = 'Kopiert'; icon.className = 'ph ph-check';
       live.textContent = 'Kopiert: ' + b.dataset.copy;
-      setTimeout(() => { b.classList.remove('done'); label.textContent = text; icon.className = 'ph ph-copy'; }, 1800);
+      setTimeout(() => { b.classList.remove('done'); label.textContent = text; icon.className = 'ph ph-copy'; b.style.width = ''; }, 1800);
     });
   });
 

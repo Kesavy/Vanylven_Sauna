@@ -2,6 +2,8 @@
 # subpages get the same markup with paths adjusted, and the header starts in its "solid" state.
 
 CALENDLY = 'https://calendly.com/vanylvensauna/sauna'
+# Gift card orders go to this service (separate Vercel project, see the vanylven_vouchers folder)
+VOUCHER_API = 'https://vanylven-vouchers.vercel.app/api/order'
 
 # Public address of the site. Change this one line when the site moves to its own domain,
 # then rerun all generators and update sitemap.xml and robots.txt.
@@ -11,11 +13,11 @@ TEXT = {
   'en': dict(book='Book a session', open='Open menu', close='Close menu', menu='Menu', main='Main', contact='Contact and social',
              email='Email', lang_name='Norsk', lang_code='nn', credit='Vanylven Sauna is built by Stad Kystbygg and run by volunteers from Vanylven.', design='Website design and coding by',
              links=[('ritual', 'The ritual', '#ritual'), ('plan', 'Prices and booking', '#plan'), ('pay', 'How to pay', 'pay/'),
-                    ('gift', 'Gift cards', 'gift/'), ('rules', 'Before you come', '#rules'), ('find', 'Find us', '#find')]),
+                    ('gift', 'Gift cards', 'gift/'), ('rules', 'Before you come', '#rules'), ('find', 'Find us', 'find/')]),
   'nn': dict(book='Book ei økt', open='Opne meny', close='Lukk meny', menu='Meny', main='Hovudmeny', contact='Kontakt og sosiale medium',
              email='E-post', lang_name='English', lang_code='en', credit='Vanylven Sauna er bygd av Stad Kystbygg og drifta av frivillige frå Vanylven.', design='Design og koding av nettsida:',
              links=[('ritual', 'Ritualet', '#ritual'), ('plan', 'Prisar og booking', '#plan'), ('pay', 'Slik betaler du', 'pay/'),
-                    ('gift', 'Gåvekort', 'gift/'), ('rules', 'Før du kjem', '#rules'), ('find', 'Finn oss', '#find')]),
+                    ('gift', 'Gåvekort', 'gift/'), ('rules', 'Før du kjem', '#rules'), ('find', 'Finn oss', 'find/')]),
 }
 
 
@@ -58,6 +60,7 @@ def place(lang, desc):
         'address': {'@type': 'PostalAddress', 'addressLocality': 'Fiskå', 'postalCode': '6143',
                     'addressRegion': 'Møre og Romsdal', 'addressCountry': 'NO'},
         'hasMap': 'https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6',
+        'geo': {'@type': 'GeoCoordinates', 'latitude': 62.0973003, 'longitude': 5.5577698},
         'currenciesAccepted': 'NOK',
         'paymentAccepted': 'Vipps, bank transfer',
         'priceRange': 'NOK 100-600',
@@ -74,6 +77,15 @@ def place(lang, desc):
         'sameAs': ['https://www.instagram.com/vanylvensauna/', 'https://www.facebook.com/profile.php?id=61570144756846'],
     }
     return '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False, indent=2) + '\n</script>'
+
+
+def icons(img):
+    """Round favicon: SVG for browsers that take it, PNG for the rest and for home screens."""
+    return '\n'.join([
+        f'<link rel="icon" href="{img}favicon.svg" type="image/svg+xml">',
+        f'<link rel="icon" href="{img}favicon.png" sizes="192x192" type="image/png">',
+        f'<link rel="apple-touch-icon" href="{img}favicon.png">',
+    ])
 
 
 def parts(lang, home, img, lang_href, here=None):

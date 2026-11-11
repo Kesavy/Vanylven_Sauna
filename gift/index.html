@@ -18,7 +18,9 @@
 <meta property="og:description" content="Give a few quiet hours by the fjord. Design a Vanylven Sauna gift card and order it by email.">
 <meta property="og:image" content="https://www.vanylvensauna.no/img/gift-card.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="../img/logo-mark.png">
+<link rel="icon" href="../img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../img/favicon.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="../img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
@@ -69,12 +71,12 @@
   .field > span, .field legend { font-weight: 600; font-size: .95rem; padding: 0; }
   .field small { color: var(--faint); font-weight: 400; }
   fieldset { border: 0; margin: 0; padding: 0; }
-  input[type="text"], textarea {
+  input[type="text"], input[type="email"], textarea {
     width: 100%; padding: 15px 18px; border-radius: 12px; border: 0; background: rgb(255 255 255 / .06);
     box-shadow: inset 0 0 0 1px var(--line); transition: box-shadow .2s, background-color .2s;
   }
-  input[type="text"]:hover, textarea:hover { background: rgb(255 255 255 / .08); }
-  input[type="text"]:focus, textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--heat); }
+  input[type="text"]:hover, input[type="email"]:hover, textarea:hover { background: rgb(255 255 255 / .08); }
+  input[type="text"]:focus, input[type="email"]:focus, textarea:focus { outline: none; box-shadow: inset 0 0 0 2px var(--heat); }
   textarea { resize: none; min-height: 92px; }
   .field .count { justify-self: end; margin-top: -4px; color: var(--faint); font-size: .85rem; font-variant-numeric: tabular-nums; }
   .field .count.near { color: var(--heat-soft); }
@@ -95,7 +97,19 @@
   .send { display: grid; gap: 14px; padding-top: 8px; }
   .send .btn { width: 100%; }
   .send p { color: var(--faint); font-size: .88rem; }
-  .send .noapp { justify-self: start; border: 0; background: none; padding: 0; color: var(--heat-soft); font: inherit; font-size: .88rem; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .send .err { color: #ffb48f; font-size: .92rem; font-weight: 600; }
+  .send .btn:disabled { opacity: .6; cursor: progress; }
+  [hidden] { display: none !important; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  /* After a successful order: the number and what to do next */
+  .done { margin-top: 44px; display: grid; gap: 16px; padding: 30px; border-radius: var(--radius); background: rgb(239 106 50 / .08); box-shadow: inset 0 0 0 1px rgb(239 106 50 / .35); }
+  .done h2 { font-size: 1.6rem; letter-spacing: -0.03em; }
+  .done p { color: var(--muted); line-height: 1.6; }
+  .done p strong { color: var(--ink); }
+  .done a { color: var(--heat-soft); }
+  .done .again { justify-self: start; border: 0; background: none; padding: 0; color: var(--heat-soft); font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+  .card .no { position: absolute; top: 4.5%; right: 4%; font-size: 2.2cqi; letter-spacing: .08em; opacity: .8; }
 
   /* Fallback when no email app opens: the order in the card's look, ready to copy */
   .copybox { border: 0; padding: 0; max-width: min(560px, calc(100vw - 32px)); width: 100%; background: none; color: var(--card-ink); }
@@ -150,7 +164,7 @@
     mask-image: linear-gradient(to right, rgb(0 0 0 / .18) 0%, rgb(0 0 0 / .18) 42%, #000 72%);
   }
   main, footer { position: relative; z-index: 1; }
-  input[type="text"], textarea { background-color: rgb(18 26 29 / .72); }
+  input[type="text"], input[type="email"], textarea { background-color: rgb(18 26 29 / .72); }
   .choice label { background-color: rgb(18 26 29 / .55); }
 
   @media (max-width: 900px) {
@@ -240,7 +254,7 @@
       <a href="../pay/" style="--i:2" data-close>How to pay</a>
       <a href="../gift/" style="--i:3" data-close aria-current="page">Gift cards</a>
       <a href="../#rules" style="--i:4" data-close>Before you come</a>
-      <a href="../#find" style="--i:5" data-close>Find us</a>
+      <a href="../find/" style="--i:5" data-close>Find us</a>
     </nav>
     <div class="foot">
       <a class="btn btn-heat book" href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">Book a session <i class="ph ph-arrow-up-right" aria-hidden="true"></i></a>
@@ -273,13 +287,21 @@
           <label class="field"><span>To</span><input type="text" name="to" maxlength="40" autocomplete="off" placeholder="Who is it for?"></label>
           <label class="field"><span>From</span><input type="text" name="from" maxlength="40" autocomplete="name" placeholder="Your name"></label>
         </div>
+        <label class="field"><span>Your email</span><input type="email" name="email" maxlength="120" autocomplete="email" placeholder="So we can send you the card" required></label>
+        <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
         <label class="field"><span>A short message <small>(optional)</small></span><textarea name="msg" maxlength="70" placeholder="Happy birthday! Time to slow down." aria-describedby="msg-count"></textarea><small class="count" id="msg-count" aria-live="polite">0 / 70</small></label>
         <div class="send">
-          <button class="btn btn-heat" type="submit"><i class="ph ph-envelope-simple" aria-hidden="true"></i>Send the order</button>
-          <p>This opens your email app with the order filled in. Nothing is sent until you press send there.</p>
-          <button class="noapp" type="button">No email app opened? Copy the order instead</button>
+          <p class="err" role="alert" hidden></p>
+          <button class="btn btn-heat" type="submit"><i class="ph ph-paper-plane-tilt" aria-hidden="true"></i><span>Send the order</span></button>
+          <p>We keep your name, email and the card details only to issue and redeem the gift card, and delete them once the card has expired.</p>
         </div>
       </form>
+
+      <section class="done" aria-live="polite" hidden>
+        <h2></h2>
+        <p></p>
+        <button class="again" type="button">Order another gift card</button>
+      </section>
 
       <dialog class="copybox" aria-labelledby="copy-h">
         <div class="face">
@@ -297,12 +319,13 @@
 
       <section class="how after" aria-label="How it works">
         <h2>How it works</h2>
-        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send the order</strong> from your email.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. <a href="../pay/">Payment details</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>We send you the gift card</strong> by email, with its own number, ready to print or forward.</p></li><li><span class="pebble" aria-hidden="true">4</span><p><strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.</p></li></ol>
+        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send the order</strong> here on the page. You get an order number straight away.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. Put the order number in the message. <a href="../pay/">Payment details</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>We email you the gift card</strong> once the payment is in, with its own number and valid for one year, ready to print or forward.</p></li><li><span class="pebble" aria-hidden="true">4</span><p><strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.</p></li></ol>
       </section>
     </div>
 
     <div class="side">
       <figure class="card" aria-label="Preview of your gift card" style="margin:0">
+        <span class="no" data-out="no"></span>
         <div class="title"><img src="../img/gavekort.svg" alt="GIFT CARD" width="273" height="44"></div>
         <dl>
           <div><dt>Value:</dt><dd data-out="value"></dd></div>
@@ -316,7 +339,7 @@
 
       <section class="how" aria-label="How it works">
         <h2>How it works</h2>
-        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send the order</strong> from your email.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. <a href="../pay/">Payment details</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>We send you the gift card</strong> by email, with its own number, ready to print or forward.</p></li><li><span class="pebble" aria-hidden="true">4</span><p><strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.</p></li></ol>
+        <ol><li><span class="pebble" aria-hidden="true">1</span><p><strong>Send the order</strong> here on the page. You get an order number straight away.</p></li><li><span class="pebble p2" aria-hidden="true">2</span><p><strong>Pay with Vipps or bank transfer.</strong> Our Vipps number is 943550. Put the order number in the message. <a href="../pay/">Payment details</a></p></li><li><span class="pebble p3" aria-hidden="true">3</span><p><strong>We email you the gift card</strong> once the payment is in, with its own number and valid for one year, ready to print or forward.</p></li><li><span class="pebble" aria-hidden="true">4</span><p><strong>To use it,</strong> the recipient books a time as usual and emails us the gift card number instead of paying.</p></li></ol>
       </section>
     </div>
   </div>
@@ -367,7 +390,7 @@
     if (!calm) { for (let i = 0; i < 24; i++) { spawn(Math.random() * h * 1.1); parts[i].life = Math.random() * 300; } requestAnimationFrame(frame); }
   })();
 
-  const t = {"subject": "Gift card order", "mailHello": "Hi, I would like to order a gift card.", "mailGift": "Gift", "mailTo": "To", "mailFrom": "From", "mailMsg": "Message on the card", "mailValid": "Valid until", "copied": "Copied", "date": "{d} {m} {y}", "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "mailPay": "I will pay {amount} with Vipps or bank transfer, with the message \"{ref}\".", "refWord": "Gift card", "mailThanks": "Thank you!", value: (h) => h + " hours"};
+  const t = {"subject": "Gift card order", "mailHello": "Hi, I would like to order a gift card.", "mailGift": "Gift", "mailTo": "To", "mailFrom": "From", "mailMsg": "Message on the card", "mailEmail": "My email", "lang": "en", "no": "No.", "sending": "Sending…", "errEmail": "Please enter your email, so we can send you the gift card.", "doneH": "Thank you! Your order number is {n}.", "doneP": "Pay <strong>{amount}</strong> with Vipps to 943550 or by <a href=\"../pay/#abroad\">bank transfer</a>, and write <strong>{ref}</strong> in the message. Once the payment is in, we email the gift card to <strong>{email}</strong>.", "copied": "Copied", "date": "{d} {m} {y}", "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "mailPay": "I will pay {amount} with Vipps or bank transfer, with the message \"{ref}\".", "refWord": "Gift card", "mailThanks": "Thank you!", value: (h) => h + " hours"};
   const group = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   const money = (n) => "NOK " + group(n);
   const form = document.getElementById('order');
@@ -405,7 +428,8 @@
       [t.mailTo + ': ', val('to') || '-'],
       [t.mailFrom + ': ', val('from') || '-'],
       [t.mailMsg + ': ', val('msg') || '-'],
-      [t.mailValid + ': ', validText], '',
+      [t.mailEmail + ': ', val('email') || '-'], '',
+      // No validity date here: we set it ourselves when we issue the card, so an edited email cannot change it
       t.mailPay.replace('{amount}', amount).replace('{ref}', t.refWord + ' ' + (val('to') || '')), '',
       t.mailThanks,
     ];
@@ -429,15 +453,54 @@
     const label = b.querySelector('span'), text = label.textContent;
     try { await navigator.clipboard.writeText(b.dataset.copy === 'order' ? plain() : EMAIL); }
     catch (e) { const r = document.createRange(); r.selectNodeContents(b.dataset.copy === 'order' ? pre : label); getSelection().removeAllRanges(); getSelection().addRange(r); return; }
+    // Keep the button the same size while it says "Copied"
+    b.style.flex = '0 0 ' + b.offsetWidth + 'px';
     label.textContent = t.copied;
-    setTimeout(() => { label.textContent = text; }, 1800);
+    setTimeout(() => { label.textContent = text; b.style.flex = ''; }, 1800);
   }));
-  document.querySelector('.noapp').addEventListener('click', showCopy);
 
-  // Opens the buyer's own email app with the order filled in. Nothing is sent by the website itself.
-  // If no email app takes over (the page keeps focus), the order is shown to copy instead.
-  form.addEventListener('submit', (e) => {
+  // The order goes to our gift card service, which stores it and answers with its number.
+  // If the service cannot be reached, the buyer's email app opens with the order instead.
+  const API = 'https://vanylven-vouchers.vercel.app/api/order';
+  const err = form.querySelector('.err'), sendBtn = form.querySelector('button[type="submit"]'), done = document.querySelector('.done');
+  const pad = (n) => String(n).padStart(4, '0');
+  const fill = (s, v) => s.replace(/\{(\w+)\}/g, (m, k) => v[k] ?? m);
+  const escape = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fail = (msg) => { err.textContent = msg; err.hidden = false; form.elements.email.focus(); };
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    err.hidden = true;
+    const email = val('email');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail(t.errEmail);
+    const label = sendBtn.querySelector('span'), text = label.textContent;
+    sendBtn.disabled = true; label.textContent = t.sending;
+    try {
+      const r = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hours: Number(hours()), to: val('to'), from: val('from'), msg: val('msg'), email, lang: t.lang, website: form.elements.website.value }) });
+      if (r.status === 400) return fail(t.errEmail);
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      const v = { n: pad(d.number), amount: money(d.amount), ref: t.refWord + ' ' + pad(d.number), email: escape(email) };
+      done.querySelector('h2').textContent = fill(t.doneH, v);
+      done.querySelector('p').innerHTML = fill(t.doneP, v);
+      out('no').textContent = t.no + ' ' + v.n;
+      form.hidden = true; done.hidden = false;
+      done.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (e2) {
+      mailFallback();
+    } finally {
+      sendBtn.disabled = false; label.textContent = text;
+    }
+  });
+  done.querySelector('.again').addEventListener('click', () => {
+    form.reset(); render(); out('no').textContent = '';
+    done.hidden = true; form.hidden = false; form.elements.to.focus();
+  });
+
+  // Fallback: the buyer's own email app with the order filled in.
+  // If no email app takes over either (the page keeps focus), the order is shown to copy instead.
+  function mailFallback() {
     let left = false;
     const away = () => { left = true; };
     addEventListener('blur', away, { once: true });
@@ -448,7 +511,7 @@
       document.removeEventListener('visibilitychange', away);
       if (!left && document.visibilityState === 'visible' && document.hasFocus()) showCopy();
     }, 1600);
-  });
+  }
 
   // Shared shell: fogged menu
   (() => {

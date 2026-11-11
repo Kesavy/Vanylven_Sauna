@@ -14,7 +14,7 @@ T = r'''<!doctype html>
 <meta name="color-scheme" content="dark">
 <meta name="robots" content="noindex">
 {seo}
-<link rel="icon" href="{img}logo-mark.png">
+{icons}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
@@ -237,9 +237,10 @@ T = r'''<!doctype html>
     const label = b.querySelector('span'), icon = b.querySelector('i'), text = label.textContent;
     b.addEventListener('click', async () => {{
       try {{ await navigator.clipboard.writeText(b.dataset.copy); }} catch (e) {{ return; }}
+      b.style.width = b.offsetWidth + 'px'; // same size while it says "Copied"
       b.classList.add('done'); label.textContent = '{copied}'; icon.className = 'ph ph-check';
       live.textContent = '{copied}: ' + b.dataset.copy;
-      setTimeout(() => {{ b.classList.remove('done'); label.textContent = text; icon.className = 'ph ph-copy'; }}, 1800);
+      setTimeout(() => {{ b.classList.remove('done'); label.textContent = text; icon.className = 'ph ph-copy'; b.style.width = ''; }}, 1800);
     }});
   }});
 {shell_js}</script>
@@ -299,5 +300,5 @@ for d, path, img, home, alt_href in [
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, 'w', encoding='utf-8', newline='') as f:
         sh, sf = shared.parts(d['lang'], '../', img, alt_href, here='pay')
-        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, seo=shared.seo('pay/', d['lang'], d['title'], d['desc'], 'img/deck-fjord.jpg'), img=img, home=home, alt_href=alt_href, **d))
+        f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS, icons=shared.icons(img), seo=shared.seo('pay/', d['lang'], d['title'], d['desc'], 'img/deck-fjord.jpg'), img=img, home=home, alt_href=alt_href, **d))
     print('wrote', path)
