@@ -10,11 +10,11 @@ VOUCHER_API = 'https://vanylven-vouchers.vercel.app/api/order'
 SITE = 'https://www.vanylvensauna.no/'
 
 TEXT = {
-  'en': dict(book='Book a session', open='Open menu', close='Close menu', menu='Menu', main='Main', contact='Contact and social',
+  'en': dict(book='Book a session', skip='Skip to content', open='Open menu', close='Close menu', menu='Menu', main='Main', contact='Contact and social',
              email='Email', lang_name='Norsk', lang_code='nn', privacy='Privacy', credit='Vanylven Sauna is built by Stad Kystbygg and run by volunteers from Vanylven.', design='Website design and coding by',
              links=[('ritual', 'The ritual', '#ritual'), ('plan', 'Prices and booking', '#plan'), ('pay', 'How to pay', 'pay/'),
                     ('gift', 'Gift cards', 'gift/'), ('rules', 'Before you come', '#rules'), ('find', 'Find us', 'find/')]),
-  'nn': dict(book='Book ei økt', open='Opne meny', close='Lukk meny', menu='Meny', main='Hovudmeny', contact='Kontakt og sosiale medium',
+  'nn': dict(book='Book ei økt', skip='Hopp til innhaldet', open='Opne meny', close='Lukk meny', menu='Meny', main='Hovudmeny', contact='Kontakt og sosiale medium',
              email='E-post', lang_name='English', lang_code='en', privacy='Personvern', credit='Vanylven Sauna er bygd av Stad Kystbygg og drifta av frivillige frå Vanylven.', design='Design og koding av nettsida:',
              links=[('ritual', 'Ritualet', '#ritual'), ('plan', 'Prisar og booking', '#plan'), ('pay', 'Slik betaler du', 'pay/'),
                     ('gift', 'Gåvekort', 'gift/'), ('rules', 'Før du kjem', '#rules'), ('find', 'Finn oss', 'find/')]),
@@ -101,6 +101,7 @@ def parts(lang, home, img, lang_href, here=None):
         for i, (k, label, u) in enumerate(t['links']))
     lc = t['lang_code']
     header = f'''<header class="nav{"" if home == "" else " solid"}" id="nav">
+  <a class="skip" href="{'#top' if home == '' else '#main'}">{t['skip']}</a>
   <div class="wrap">
     <a class="brand" href="{brand_href}"><img src="{img}logo-symbol.svg" alt="" width="35" height="44">Vanylven Sauna</a>
     <span class="spacer"></span>
@@ -156,6 +157,9 @@ CSS = '''
   .menu-btn { width: 48px; height: 46px; border: 0; cursor: pointer; background: rgb(255 255 255 / .1); font-size: 1.35rem; display: inline-grid; place-items: center; }
   .menu-btn:hover { background: rgb(255 255 255 / .18); }
   body.locked { overflow: hidden; }
+  /* Skip link: hidden until a keyboard user tabs to it */
+  .skip { position: absolute; left: 16px; top: -80px; z-index: 90; padding: 12px 18px; border-radius: 999px; background: var(--heat); color: var(--on-heat); font-weight: 700; text-decoration: none; transition: top .2s; }
+  .skip:focus { top: 14px; }
   .fog {
     position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column; padding: 0 0 40px;
     background: rgb(11 16 18 / .55); backdrop-filter: blur(28px) saturate(1.2); -webkit-backdrop-filter: blur(28px) saturate(1.2);
@@ -202,6 +206,15 @@ JS = '''
     };
     openBtn.addEventListener('click', () => setMenu(true));
     fog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', () => setMenu(false)));
-    addEventListener('keydown', (e) => { if (e.key === 'Escape' && fog.classList.contains('open')) setMenu(false); });
+    addEventListener('keydown', (e) => {
+      if (!fog.classList.contains('open')) return;
+      if (e.key === 'Escape') return setMenu(false);
+      // Keep Tab inside the open menu
+      if (e.key !== 'Tab') return;
+      const f = [...fog.querySelectorAll('a[href], button')], first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!fog.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    });
   })();
 '''

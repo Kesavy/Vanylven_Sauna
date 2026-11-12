@@ -117,7 +117,7 @@
     --night-2: #121a1d;
     --ink: #eef2f1;
     --muted: #a7b4b4;
-    --faint: #6b7a7b;
+    --faint: #7d8c8d;
     --line: rgb(238 242 241 / .12);
     --heat: #ef6a32;
     --heat-soft: #ffb48f;
@@ -137,6 +137,9 @@
     overflow-x: clip;
   }
   body.locked { overflow: hidden; }
+  /* Skip link: hidden until a keyboard user tabs to it */
+  .skip { position: absolute; left: 16px; top: -80px; z-index: 90; padding: 12px 18px; border-radius: 999px; background: var(--heat); color: var(--on-heat); font-weight: 700; text-decoration: none; transition: top .2s; }
+  .skip:focus { top: 14px; }
   img { display: block; max-width: 100%; height: auto; }
   a { color: inherit; }
   button { font: inherit; color: inherit; }
@@ -458,6 +461,7 @@
 <body>
 
 <header class="nav" id="nav">
+  <a class="skip" href="#top">Hopp til innhaldet</a>
   <div class="wrap">
     <a class="brand" href="#top"><img src="../img/logo-symbol.svg" alt="" width="35" height="44">Vanylven Sauna</a>
     <span class="spacer"></span>
@@ -522,12 +526,12 @@
   <section class="ritual" id="ritual" aria-label="Eit besøk, frå du kjem til siste runde">
     <div class="stage">
       <!-- PHOTO WANTED for each act: dusk arrival, steam over the stones, a swimmer in the fjord, resting by the window in towels. -->
-      <div class="layer on" data-act="0"><img src="../img/exterior-dock.jpg" width="2000" height="1500" alt="" ></div>
-      <div class="layer" data-act="1"><img src="../img/stove-bucket.jpg" width="1536" height="2048" alt="" style="object-position:50% 65%"></div>
-      <div class="layer" data-act="2"><img src="../img/interior-bench.jpg" width="1536" height="1155" alt="" style="object-position:20% 40%"></div>
-      <div class="layer" data-act="3"><img src="../img/deck-wide.jpg" width="2000" height="1500" alt=""></div>
-      <div class="layer" data-act="4"><img src="../img/window-view.jpg" width="1536" height="2048" alt="" style="object-position:50% 55%"></div>
-      <div class="layer" data-act="5"><img src="../img/deck-reflection.jpg" width="1536" height="1155" alt=""></div>
+      <div class="layer on" data-act="0"><img src="../img/exterior-dock.jpg" width="2000" height="1500" alt="Badstuehytta i tre på steinmoloen, med fjorden og fjella bak" ></div>
+      <div class="layer" data-act="1"><img src="../img/stove-bucket.jpg" width="1536" height="2048" alt="Badstueomnen med steinar, og ei trebytte med øse på benken" style="object-position:50% 65%"></div>
+      <div class="layer" data-act="2"><img src="../img/interior-bench.jpg" width="1536" height="1155" alt="Inne i badstua: lyse trebenkar og eit stort vindauge mot fjorden" style="object-position:20% 40%"></div>
+      <div class="layer" data-act="3"><img src="../img/deck-wide.jpg" width="2000" height="1500" alt="Terrassen langs glasveggen på badstua, ned mot landgangen og flytebrygga"></div>
+      <div class="layer" data-act="4"><img src="../img/window-view.jpg" width="1536" height="2048" alt="Utsikta frå badstuvindauget over terrassen, steinane og fjorden" style="object-position:50% 55%"></div>
+      <div class="layer" data-act="5"><img src="../img/deck-reflection.jpg" width="1536" height="1155" alt="Fjell og naust speglar seg i glasveggen på badstua"></div>
       <div class="shade"></div>
       <div class="warm" id="warm"></div>
       <div class="chill" id="chill"></div>
@@ -886,7 +890,16 @@
   };
   openBtn.addEventListener('click', () => setMenu(true));
   fog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', () => setMenu(false)));
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && fog.classList.contains('open')) setMenu(false); });
+  addEventListener('keydown', (e) => {
+    if (!fog.classList.contains('open')) return;
+    if (e.key === 'Escape') return setMenu(false);
+    // Keep Tab inside the open menu
+    if (e.key !== 'Tab') return;
+    const f = [...fog.querySelectorAll('a[href], button')], first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    else if (!fog.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+  });
 
   /* Steam puff from every booking button */
   document.querySelectorAll('.book').forEach((b) => b.addEventListener('click', () => {
@@ -1059,6 +1072,19 @@
   };
   applySwipe();
   narrow.addEventListener('change', applySwipe);
+
+  /* ---------- Keyboard: never leave focus on something still hidden ---------- */
+  document.addEventListener('focusin', (e) => {
+    const t = e.target;
+    // Scroll-in reveals: show at once when tabbed to
+    t.closest('.reveal')?.classList.add('in');
+    // Wide-screen ritual: jump to the act that holds the focused link, so it is on screen
+    const act = t.closest('.act');
+    if (act && !ritual.classList.contains('swipe')) {
+      const i = acts.indexOf(act), span = ritual.offsetHeight - innerHeight;
+      scrollTo({ top: ritual.offsetTop + span * (i + .5) / acts.length, behavior: 'auto' });
+    }
+  });
 })();
 </script>
 </body>

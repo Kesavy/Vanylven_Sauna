@@ -24,7 +24,7 @@ T = r'''<!doctype html>
     Nothing is stored or sent by the site. The card face copies the printed card (taupe, thin display title, ruled fields).
   */
   :root {{
-    --night: #0b1012; --night-2: #121a1d; --ink: #eef2f1; --muted: #a7b4b4; --faint: #6b7a7b;
+    --night: #0b1012; --night-2: #121a1d; --ink: #eef2f1; --muted: #a7b4b4; --faint: #7d8c8d;
     --line: rgb(238 242 241 / .12); --heat: #ef6a32; --heat-soft: #ffb48f; --on-heat: #1a1310;
     --brand: #5a4d44; --card: #716a64; --card-ink: #f3eee9; --radius: 16px; --max: 1180px; --ease: cubic-bezier(.16, 1, .3, 1);
   }}
@@ -94,6 +94,8 @@ T = r'''<!doctype html>
   .send .err {{ color: #ffb48f; font-size: .92rem; font-weight: 600; }}
   .send .btn:disabled {{ opacity: .6; cursor: progress; }}
   [hidden] {{ display: none !important; }}
+  .sr {{ position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }}
+  .done h2:focus {{ outline: none; }}
   .hp {{ position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }}
 
   /* After a successful order: the number and what to do next */
@@ -183,7 +185,7 @@ T = r'''<!doctype html>
 
 {shell_header}
 
-<main>
+<main id="main">
   <div class="wrap layout">
     <div>
       <div class="head">
@@ -206,7 +208,7 @@ T = r'''<!doctype html>
         </div>
         <label class="field"><span>{l_email}</span><input type="email" name="email" maxlength="120" autocomplete="email" placeholder="{p_email}" required></label>
         <label class="hp" aria-hidden="true">Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-        <label class="field"><span>{l_msg} <small>{optional}</small></span><textarea name="msg" maxlength="70" placeholder="{p_msg}" aria-describedby="msg-count"></textarea><small class="count" id="msg-count" aria-live="polite">0 / 70</small></label>
+        <label class="field"><span>{l_msg} <small>{optional}</small></span><textarea name="msg" maxlength="70" placeholder="{p_msg}" aria-describedby="msg-count"></textarea><small class="count" id="msg-count">0 / 70</small><span class="sr" id="msg-limit" aria-live="polite"></span></label>
         <div class="send">
           <p class="err" role="alert" hidden></p>
           <button class="btn btn-heat" type="submit"><i class="ph ph-paper-plane-tilt" aria-hidden="true"></i><span>{send}</span></button>
@@ -215,7 +217,7 @@ T = r'''<!doctype html>
       </form>
 
       <section class="done" aria-live="polite" hidden>
-        <h2></h2>
+        <h2 tabindex="-1"></h2>
         <p></p>
         <button class="again" type="button">{again}</button>
       </section>
@@ -317,6 +319,9 @@ T = r'''<!doctype html>
     out('msg').textContent = val('msg') ? '“' + val('msg') + '”' : '';
     const n = form.elements.msg.value.length, cnt = document.getElementById('msg-count');
     cnt.textContent = n + ' / 70'; cnt.classList.toggle('near', n >= 60);
+    // Screen readers hear the count only near the limit, not on every key
+    const lim = document.getElementById('msg-limit'), say = n >= 60 ? n + ' / 70' : '';
+    if (lim.textContent !== say) lim.textContent = say;
     // Shrink the message a little until it fits its two lines on the card
     const m = out('msg'); let size = 2.8; m.style.fontSize = '';
     while (m.scrollHeight > m.clientHeight + 1 && size > 1.9) {{ size -= .1; m.style.fontSize = size + 'cqi'; }}
@@ -391,7 +396,7 @@ T = r'''<!doctype html>
       done.querySelector('h2').textContent = fill(t.doneH, v);
       done.querySelector('p').innerHTML = fill(t.doneP, v);
       out('no').textContent = t.no + ' ' + v.n;
-      form.hidden = true; done.hidden = false;
+      form.hidden = true; done.hidden = false; done.querySelector('h2').focus();
       done.scrollIntoView({{ behavior: 'smooth', block: 'center' }});
     }} catch (e2) {{
       mailFallback();

@@ -30,7 +30,7 @@ T = r'''<!doctype html>
 <style>
   /* Find us: map, address, how to reach us. Same tokens and shapes as the main site. */
   :root {{
-    --night: #0b1012; --night-2: #121a1d; --ink: #eef2f1; --muted: #a7b4b4; --faint: #6b7a7b;
+    --night: #0b1012; --night-2: #121a1d; --ink: #eef2f1; --muted: #a7b4b4; --faint: #7d8c8d;
     --line: rgb(238 242 241 / .12); --heat: #ef6a32; --heat-soft: #ffb48f; --on-heat: #1a1310;
     --brand: #5a4d44; --radius: 16px; --max: 1180px; --ease: cubic-bezier(.16, 1, .3, 1);
   }}
@@ -123,7 +123,7 @@ T = r'''<!doctype html>
 
 {shell_header}
 
-<main>
+<main id="main">
   <div class="wrap">
     <section class="where" aria-labelledby="where-h">
       <div class="text">

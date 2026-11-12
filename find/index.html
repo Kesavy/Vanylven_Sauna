@@ -28,7 +28,7 @@
 <style>
   /* Find us: map, address, how to reach us. Same tokens and shapes as the main site. */
   :root {
-    --night: #0b1012; --night-2: #121a1d; --ink: #eef2f1; --muted: #a7b4b4; --faint: #6b7a7b;
+    --night: #0b1012; --night-2: #121a1d; --ink: #eef2f1; --muted: #a7b4b4; --faint: #7d8c8d;
     --line: rgb(238 242 241 / .12); --heat: #ef6a32; --heat-soft: #ffb48f; --on-heat: #1a1310;
     --brand: #5a4d44; --radius: 16px; --max: 1180px; --ease: cubic-bezier(.16, 1, .3, 1);
   }
@@ -128,6 +128,9 @@
   .menu-btn { width: 48px; height: 46px; border: 0; cursor: pointer; background: rgb(255 255 255 / .1); font-size: 1.35rem; display: inline-grid; place-items: center; }
   .menu-btn:hover { background: rgb(255 255 255 / .18); }
   body.locked { overflow: hidden; }
+  /* Skip link: hidden until a keyboard user tabs to it */
+  .skip { position: absolute; left: 16px; top: -80px; z-index: 90; padding: 12px 18px; border-radius: 999px; background: var(--heat); color: var(--on-heat); font-weight: 700; text-decoration: none; transition: top .2s; }
+  .skip:focus { top: 14px; }
   .fog {
     position: fixed; inset: 0; z-index: 80; display: flex; flex-direction: column; padding: 0 0 40px;
     background: rgb(11 16 18 / .55); backdrop-filter: blur(28px) saturate(1.2); -webkit-backdrop-filter: blur(28px) saturate(1.2);
@@ -166,6 +169,7 @@
 <body>
 
 <header class="nav solid" id="nav">
+  <a class="skip" href="#main">Skip to content</a>
   <div class="wrap">
     <a class="brand" href="../"><img src="../img/logo-symbol.svg" alt="" width="35" height="44">Vanylven Sauna</a>
     <span class="spacer"></span>
@@ -198,7 +202,7 @@
   </div>
 </div>
 
-<main>
+<main id="main">
   <div class="wrap">
     <section class="where" aria-labelledby="where-h">
       <div class="text">
@@ -278,7 +282,16 @@
     };
     openBtn.addEventListener('click', () => setMenu(true));
     fog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', () => setMenu(false)));
-    addEventListener('keydown', (e) => { if (e.key === 'Escape' && fog.classList.contains('open')) setMenu(false); });
+    addEventListener('keydown', (e) => {
+      if (!fog.classList.contains('open')) return;
+      if (e.key === 'Escape') return setMenu(false);
+      // Keep Tab inside the open menu
+      if (e.key !== 'Tab') return;
+      const f = [...fog.querySelectorAll('a[href], button')], first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!fog.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    });
   })();
 </script>
 </body>
