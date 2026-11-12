@@ -141,6 +141,7 @@ T = r'''<!doctype html>
           <span>6143 Fiskå, {country}</span>
           <span class="gps">{coords} {lat:.5f}, {lon:.5f}</span>
         </address>
+        <p data-weather hidden></p>
       </div>
       <figure class="map">
         <iframe src="{gmap}" title="{map_title}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
@@ -181,6 +182,7 @@ T = r'''<!doctype html>
 
 <script>
 {shell_js}</script>
+{weather}
 </body>
 </html>
 '''
@@ -226,5 +228,5 @@ for d, path, img, alt_href in [
         sh, sf = shared.parts(d['lang'], '../', img, alt_href, here='find')
         f.write(T.format(shell_header=sh, shell_footer=sf, shell_css=shared.CSS, shell_js=shared.JS,
                          seo=shared.seo('find/', d['lang'], d['title'], d['desc'], 'img/harbour-reflection.jpg'), icons=shared.icons(img),
-                         directions=DIRECTIONS, apple=APPLE, gmap=GMAP.replace('{hl}', 'no' if d['lang'] == 'nn' else 'en'), place=PLACE, review=REVIEW, lat=LAT, lon=LON, **d))
+                         directions=DIRECTIONS, apple=APPLE, gmap=GMAP.replace('{hl}', 'no' if d['lang'] == 'nn' else 'en'), place=PLACE, review=REVIEW, weather=shared.weather(d['lang']), lat=LAT, lon=LON, **d))
     print('wrote', path)

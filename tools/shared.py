@@ -218,3 +218,51 @@ JS = '''
     });
   })();
 '''
+
+
+WEATHER_API = 'https://vanylven-vouchers.vercel.app/api/weather'
+
+
+def weather(lang):
+    """Small 'right now in Fiskå' line: fills every [data-weather] element on the page.
+    Data from MET Norway through our own cached endpoint; the line stays hidden if it fails."""
+    import json
+    w = {
+        'en': dict(now='Now in Fiskå', sea='Sea', sunrise='Sunrise', sunset='Sunset', src='Weather data: MET Norway',
+                   sky=dict(clearsky='Clear', fair='Mostly clear', partlycloudy='Partly cloudy', cloudy='Cloudy', fog='Fog',
+                            rain='Rain', lightrain='Light rain', heavyrain='Heavy rain', showers='Showers', sleet='Sleet', snow='Snow', thunder='Thunder')),
+        'nn': dict(now='No på Fiskå', sea='Sjøen', sunrise='Soloppgang', sunset='Solnedgang', src='Vêrdata: Meteorologisk institutt',
+                   sky=dict(clearsky='Klårvêr', fair='Lettskya', partlycloudy='Delvis skya', cloudy='Skya', fog='Skodde',
+                            rain='Regn', lightrain='Lett regn', heavyrain='Kraftig regn', showers='Regnbyer', sleet='Sludd', snow='Snø', thunder='Torevêr')),
+    }[lang]
+    return '''<style>
+  [data-weather] { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; color: var(--muted); font-size: .95rem; }
+  [data-weather] .w-label { color: var(--faint); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+  [data-weather] span { display: inline-flex; align-items: center; gap: 7px; }
+  [data-weather] i { font-size: 1.15em; color: var(--ink); opacity: .8; }
+</style>
+<script>
+  // Right now in Fiskå (MET Norway via our cached endpoint)
+  (() => {
+    const boxes = document.querySelectorAll('[data-weather]');
+    if (!boxes.length) return;
+    const W = %s;
+    const icon = (c, night) => /thunder/.test(c) ? 'cloud-lightning' : /snow/.test(c) ? 'cloud-snow' : /rain|sleet/.test(c) ? 'cloud-rain'
+      : c === 'fog' ? 'cloud-fog' : c === 'cloudy' ? 'cloud' : c === 'partlycloudy' ? (night ? 'cloud-moon' : 'cloud-sun') : (night ? 'moon' : 'sun');
+    const word = (c) => W.sky[c] || (/thunder/.test(c) ? W.sky.thunder : /snow/.test(c) ? W.sky.snow : /sleet/.test(c) ? W.sky.sleet
+      : /showers/.test(c) ? W.sky.showers : /^light/.test(c) ? W.sky.lightrain : /^heavy/.test(c) ? W.sky.heavyrain : /rain/.test(c) ? W.sky.rain : '');
+    fetch('%s').then((r) => r.ok ? r.json() : Promise.reject()).then((d) => {
+      if (d.air == null) return;
+      const code = (d.sky || '').replace(/_(day|night|polartwilight)$/, ''), night = /_night$/.test(d.sky || '');
+      const now = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Oslo', hour: '2-digit', minute: '2-digit' }).format(new Date());
+      const sun = d.sunset && now >= (d.sunrise || '') && now < d.sunset ? [W.sunset, d.sunset] : d.sunrise ? [W.sunrise, d.sunrise] : null;
+      const parts = [
+        `<span class="w-label">${W.now}</span>`,
+        `<span><i class="ph ph-${icon(code, night)}" aria-hidden="true"></i>${d.air}°${code ? ' ' + word(code).toLowerCase() : ''}</span>`,
+        d.sea != null ? `<span><i class="ph ph-waves" aria-hidden="true"></i>${W.sea} ${d.sea}°</span>` : '',
+        sun ? `<span><i class="ph ph-sun-horizon" aria-hidden="true"></i>${sun[0]} ${sun[1]}</span>` : '',
+      ].join('');
+      boxes.forEach((b) => { b.innerHTML = parts; b.title = W.src; b.hidden = false; });
+    }).catch(() => {});
+  })();
+</script>''' % (json.dumps(w, ensure_ascii=False), WEATHER_API)

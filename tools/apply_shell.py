@@ -17,7 +17,9 @@ for path, lang, img, lang_href in [('index.html', 'en', 'img/', 'nn/'), ('nn/ind
     desc = re.search(r'<meta name="description" content="(.*?)">', s).group(1)
     block = '\n'.join(['<!-- seo -->', shared.seo('', lang, title, desc, 'img/deck-fjord.jpg'), shared.place(lang, desc), '<!-- /seo -->'])
     s, n3 = re.subn(r'<!-- seo -->.*?<!-- /seo -->', lambda m: block, s, count=1, flags=re.S)
-    assert (n1, n2, n3) == (1, 1, 1), (path, n1, n2, n3)
+    wx = '\n'.join(['<!-- weather -->', shared.weather(lang), '<!-- /weather -->'])
+    s, n4 = re.subn(r'<!-- weather -->.*?<!-- /weather -->', lambda m: wx, s, count=1, flags=re.S)
+    assert (n1, n2, n3, n4) == (1, 1, 1, 1), (path, n1, n2, n3, n4)
     with open(p, 'w', encoding='utf-8', newline='') as f:
         f.write(s)
     print('updated', path)
