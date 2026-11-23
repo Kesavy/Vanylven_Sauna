@@ -1420,5 +1420,13 @@
   })();
 </script>
 <!-- /weather -->
+<script>
+  // Opened with #plan, #rules and so on (also from old links): jump there again once the pinned sections have their final height
+  addEventListener('load', () => {
+    const id = decodeURIComponent(location.hash.slice(1)), el = id && document.getElementById(id);
+    if (!el) return;
+    requestAnimationFrame(() => { if (window.ScrollTrigger) ScrollTrigger.refresh(); el.scrollIntoView({ block: 'start' }); });
+  });
+</script>
 </body>
 </html>

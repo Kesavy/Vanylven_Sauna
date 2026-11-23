@@ -55,6 +55,61 @@
       "source": "/nn/(.*)",
       "destination": "/$1",
       "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/om-oss",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/booking",
+      "destination": "/#plan",
+      "permanent": true
+    },
+    {
+      "source": "/reglar",
+      "destination": "/#rules",
+      "permanent": true
+    },
+    {
+      "source": "/gåvekort",
+      "destination": "/gift/",
+      "permanent": true
+    },
+    {
+      "source": "/g%C3%A5vekort",
+      "destination": "/gift/",
+      "permanent": true
+    },
+    {
+      "source": "/english",
+      "destination": "/en/",
+      "permanent": true
+    },
+    {
+      "source": "/english/about-us",
+      "destination": "/en/",
+      "permanent": true
+    },
+    {
+      "source": "/english/booking",
+      "destination": "/en/#plan",
+      "permanent": true
+    },
+    {
+      "source": "/english/sauna-rules",
+      "destination": "/en/#rules",
+      "permanent": true
+    },
+    {
+      "source": "/english/(.*)",
+      "destination": "/en/",
+      "permanent": true
     }
   ]
 }
