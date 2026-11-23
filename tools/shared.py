@@ -24,7 +24,7 @@ TEXT = {
 def seo(page, lang, title, desc, image):
     """Canonical, language alternates and share tags for one page.
     page: path below the language root ('' for home, 'gift/', 'pay/'). image: path below the site root."""
-    en, nn = SITE + page, SITE + 'nn/' + page
+    en, nn = SITE + 'en/' + page, SITE + page
     url = en if lang == 'en' else nn
     locale = 'en_GB' if lang == 'en' else 'nn_NO'
     return f'''<link rel="canonical" href="{url}">
@@ -49,7 +49,7 @@ def place(lang, desc):
     """Structured data for the home pages: what the sauna is, where, when, and what it costs.
     Search engines and AI answers read this instead of guessing from the page design."""
     import json
-    url = SITE if lang == 'en' else SITE + 'nn/'
+    url = SITE + 'en/' if lang == 'en' else SITE
     data = {
         '@context': 'https://schema.org',
         '@type': ['LocalBusiness', 'SportsActivityLocation'],
@@ -78,7 +78,7 @@ def place(lang, desc):
             {'@type': 'Offer', 'name': 'Open sauna, Wednesday 17:00 to 20:00, per person' if lang == 'en' else 'Open badstue, onsdag 17:00 til 20:00, per person',
              'price': '100', 'priceCurrency': 'NOK'},
             {'@type': 'Offer', 'name': 'Gift card for 2, 4 or 6 hours, valid for one year' if lang == 'en' else 'Gåvekort for 2, 4 eller 6 timar, gyldig i eitt år',
-             'price': '600', 'priceCurrency': 'NOK', 'url': SITE + ('gift/' if lang == 'en' else 'nn/gift/')},
+             'price': '600', 'priceCurrency': 'NOK', 'url': SITE + ('en/gift/' if lang == 'en' else 'gift/')},
         ],
         'sameAs': ['https://www.instagram.com/vanylvensauna/', 'https://www.facebook.com/profile.php?id=61570144756846', 'https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6'],
         'areaServed': ['Vanylven', 'Stad', 'Sunnmøre', 'Nordfjord', 'Møre og Romsdal'],

@@ -289,8 +289,8 @@ nn = dict(
   book_h='Ikkje booka enno?', book_p='Vel ei ledig tid i kalenderen først, og betal så her.', book_btn='Book ei økt',
 )
 for d, path, img, home, alt_href in [
-    (en, 'pay/index.html', '../img/', '../', '../nn/pay/'),
-    (nn, 'nn/pay/index.html', '../../img/', '../', '../../pay/'),
+    (nn, 'pay/index.html', '../img/', '../', '../en/pay/'),
+    (en, 'en/pay/index.html', '../../img/', '../', '../../pay/'),
 ]:
     out = os.path.join(ROOT, path)
     os.makedirs(os.path.dirname(out), exist_ok=True)

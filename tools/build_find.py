@@ -251,8 +251,8 @@ nn = dict(
 )
 
 for d, path, img, alt_href in [
-    (en, 'find/index.html', '../img/', '../nn/find/'),
-    (nn, 'nn/find/index.html', '../../img/', '../../find/'),
+    (nn, 'find/index.html', '../img/', '../en/find/'),
+    (en, 'en/find/index.html', '../../img/', '../../find/'),
 ]:
     out = os.path.join(ROOT, path)
     os.makedirs(os.path.dirname(out), exist_ok=True)

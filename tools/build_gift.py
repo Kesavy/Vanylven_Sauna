@@ -478,8 +478,8 @@ def money(n, lang):
 
 
 for d, path, img, home, alt_href, unit in [
-    (en, 'gift/index.html', '../img/', '../', '../nn/gift/', 'hours'),
-    (nn, 'nn/gift/index.html', '../../img/', '../', '../../gift/', 'timar'),
+    (nn, 'gift/index.html', '../img/', '../', '../en/gift/', 'timar'),
+    (en, 'en/gift/index.html', '../../img/', '../', '../../gift/', 'hours'),
 ]:
     s = dict(d['strings'])
     js = json.dumps(s, ensure_ascii=False)

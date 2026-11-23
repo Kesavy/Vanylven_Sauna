@@ -44,5 +44,17 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/nn",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/nn/:path*",
+      "destination": "/:path*",
+      "permanent": true
+    }
   ]
 }

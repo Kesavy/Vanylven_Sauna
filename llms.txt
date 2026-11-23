@@ -13,12 +13,12 @@ Key facts:
 
 ## Pages
 
-- [Home (English)](https://www.vanylvensauna.no/): the sauna, a visit step by step, prices, booking, rules, questions and answers
-- [Heim (nynorsk)](https://www.vanylvensauna.no/nn/): same in Nynorsk
-- [Gift cards](https://www.vanylvensauna.no/gift/): gift cards for 2, 4 or 6 hours, valid one year, ordered online
-- [Find us](https://www.vanylvensauna.no/find/): address, directions, contact
-- [How to pay](https://www.vanylvensauna.no/pay/): Vipps and bank transfer details
-- [Privacy](https://www.vanylvensauna.no/privacy/): how personal data is handled
+- [Heim (nynorsk)](https://www.vanylvensauna.no/): the main version of the site, in Nynorsk
+- [Home (English)](https://www.vanylvensauna.no/en/): the sauna, a visit step by step, prices, booking, rules, questions and answers
+- [Gift cards](https://www.vanylvensauna.no/en/gift/): gift cards for 2, 4 or 6 hours, valid one year, ordered online
+- [Find us](https://www.vanylvensauna.no/en/find/): address, directions, contact
+- [How to pay](https://www.vanylvensauna.no/en/pay/): Vipps and bank transfer details
+- [Privacy](https://www.vanylvensauna.no/en/privacy/): how personal data is handled
 
 ## Questions and answers
 

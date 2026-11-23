@@ -15,14 +15,14 @@ PAGES = ['', 'gift/', 'find/', 'privacy/']
 
 def sitemap():
     def alts(page):
-        en, nn = SITE + page, SITE + 'nn/' + page
+        en, nn = SITE + 'en/' + page, SITE + page
         return ''.join(f'\n    <xhtml:link rel="alternate" hreflang="{h}" href="{u}"/>'
                        for h, u in [('en', en), ('nn', nn), ('nb', nn), ('no', nn), ('x-default', en)])
     urls = ''.join(f'''
   <url>
     <loc>{SITE}{prefix}{page}</loc>
     <lastmod>{TODAY}</lastmod>{alts(page)}
-  </url>''' for page in PAGES for prefix in ['', 'nn/'])
+  </url>''' for page in PAGES for prefix in ['', 'en/'])
     return f'''<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">{urls}
 </urlset>
@@ -31,7 +31,7 @@ def sitemap():
 
 def llms():
     """A plain summary for AI assistants (llmstxt.org): what the sauna is and where the facts live."""
-    qa = '\n'.join(f'- **{q}** {faq.plain(a.replace("{root}", SITE))}' for q, a in faq.FAQ['en']['items'])
+    qa = '\n'.join(f'- **{q}** {faq.plain(a.replace("{root}", SITE + "en/"))}' for q, a in faq.FAQ['en']['items'])
     return f'''# Vanylven Sauna
 
 > A small public sauna on the shore of the Vanylvsfjord in Fiskå, Vanylven municipality (Møre og Romsdal, Norway), below Fiskå Brygge Gjestgiveri. Built by Stad Kystbygg and run by local volunteers. Private sessions for up to 8 people, and an open sauna on Wednesday evenings. Sea swimming straight from the shore.
@@ -47,12 +47,12 @@ Key facts:
 
 ## Pages
 
-- [Home (English)]({SITE}): the sauna, a visit step by step, prices, booking, rules, questions and answers
-- [Heim (nynorsk)]({SITE}nn/): same in Nynorsk
-- [Gift cards]({SITE}gift/): gift cards for 2, 4 or 6 hours, valid one year, ordered online
-- [Find us]({SITE}find/): address, directions, contact
-- [How to pay]({SITE}pay/): Vipps and bank transfer details
-- [Privacy]({SITE}privacy/): how personal data is handled
+- [Heim (nynorsk)]({SITE}): the main version of the site, in Nynorsk
+- [Home (English)]({SITE}en/): the sauna, a visit step by step, prices, booking, rules, questions and answers
+- [Gift cards]({SITE}en/gift/): gift cards for 2, 4 or 6 hours, valid one year, ordered online
+- [Find us]({SITE}en/find/): address, directions, contact
+- [How to pay]({SITE}en/pay/): Vipps and bank transfer details
+- [Privacy]({SITE}en/privacy/): how personal data is handled
 
 ## Questions and answers
 
@@ -99,9 +99,9 @@ def notfound():
   <p>The address may have changed. The sauna has not.</p>
   <p lang="nn">Denne sida finst ikkje. Badstua er der framleis.</p>
   <nav>
-    <a class="main" href="/"><i class="ph ph-house" aria-hidden="true"></i>Home</a>
-    <a href="/nn/" lang="nn">Heim</a>
-    <a href="/find/"><i class="ph ph-map-pin" aria-hidden="true"></i>Find us</a>
+    <a class="main" href="/" lang="nn"><i class="ph ph-house" aria-hidden="true"></i>Heim</a>
+    <a href="/en/">Home</a>
+    <a href="/find/" lang="nn"><i class="ph ph-map-pin" aria-hidden="true"></i>Finn oss</a>
   </nav>
 </main>
 </body>
