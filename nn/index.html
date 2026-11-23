@@ -3,21 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vanylven Sauna | Gå inn i dampen</title>
+<title>Vanylven Sauna | Badstue ved fjorden på Fiskå i Vanylven</title>
 <meta name="description" content="Ei lita badstue på svaberget ved Vanylvsfjorden på Fiskå. Varm deg opp, bad i sjøen, senk skuldrane. Privat badstue for opptil 8 personar, drifta av lokale frivillige.">
 <meta name="color-scheme" content="dark">
 <!-- seo -->
 <link rel="canonical" href="https://www.vanylvensauna.no/nn/">
 <link rel="alternate" hreflang="en" href="https://www.vanylvensauna.no/">
 <link rel="alternate" hreflang="nn" href="https://www.vanylvensauna.no/nn/">
+<link rel="alternate" hreflang="nb" href="https://www.vanylvensauna.no/nn/">
+<link rel="alternate" hreflang="no" href="https://www.vanylvensauna.no/nn/">
 <link rel="alternate" hreflang="x-default" href="https://www.vanylvensauna.no/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Vanylven Sauna">
 <meta property="og:locale" content="nn_NO">
+<meta property="og:locale:alternate" content="en_GB">
 <meta property="og:url" content="https://www.vanylvensauna.no/nn/">
-<meta property="og:title" content="Vanylven Sauna | Gå inn i dampen">
+<meta property="og:title" content="Vanylven Sauna | Badstue ved fjorden på Fiskå i Vanylven">
 <meta property="og:description" content="Ei lita badstue på svaberget ved Vanylvsfjorden på Fiskå. Varm deg opp, bad i sjøen, senk skuldrane. Privat badstue for opptil 8 personar, drifta av lokale frivillige.">
 <meta property="og:image" content="https://www.vanylvensauna.no/img/deck-fjord.jpg">
+<meta property="og:image:alt" content="Vanylven Sauna | Badstue ved fjorden på Fiskå i Vanylven">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
 {
@@ -86,11 +90,49 @@
       "name": "Open badstue, onsdag 17:00 til 20:00, per person",
       "price": "100",
       "priceCurrency": "NOK"
+    },
+    {
+      "@type": "Offer",
+      "name": "Gåvekort for 2, 4 eller 6 timar, gyldig i eitt år",
+      "price": "600",
+      "priceCurrency": "NOK",
+      "url": "https://www.vanylvensauna.no/nn/gift/"
     }
   ],
   "sameAs": [
     "https://www.instagram.com/vanylvensauna/",
-    "https://www.facebook.com/profile.php?id=61570144756846"
+    "https://www.facebook.com/profile.php?id=61570144756846",
+    "https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6"
+  ],
+  "areaServed": [
+    "Vanylven",
+    "Stad",
+    "Sunnmøre",
+    "Nordfjord",
+    "Møre og Romsdal"
+  ],
+  "knowsLanguage": [
+    "no",
+    "en"
+  ],
+  "publicAccess": true,
+  "maximumAttendeeCapacity": 8,
+  "amenityFeature": [
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Bading i Vanylvsfjorden",
+      "value": true
+    },
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Privat badstue for opptil 8 personar",
+      "value": true
+    },
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Open badstue onsdagskveldar",
+      "value": true
+    }
   ]
 }
 </script>
@@ -98,13 +140,12 @@
 <link rel="icon" href="../img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../img/favicon.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="../img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" integrity="sha384-6p9AefaqUhEVheRlj1mpAkbngHXy9mbYMrIdcIt4Jlc9lOLIablJq3bBsLOjGwZ7" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" integrity="sha384-GzhNOdwUkh38xzoNEY1vRdLr+w8q+bXEJsd/km6Ef61w1Kfk+lself6cn14ilrpO" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<link rel="preload" href="../fonts/schibsted-grotesk-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../fonts/fonts.css">
+<link rel="stylesheet" href="../vendor/phosphor/regular.css">
+<link rel="stylesheet" href="../vendor/phosphor/light.css">
+<script src="../vendor/gsap/gsap.min.js"></script>
+<script src="../vendor/gsap/ScrollTrigger.min.js"></script>
 <link rel="preload" as="image" href="../img/deck-fjord.jpg">
 <style>
   /*
@@ -742,6 +783,194 @@
   </section>
 
   <!-- FINALE -->
+<!-- faq -->
+<style>
+  /* Questions and answers */
+  .faq { padding: 140px 0; }
+  .faq .head { max-width: 760px; margin-bottom: 48px; }
+  .faq .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--heat-soft, var(--heat)); font-weight: 700; font-size: .9rem; }
+  .faq h2 { margin-top: 14px; font-size: clamp(2.6rem, 5.4vw, 4.8rem); }
+  .faq .head p { margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
+  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  .faq details { border-top: 1px solid rgb(255 255 255 / .1); }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 22px 0; font-weight: 700; font-size: 1.08rem; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary i { flex: none; transition: transform .3s; color: var(--muted); }
+  .faq details[open] summary i { transform: rotate(45deg); }
+  .faq details p { margin: -6px 0 24px; color: var(--muted); max-width: 60ch; }
+  .faq details a { color: var(--ink); }
+  @media (max-width: 767px) { .faq { padding: 90px 0; } .faq .list { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .faq summary i { transition: none; } }
+</style>
+  <section class="faq" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow"><i class="ph ph-question" aria-hidden="true"></i>Spørsmål og svar</span>
+        <h2 id="faq-h">Greitt å vite</h2>
+        <p>Korte svar på det folk oftast spør oss om.</p>
+      </div>
+      <div class="list">
+        <details>
+          <summary>Kva kostar badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Ei privat økt kostar 600 kr for 2 timar, for heile gruppa på opptil 8 personar. Open badstue onsdagskveldar kostar 100 kr per person.</p>
+        </details>
+        <details>
+          <summary>Når er badstua open?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Privat badstue torsdag til søndag, 10:00 til 20:00, med siste start 18:00. Open badstue kvar onsdag, 17:00 til 20:00. Vil du kome på andre tider, send e-post til <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> eller ei melding på <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener">Messenger</a>.</p>
+        </details>
+        <details>
+          <summary>Korleis bookar eg?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Finn ei ledig tid i <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">bookingkalenderen</a> vår, og betal med Vipps eller bankoverføring. Til open badstue på onsdagar treng du ikkje booke: berre kom.</p>
+        </details>
+        <details>
+          <summary>Korleis betaler eg?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Med Vipps (943550) eller bankoverføring. Skriv datoen og namnet ditt i meldinga, så finn vi bookinga di. <a href="../pay/">Slik betaler du, steg for steg</a>.</p>
+        </details>
+        <details>
+          <summary>Korleis kjem eg inn?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Når betalinga er komen inn, sender vi deg koden til døra på e-post dagen før besøket.</p>
+        </details>
+        <details>
+          <summary>Kan eg bade i sjøen?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Ja. Badstua ligg i sjøkanten ved Vanylvsfjorden på Fiskå, så du kan kjøle deg ned i sjøen mellom rundane. Badstue og bading skjer på eige ansvar.</p>
+        </details>
+        <details>
+          <summary>Kva skal eg ta med?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Badetøy, eige handkle å sitje eller liggje på, og rikeleg med vatn å drikke. Ikkje alkohol, verken inne eller ute.</p>
+        </details>
+        <details>
+          <summary>Kan born vere med?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Ja. Born under 16 år kjem saman med ein vaksen.</p>
+        </details>
+        <details>
+          <summary>Kan eg avbestille?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Avbestill på e-post eller Messenger seinast 24 timar før økta, så kostar det ingenting. Ved seinare avbestilling er gebyret 300 kr.</p>
+        </details>
+        <details>
+          <summary>Sel de gåvekort?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Ja, for 2, 4 eller 6 timar, gyldige i eitt år. <a href="../gift/">Lag kortet på nettsida</a>, betal med Vipps eller bankoverføring, så sender vi det til deg. Book som vanleg og send oss nummeret på gåvekortet i staden for å betale.</p>
+        </details>
+        <details>
+          <summary>Kvar ligg badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>I sjøkanten nedanfor Fiskå Brygge Gjestgiveri på Fiskå i Vanylven, i Møre og Romsdal, ikkje langt frå Stad. <a href="../find/">Kart og vegbeskriving</a>.</p>
+        </details>
+        <details>
+          <summary>Kven driv badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Vanylven Sauna er bygd av Stad Kystbygg og blir driven av frivillige frå Vanylven.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "nn",
+  "about": {
+    "@id": "https://www.vanylvensauna.no/#sauna"
+  },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Kva kostar badstua?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ei privat økt kostar 600 kr for 2 timar, for heile gruppa på opptil 8 personar. Open badstue onsdagskveldar kostar 100 kr per person."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Når er badstua open?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Privat badstue torsdag til søndag, 10:00 til 20:00, med siste start 18:00. Open badstue kvar onsdag, 17:00 til 20:00. Vil du kome på andre tider, send e-post til vanylvensauna@gmail.com eller ei melding på Messenger."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Korleis bookar eg?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Finn ei ledig tid i bookingkalenderen vår, og betal med Vipps eller bankoverføring. Til open badstue på onsdagar treng du ikkje booke: berre kom."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Korleis betaler eg?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Med Vipps (943550) eller bankoverføring. Skriv datoen og namnet ditt i meldinga, så finn vi bookinga di. Slik betaler du, steg for steg."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Korleis kjem eg inn?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Når betalinga er komen inn, sender vi deg koden til døra på e-post dagen før besøket."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kan eg bade i sjøen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Badstua ligg i sjøkanten ved Vanylvsfjorden på Fiskå, så du kan kjøle deg ned i sjøen mellom rundane. Badstue og bading skjer på eige ansvar."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kva skal eg ta med?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Badetøy, eige handkle å sitje eller liggje på, og rikeleg med vatn å drikke. Ikkje alkohol, verken inne eller ute."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kan born vere med?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Born under 16 år kjem saman med ein vaksen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kan eg avbestille?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Avbestill på e-post eller Messenger seinast 24 timar før økta, så kostar det ingenting. Ved seinare avbestilling er gebyret 300 kr."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Sel de gåvekort?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, for 2, 4 eller 6 timar, gyldige i eitt år. Lag kortet på nettsida, betal med Vipps eller bankoverføring, så sender vi det til deg. Book som vanleg og send oss nummeret på gåvekortet i staden for å betale."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kvar ligg badstua?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "I sjøkanten nedanfor Fiskå Brygge Gjestgiveri på Fiskå i Vanylven, i Møre og Romsdal, ikkje langt frå Stad. Kart og vegbeskriving."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kven driv badstua?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Vanylven Sauna er bygd av Stad Kystbygg og blir driven av frivillige frå Vanylven."
+      }
+    }
+  ]
+}
+</script>
+<!-- /faq -->
+
   <section class="finale" id="finale">
     <canvas class="steam" data-steam="finale" aria-hidden="true"></canvas>
     <div class="content">

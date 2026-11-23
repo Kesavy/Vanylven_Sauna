@@ -14,11 +14,6 @@ T = r'''<!doctype html>
 <meta name="color-scheme" content="dark">
 {seo}
 {icons}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" integrity="sha384-6p9AefaqUhEVheRlj1mpAkbngHXy9mbYMrIdcIt4Jlc9lOLIablJq3bBsLOjGwZ7" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" integrity="sha384-GzhNOdwUkh38xzoNEY1vRdLr+w8q+bXEJsd/km6Ef61w1Kfk+lself6cn14ilrpO" crossorigin="anonymous">
 <style>
   /* Privacy: plain reading page in the site's tokens */
   :root {{
@@ -106,7 +101,7 @@ en = dict(
     ('Who else handles the data', '<ul><li><strong>Vercel</strong> stores gift card orders for us. The data is kept in Frankfurt, Germany. Vercel is an American company and follows the EU rules for transfers to the USA.</li>'
       '<li><strong>Calendly</strong> handles bookings, <strong>Vipps</strong> handles mobile payments.</li>'
       '<li>We never sell or share your details with anyone else.</li></ul>'),
-    ('When you visit the website', '<p>The website itself has no analytics, no advertising and no tracking cookies. To show the page, your browser fetches fonts from Google Fonts and icons and scripts from public content networks (unpkg and cdnjs). These services see your IP address when your browser asks for the files, as any website does. The map on the Find us page is embedded from Google Maps; when it loads, Google receives your IP address and may set its own cookies, under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">the Google privacy policy</a>. The weather line on the home and Find us pages comes from the server that also handles gift card orders (Vercel, Frankfurt), which gets it from MET Norway; MET Norway does not see visitors. The host of this website also keeps short technical logs.</p>'),
+    ('When you visit the website', '<p>The website itself has no analytics, no advertising and no tracking cookies. Fonts, icons and scripts are served from this website itself, so opening a page sends nothing to Google or other third parties. The weather line on the home and Find us pages comes from the server that also handles gift card orders (Vercel, Frankfurt), which gets it from MET Norway; MET Norway does not see visitors. The map on the Find us page loads from Google Maps only when you press <em>Show the map</em>; Google then receives your IP address and may set its own cookies, under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">the Google privacy policy</a>. If you tick <em>Always show maps</em>, that choice is kept in your own browser only. The host of this website (Vercel) keeps short technical logs.</p>'),
     ('Your rights', f'<p>You can ask to see the details we have about you, have them corrected or deleted, or object to how we use them. Write to {MAIL}. If you think we handle your details wrongly, you can complain to the Norwegian Data Protection Authority, <a href="https://www.datatilsynet.no/en/" target="_blank" rel="noopener">Datatilsynet</a>.</p>'),
   ]),
 )
@@ -125,7 +120,7 @@ nn = dict(
     ('Kven andre som handterer opplysningane', '<ul><li><strong>Vercel</strong> lagrar gåvekortbestillingane for oss. Opplysningane ligg i Frankfurt i Tyskland. Vercel er eit amerikansk selskap og følgjer EU-reglane for overføring til USA.</li>'
       '<li><strong>Calendly</strong> handterer booking, <strong>Vipps</strong> handterer mobilbetaling.</li>'
       '<li>Vi sel aldri opplysningane dine og deler dei ikkje med andre.</li></ul>'),
-    ('Når du besøkjer nettsida', '<p>Nettsida sjølv har ingen analyseverktøy, ingen reklame og ingen sporingscookies. For å vise sida hentar nettlesaren skrifter frå Google Fonts og ikon og skript frå offentlege innhaldsnettverk (unpkg og cdnjs). Desse tenestene ser IP-adressa di når nettlesaren ber om filene, slik det er for alle nettsider. Kartet på sida Finn oss er henta frå Google Maps. Når kartet lastar, får Google IP-adressa di og kan setje eigne informasjonskapslar, etter <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">personvernerklæringa til Google</a>. Vêrlinja på framsida og på sida Finn oss kjem frå den same tenaren som tek imot gåvekortbestillingar (Vercel, Frankfurt), som hentar ho frå Meteorologisk institutt; instituttet ser ikkje dei besøkande. Den som driftar nettsida, tek òg vare på korte tekniske loggar.</p>'),
+    ('Når du besøkjer nettsida', '<p>Nettsida sjølv har ingen analyseverktøy, ingen reklame og ingen sporingscookies. Skrifter, ikon og skript kjem frå nettsida sjølv, så når du opnar ei side, går ingenting til Google eller andre tredjepartar. Vêrlinja på framsida og på sida Finn oss kjem frå den same tenaren som tek imot gåvekortbestillingar (Vercel, Frankfurt), som hentar ho frå Meteorologisk institutt; instituttet ser ikkje dei besøkande. Kartet på sida Finn oss blir berre henta frå Google Maps når du trykkjer på <em>Vis kartet</em>; då får Google IP-adressa di og kan setje eigne informasjonskapslar, etter <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">personvernerklæringa til Google</a>. Krysser du av for <em>Vis alltid kart</em>, blir valet berre lagra i din eigen nettlesar. Den som driftar nettsida (Vercel), tek vare på korte tekniske loggar.</p>'),
     ('Rettane dine', f'<p>Du kan be om å få sjå opplysningane vi har om deg, få dei retta eller sletta, eller protestere mot korleis vi brukar dei. Skriv til {MAIL}. Om du meiner vi handterer opplysningane dine feil, kan du klage til <a href="https://www.datatilsynet.no/" target="_blank" rel="noopener">Datatilsynet</a>.</p>'),
   ]),
 )

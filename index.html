@@ -3,21 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vanylven Sauna | Step into the steam</title>
+<title>Vanylven Sauna | Sauna by the fjord in Fiskå, Vanylven</title>
 <meta name="description" content="A small sauna on the rocks of the Vanylvsfjord in Fiskå. Heat up, swim in the sea, slow down. Private sessions for up to 8 people, run by local volunteers.">
 <meta name="color-scheme" content="dark">
 <!-- seo -->
 <link rel="canonical" href="https://www.vanylvensauna.no/">
 <link rel="alternate" hreflang="en" href="https://www.vanylvensauna.no/">
 <link rel="alternate" hreflang="nn" href="https://www.vanylvensauna.no/nn/">
+<link rel="alternate" hreflang="nb" href="https://www.vanylvensauna.no/nn/">
+<link rel="alternate" hreflang="no" href="https://www.vanylvensauna.no/nn/">
 <link rel="alternate" hreflang="x-default" href="https://www.vanylvensauna.no/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Vanylven Sauna">
 <meta property="og:locale" content="en_GB">
+<meta property="og:locale:alternate" content="nn_NO">
 <meta property="og:url" content="https://www.vanylvensauna.no/">
-<meta property="og:title" content="Vanylven Sauna | Step into the steam">
+<meta property="og:title" content="Vanylven Sauna | Sauna by the fjord in Fiskå, Vanylven">
 <meta property="og:description" content="A small sauna on the rocks of the Vanylvsfjord in Fiskå. Heat up, swim in the sea, slow down. Private sessions for up to 8 people, run by local volunteers.">
 <meta property="og:image" content="https://www.vanylvensauna.no/img/deck-fjord.jpg">
+<meta property="og:image:alt" content="Vanylven Sauna | Sauna by the fjord in Fiskå, Vanylven">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
 {
@@ -86,11 +90,49 @@
       "name": "Open sauna, Wednesday 17:00 to 20:00, per person",
       "price": "100",
       "priceCurrency": "NOK"
+    },
+    {
+      "@type": "Offer",
+      "name": "Gift card for 2, 4 or 6 hours, valid for one year",
+      "price": "600",
+      "priceCurrency": "NOK",
+      "url": "https://www.vanylvensauna.no/gift/"
     }
   ],
   "sameAs": [
     "https://www.instagram.com/vanylvensauna/",
-    "https://www.facebook.com/profile.php?id=61570144756846"
+    "https://www.facebook.com/profile.php?id=61570144756846",
+    "https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6"
+  ],
+  "areaServed": [
+    "Vanylven",
+    "Stad",
+    "Sunnmøre",
+    "Nordfjord",
+    "Møre og Romsdal"
+  ],
+  "knowsLanguage": [
+    "no",
+    "en"
+  ],
+  "publicAccess": true,
+  "maximumAttendeeCapacity": 8,
+  "amenityFeature": [
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Sea swimming in the Vanylvsfjord",
+      "value": true
+    },
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Private sessions for up to 8 people",
+      "value": true
+    },
+    {
+      "@type": "LocationFeatureSpecification",
+      "name": "Open sauna on Wednesday evenings",
+      "value": true
+    }
   ]
 }
 </script>
@@ -98,13 +140,12 @@
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="img/favicon.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" integrity="sha384-6p9AefaqUhEVheRlj1mpAkbngHXy9mbYMrIdcIt4Jlc9lOLIablJq3bBsLOjGwZ7" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" integrity="sha384-GzhNOdwUkh38xzoNEY1vRdLr+w8q+bXEJsd/km6Ef61w1Kfk+lself6cn14ilrpO" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d" crossorigin="anonymous"></script>
+<link rel="preload" href="fonts/schibsted-grotesk-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="vendor/phosphor/regular.css">
+<link rel="stylesheet" href="vendor/phosphor/light.css">
+<script src="vendor/gsap/gsap.min.js"></script>
+<script src="vendor/gsap/ScrollTrigger.min.js"></script>
 <link rel="preload" as="image" href="img/deck-fjord.jpg">
 <style>
   /*
@@ -742,6 +783,194 @@
   </section>
 
   <!-- FINALE -->
+<!-- faq -->
+<style>
+  /* Questions and answers */
+  .faq { padding: 140px 0; }
+  .faq .head { max-width: 760px; margin-bottom: 48px; }
+  .faq .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--heat-soft, var(--heat)); font-weight: 700; font-size: .9rem; }
+  .faq h2 { margin-top: 14px; font-size: clamp(2.6rem, 5.4vw, 4.8rem); }
+  .faq .head p { margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
+  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  .faq details { border-top: 1px solid rgb(255 255 255 / .1); }
+  .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 22px 0; font-weight: 700; font-size: 1.08rem; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary i { flex: none; transition: transform .3s; color: var(--muted); }
+  .faq details[open] summary i { transform: rotate(45deg); }
+  .faq details p { margin: -6px 0 24px; color: var(--muted); max-width: 60ch; }
+  .faq details a { color: var(--ink); }
+  @media (max-width: 767px) { .faq { padding: 90px 0; } .faq .list { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .faq summary i { transition: none; } }
+</style>
+  <section class="faq" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="eyebrow"><i class="ph ph-question" aria-hidden="true"></i>Questions and answers</span>
+        <h2 id="faq-h">Good to know</h2>
+        <p>The short answers to what people ask us most.</p>
+      </div>
+      <div class="list">
+        <details>
+          <summary>How much does the sauna cost?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>A private session costs NOK 600 for 2 hours, for the whole group of up to 8 people. Open sauna on Wednesday evenings costs NOK 100 per person.</p>
+        </details>
+        <details>
+          <summary>When is the sauna open?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Private sessions run Thursday to Sunday, 10:00 to 20:00, with the last start at 18:00. Open sauna is every Wednesday, 17:00 to 20:00. For other times, email <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> or message us on <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener">Messenger</a>.</p>
+        </details>
+        <details>
+          <summary>How do I book?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Pick a free time in our <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">booking calendar</a>, then pay with Vipps or bank transfer. Open sauna on Wednesdays needs no booking: just come.</p>
+        </details>
+        <details>
+          <summary>How do I pay?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>With Vipps (943550) or by bank transfer. Write the date and your name in the message so we can find your booking. <a href="pay/">How to pay, step by step</a>.</p>
+        </details>
+        <details>
+          <summary>How do I get in?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>When your payment is in, we email you the door code the day before your visit.</p>
+        </details>
+        <details>
+          <summary>Can I swim in the sea?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Yes. The sauna sits on the shore of the Vanylvsfjord in Fiskå, so you can cool off in the sea between rounds. Sauna and swimming are at your own risk.</p>
+        </details>
+        <details>
+          <summary>What should I bring?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Swimwear, your own towel to sit or lie on, and plenty of water to drink. No alcohol, inside or outside.</p>
+        </details>
+        <details>
+          <summary>Can children come?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Yes. Children under 16 come with an adult.</p>
+        </details>
+        <details>
+          <summary>Can I cancel?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Cancel by email or Messenger at least 24 hours before your session and it costs nothing. Later cancellations cost NOK 300.</p>
+        </details>
+        <details>
+          <summary>Do you sell gift cards?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Yes, for 2, 4 or 6 hours, valid for one year. <a href="gift/">Design the card online</a>, pay with Vipps or bank transfer, and we send it to you. To use one, book as usual and email us the card number instead of paying.</p>
+        </details>
+        <details>
+          <summary>Where is the sauna?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>On the shore below Fiskå Brygge Gjestgiveri in Fiskå, Vanylven, in Møre og Romsdal, not far from Stad. <a href="find/">Map and directions</a>.</p>
+        </details>
+        <details>
+          <summary>Who runs the sauna?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+          <p>Vanylven Sauna was built by Stad Kystbygg and is run by volunteers from Vanylven.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "inLanguage": "en",
+  "about": {
+    "@id": "https://www.vanylvensauna.no/#sauna"
+  },
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much does the sauna cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A private session costs NOK 600 for 2 hours, for the whole group of up to 8 people. Open sauna on Wednesday evenings costs NOK 100 per person."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When is the sauna open?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Private sessions run Thursday to Sunday, 10:00 to 20:00, with the last start at 18:00. Open sauna is every Wednesday, 17:00 to 20:00. For other times, email vanylvensauna@gmail.com or message us on Messenger."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I book?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pick a free time in our booking calendar, then pay with Vipps or bank transfer. Open sauna on Wednesdays needs no booking: just come."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I pay?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "With Vipps (943550) or by bank transfer. Write the date and your name in the message so we can find your booking. How to pay, step by step."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I get in?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When your payment is in, we email you the door code the day before your visit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I swim in the sea?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The sauna sits on the shore of the Vanylvsfjord in Fiskå, so you can cool off in the sea between rounds. Sauna and swimming are at your own risk."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I bring?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Swimwear, your own towel to sit or lie on, and plenty of water to drink. No alcohol, inside or outside."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can children come?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Children under 16 come with an adult."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I cancel?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cancel by email or Messenger at least 24 hours before your session and it costs nothing. Later cancellations cost NOK 300."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you sell gift cards?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, for 2, 4 or 6 hours, valid for one year. Design the card online, pay with Vipps or bank transfer, and we send it to you. To use one, book as usual and email us the card number instead of paying."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where is the sauna?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "On the shore below Fiskå Brygge Gjestgiveri in Fiskå, Vanylven, in Møre og Romsdal, not far from Stad. Map and directions."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who runs the sauna?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Vanylven Sauna was built by Stad Kystbygg and is run by volunteers from Vanylven."
+      }
+    }
+  ]
+}
+</script>
+<!-- /faq -->
+
   <section class="finale" id="finale">
     <canvas class="steam" data-steam="finale" aria-hidden="true"></canvas>
     <div class="content">

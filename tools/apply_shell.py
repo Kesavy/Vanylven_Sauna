@@ -3,7 +3,7 @@
 import os, re, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import shared
+import shared, faq
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else '.'
 
@@ -21,7 +21,10 @@ for path, lang, img, lang_href in [('index.html', 'en', 'img/', 'nn/'), ('nn/ind
     s, n4 = re.subn(r'<!-- weather -->.*?<!-- /weather -->', lambda m: wx, s, count=1, flags=re.S)
     mc = '\n'.join(['<!-- mailcopy -->', '<style>' + shared.MAIL_CSS + '</style>', '<script>' + shared.MAIL_JS + '</script>', '<!-- /mailcopy -->'])
     s, n5 = re.subn(r'<!-- mailcopy -->.*?<!-- /mailcopy -->', lambda m: mc, s, count=1, flags=re.S)
-    assert (n1, n2, n3, n4, n5) == (1, 1, 1, 1, 1), (path, n1, n2, n3, n4, n5)
+    root = '' if lang == 'en' else '../'
+    fq = '\n'.join(['<!-- faq -->', '<style>' + faq.CSS + '</style>', faq.section(lang, root), faq.data(lang), '<!-- /faq -->'])
+    s, n6 = re.subn(r'<!-- faq -->.*?<!-- /faq -->', lambda m: fq, s, count=1, flags=re.S)
+    assert (n1, n2, n3, n4, n5, n6) == (1, 1, 1, 1, 1, 1), (path, n1, n2, n3, n4, n5, n6)
     with open(p, 'w', encoding='utf-8', newline='') as f:
         f.write(s)
     print('updated', path)

@@ -14,11 +14,6 @@ T = r'''<!doctype html>
 <meta name="color-scheme" content="dark">
 {seo}
 {icons}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" integrity="sha384-6p9AefaqUhEVheRlj1mpAkbngHXy9mbYMrIdcIt4Jlc9lOLIablJq3bBsLOjGwZ7" crossorigin="anonymous">
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" integrity="sha384-GzhNOdwUkh38xzoNEY1vRdLr+w8q+bXEJsd/km6Ef61w1Kfk+lself6cn14ilrpO" crossorigin="anonymous">
 <style>
   /*
     Gift card page: the buyer designs the card, sees it live, and sends the order from their own email app.
@@ -434,8 +429,8 @@ def how(items):
     return ''.join(f'<li><span class="pebble{cls[i]}" aria-hidden="true">{i+1}</span><p>{x}</p></li>' for i, x in enumerate(items))
 
 en = dict(
-  lang='en', title='Gift cards | Vanylven Sauna',
-  desc='Give a few quiet hours by the fjord. Design a Vanylven Sauna gift card and order it by email.',
+  lang='en', title='Sauna gift cards | Vanylven Sauna',
+  desc='Give a few quiet hours by the fjord: a Vanylven Sauna gift card for 2, 4 or 6 hours, valid for a year. Design it online and pay with Vipps or bank transfer.',
   alt_lang='nn', alt_name='Norsk', nav_label='Page links', nav_prices='Prices',
   h1='Give a few quiet hours', lead='A gift card is something to do, not something to keep. Fill in the card and see it take shape, then send us the order.',
   l_gift='How long?', h2='2 hours', h4='4 hours', h6='6 hours',
@@ -455,8 +450,8 @@ en = dict(
     mailPay='I will pay {amount} with Vipps or bank transfer, with the message "{ref}".', refWord='Gift card', mailThanks='Thank you!'),
 )
 nn = dict(
-  lang='nn', title='Gåvekort | Vanylven Sauna',
-  desc='Gi nokre stille timar ved fjorden. Lag eit gåvekort frå Vanylven Sauna og bestill det på e-post.',
+  lang='nn', title='Gåvekort til badstua | Vanylven Sauna',
+  desc='Gi nokre stille timar ved fjorden: eit gåvekort frå Vanylven Sauna for 2, 4 eller 6 timar, gyldig i eitt år. Lag det på nettsida og betal med Vipps eller bankoverføring.',
   alt_lang='en', alt_name='English', nav_label='Lenker', nav_prices='Prisar',
   h1='Gi nokre stille timar', lead='Eit gåvekort er noko å gjere, ikkje noko å ha. Fyll ut kortet og sjå det ta form, og send oss så bestillinga.',
   l_gift='Kor lenge?', h2='2 timar', h4='4 timar', h6='6 timar',

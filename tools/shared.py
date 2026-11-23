@@ -30,14 +30,18 @@ def seo(page, lang, title, desc, image):
     return f'''<link rel="canonical" href="{url}">
 <link rel="alternate" hreflang="en" href="{en}">
 <link rel="alternate" hreflang="nn" href="{nn}">
+<link rel="alternate" hreflang="nb" href="{nn}">
+<link rel="alternate" hreflang="no" href="{nn}">
 <link rel="alternate" hreflang="x-default" href="{en}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Vanylven Sauna">
 <meta property="og:locale" content="{locale}">
+<meta property="og:locale:alternate" content="{'nn_NO' if lang == 'en' else 'en_GB'}">
 <meta property="og:url" content="{url}">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:image" content="{SITE}{image}">
+<meta property="og:image:alt" content="{title}">
 <meta name="twitter:card" content="summary_large_image">'''
 
 
@@ -73,15 +77,36 @@ def place(lang, desc):
              'price': '600', 'priceCurrency': 'NOK', 'url': CALENDLY},
             {'@type': 'Offer', 'name': 'Open sauna, Wednesday 17:00 to 20:00, per person' if lang == 'en' else 'Open badstue, onsdag 17:00 til 20:00, per person',
              'price': '100', 'priceCurrency': 'NOK'},
+            {'@type': 'Offer', 'name': 'Gift card for 2, 4 or 6 hours, valid for one year' if lang == 'en' else 'Gåvekort for 2, 4 eller 6 timar, gyldig i eitt år',
+             'price': '600', 'priceCurrency': 'NOK', 'url': SITE + ('gift/' if lang == 'en' else 'nn/gift/')},
         ],
-        'sameAs': ['https://www.instagram.com/vanylvensauna/', 'https://www.facebook.com/profile.php?id=61570144756846'],
+        'sameAs': ['https://www.instagram.com/vanylvensauna/', 'https://www.facebook.com/profile.php?id=61570144756846', 'https://maps.app.goo.gl/YxkPj1qFpbwp8hvf6'],
+        'areaServed': ['Vanylven', 'Stad', 'Sunnmøre', 'Nordfjord', 'Møre og Romsdal'],
+        'knowsLanguage': ['no', 'en'],
+        'publicAccess': True,
+        'maximumAttendeeCapacity': 8,
+        'amenityFeature': [
+            {'@type': 'LocationFeatureSpecification', 'name': 'Sea swimming in the Vanylvsfjord' if lang == 'en' else 'Bading i Vanylvsfjorden', 'value': True},
+            {'@type': 'LocationFeatureSpecification', 'name': 'Private sessions for up to 8 people' if lang == 'en' else 'Privat badstue for opptil 8 personar', 'value': True},
+            {'@type': 'LocationFeatureSpecification', 'name': 'Open sauna on Wednesday evenings' if lang == 'en' else 'Open badstue onsdagskveldar', 'value': True},
+        ],
     }
     return '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False, indent=2) + '\n</script>'
 
 
-def icons(img):
-    """Round favicon: SVG for browsers that take it, PNG for the rest and for home screens."""
+def assets(root):
+    """Fonts and icons, served from this site so no visitor's IP goes to Google or a CDN."""
     return '\n'.join([
+        f'<link rel="preload" href="{root}fonts/schibsted-grotesk-normal-latin.woff2" as="font" type="font/woff2" crossorigin>',
+        f'<link rel="stylesheet" href="{root}fonts/fonts.css">',
+        f'<link rel="stylesheet" href="{root}vendor/phosphor/regular.css">',
+        f'<link rel="stylesheet" href="{root}vendor/phosphor/light.css">',
+    ])
+
+
+def icons(img):
+    """Round favicon (SVG for browsers that take it, PNG for the rest and for home screens), plus fonts and icon styles."""
+    return assets(img[:-len('img/')]) + '\n' + '\n'.join([
         f'<link rel="icon" href="{img}favicon.svg" type="image/svg+xml">',
         f'<link rel="icon" href="{img}favicon.png" sizes="192x192" type="image/png">',
         f'<link rel="apple-touch-icon" href="{img}favicon.png">',
