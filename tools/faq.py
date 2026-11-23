@@ -73,10 +73,13 @@ CSS = '''
   .faq .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--heat-soft, var(--heat)); font-weight: 700; font-size: .9rem; }
   .faq h2 { margin-top: 14px; font-size: clamp(2.6rem, 5.4vw, 4.8rem); }
   .faq .head p { margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
-  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  /* Two independent columns: opening an answer only pushes down its own column */
+  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; align-items: start; }
   .faq details { border-top: 1px solid rgb(255 255 255 / .1); }
   .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 22px 0; font-weight: 700; font-size: 1.08rem; }
   .faq summary::-webkit-details-marker { display: none; }
+  .faq summary:focus { outline: none; }
+  .faq summary:focus-visible { outline: 2px solid var(--heat); outline-offset: -2px; border-radius: 12px; padding-inline: 12px; margin-inline: -12px; }
   .faq summary i { flex: none; transition: transform .3s; color: var(--muted); }
   .faq details[open] summary i { transform: rotate(45deg); }
   .faq details p { margin: -6px 0 24px; color: var(--muted); max-width: 60ch; }
@@ -89,12 +92,15 @@ CSS = '''
 def section(lang, root):
     """The visible section. root: '' on the English home page, '../' on the Nynorsk one."""
     f = FAQ[lang]
-    items = ''.join(
-        f'''        <details>
-          <summary>{q}<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>{a.replace('{root}', root)}</p>
-        </details>
-''' for q, a in f['items'])
+    def one(q, a):
+        return f'''          <details>
+            <summary>{q}<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>{a.replace('{root}', root)}</p>
+          </details>
+'''
+    half = (len(f['items']) + 1) // 2
+    cols = [f['items'][:half], f['items'][half:]]
+    items = ''.join('        <div class="col">\n' + ''.join(one(q, a) for q, a in col) + '        </div>\n' for col in cols)
     return f'''  <section class="faq" id="faq" aria-labelledby="faq-h">
     <div class="wrap">
       <div class="head reveal">

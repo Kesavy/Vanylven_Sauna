@@ -791,10 +791,13 @@
   .faq .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--heat-soft, var(--heat)); font-weight: 700; font-size: .9rem; }
   .faq h2 { margin-top: 14px; font-size: clamp(2.6rem, 5.4vw, 4.8rem); }
   .faq .head p { margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
-  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  /* Two independent columns: opening an answer only pushes down its own column */
+  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; align-items: start; }
   .faq details { border-top: 1px solid rgb(255 255 255 / .1); }
   .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 22px 0; font-weight: 700; font-size: 1.08rem; }
   .faq summary::-webkit-details-marker { display: none; }
+  .faq summary:focus { outline: none; }
+  .faq summary:focus-visible { outline: 2px solid var(--heat); outline-offset: -2px; border-radius: 12px; padding-inline: 12px; margin-inline: -12px; }
   .faq summary i { flex: none; transition: transform .3s; color: var(--muted); }
   .faq details[open] summary i { transform: rotate(45deg); }
   .faq details p { margin: -6px 0 24px; color: var(--muted); max-width: 60ch; }
@@ -810,54 +813,58 @@
         <p>The short answers to what people ask us most.</p>
       </div>
       <div class="list">
-        <details>
-          <summary>How much does the sauna cost?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>A private session costs NOK 600 for 2 hours, for the whole group of up to 8 people. Open sauna on Wednesday evenings costs NOK 100 per person.</p>
-        </details>
-        <details>
-          <summary>When is the sauna open?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Private sessions run Thursday to Sunday, 10:00 to 20:00, with the last start at 18:00. Open sauna is every Wednesday, 17:00 to 20:00. For other times, email <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> or message us on <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener">Messenger</a>.</p>
-        </details>
-        <details>
-          <summary>How do I book?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Pick a free time in our <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">booking calendar</a>, then pay with Vipps or bank transfer. Open sauna on Wednesdays needs no booking: just come.</p>
-        </details>
-        <details>
-          <summary>How do I pay?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>With Vipps (943550) or by bank transfer. Write the date and your name in the message so we can find your booking. <a href="pay/">How to pay, step by step</a>.</p>
-        </details>
-        <details>
-          <summary>How do I get in?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>When your payment is in, we email you the door code the day before your visit.</p>
-        </details>
-        <details>
-          <summary>Can I swim in the sea?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Yes. The sauna sits on the shore of the Vanylvsfjord in Fiskå, so you can cool off in the sea between rounds. Sauna and swimming are at your own risk.</p>
-        </details>
-        <details>
-          <summary>What should I bring?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Swimwear, your own towel to sit or lie on, and plenty of water to drink. No alcohol, inside or outside.</p>
-        </details>
-        <details>
-          <summary>Can children come?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Yes. Children under 16 come with an adult.</p>
-        </details>
-        <details>
-          <summary>Can I cancel?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Cancel by email or Messenger at least 24 hours before your session and it costs nothing. Later cancellations cost NOK 300.</p>
-        </details>
-        <details>
-          <summary>Do you sell gift cards?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Yes, for 2, 4 or 6 hours, valid for one year. <a href="gift/">Design the card online</a>, pay with Vipps or bank transfer, and we send it to you. To use one, book as usual and email us the card number instead of paying.</p>
-        </details>
-        <details>
-          <summary>Where is the sauna?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>On the shore below Fiskå Brygge Gjestgiveri in Fiskå, Vanylven, in Møre og Romsdal, not far from Stad. <a href="find/">Map and directions</a>.</p>
-        </details>
-        <details>
-          <summary>Who runs the sauna?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Vanylven Sauna was built by Stad Kystbygg and is run by volunteers from Vanylven.</p>
-        </details>
+        <div class="col">
+          <details>
+            <summary>How much does the sauna cost?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>A private session costs NOK 600 for 2 hours, for the whole group of up to 8 people. Open sauna on Wednesday evenings costs NOK 100 per person.</p>
+          </details>
+          <details>
+            <summary>When is the sauna open?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Private sessions run Thursday to Sunday, 10:00 to 20:00, with the last start at 18:00. Open sauna is every Wednesday, 17:00 to 20:00. For other times, email <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> or message us on <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener">Messenger</a>.</p>
+          </details>
+          <details>
+            <summary>How do I book?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Pick a free time in our <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">booking calendar</a>, then pay with Vipps or bank transfer. Open sauna on Wednesdays needs no booking: just come.</p>
+          </details>
+          <details>
+            <summary>How do I pay?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>With Vipps (943550) or by bank transfer. Write the date and your name in the message so we can find your booking. <a href="pay/">How to pay, step by step</a>.</p>
+          </details>
+          <details>
+            <summary>How do I get in?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>When your payment is in, we email you the door code the day before your visit.</p>
+          </details>
+          <details>
+            <summary>Can I swim in the sea?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Yes. The sauna sits on the shore of the Vanylvsfjord in Fiskå, so you can cool off in the sea between rounds. Sauna and swimming are at your own risk.</p>
+          </details>
+        </div>
+        <div class="col">
+          <details>
+            <summary>What should I bring?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Swimwear, your own towel to sit or lie on, and plenty of water to drink. No alcohol, inside or outside.</p>
+          </details>
+          <details>
+            <summary>Can children come?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Yes. Children under 16 come with an adult.</p>
+          </details>
+          <details>
+            <summary>Can I cancel?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Cancel by email or Messenger at least 24 hours before your session and it costs nothing. Later cancellations cost NOK 300.</p>
+          </details>
+          <details>
+            <summary>Do you sell gift cards?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Yes, for 2, 4 or 6 hours, valid for one year. <a href="gift/">Design the card online</a>, pay with Vipps or bank transfer, and we send it to you. To use one, book as usual and email us the card number instead of paying.</p>
+          </details>
+          <details>
+            <summary>Where is the sauna?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>On the shore below Fiskå Brygge Gjestgiveri in Fiskå, Vanylven, in Møre og Romsdal, not far from Stad. <a href="find/">Map and directions</a>.</p>
+          </details>
+          <details>
+            <summary>Who runs the sauna?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Vanylven Sauna was built by Stad Kystbygg and is run by volunteers from Vanylven.</p>
+          </details>
+        </div>
       </div>
     </div>
   </section>

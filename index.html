@@ -791,10 +791,13 @@
   .faq .eyebrow { display: inline-flex; gap: 8px; align-items: center; color: var(--heat-soft, var(--heat)); font-weight: 700; font-size: .9rem; }
   .faq h2 { margin-top: 14px; font-size: clamp(2.6rem, 5.4vw, 4.8rem); }
   .faq .head p { margin-top: 20px; color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
-  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; }
+  /* Two independent columns: opening an answer only pushes down its own column */
+  .faq .list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; align-items: start; }
   .faq details { border-top: 1px solid rgb(255 255 255 / .1); }
   .faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 22px 0; font-weight: 700; font-size: 1.08rem; }
   .faq summary::-webkit-details-marker { display: none; }
+  .faq summary:focus { outline: none; }
+  .faq summary:focus-visible { outline: 2px solid var(--heat); outline-offset: -2px; border-radius: 12px; padding-inline: 12px; margin-inline: -12px; }
   .faq summary i { flex: none; transition: transform .3s; color: var(--muted); }
   .faq details[open] summary i { transform: rotate(45deg); }
   .faq details p { margin: -6px 0 24px; color: var(--muted); max-width: 60ch; }
@@ -810,54 +813,58 @@
         <p>Korte svar på det folk oftast spør oss om.</p>
       </div>
       <div class="list">
-        <details>
-          <summary>Kva kostar badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Ei privat økt kostar 600 kr for 2 timar, for heile gruppa på opptil 8 personar. Open badstue onsdagskveldar kostar 100 kr per person.</p>
-        </details>
-        <details>
-          <summary>Når er badstua open?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Privat badstue torsdag til søndag, 10:00 til 20:00, med siste start 18:00. Open badstue kvar onsdag, 17:00 til 20:00. Vil du kome på andre tider, send e-post til <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> eller ei melding på <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener">Messenger</a>.</p>
-        </details>
-        <details>
-          <summary>Korleis bookar eg?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Finn ei ledig tid i <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">bookingkalenderen</a> vår, og betal med Vipps eller bankoverføring. Til open badstue på onsdagar treng du ikkje booke: berre kom.</p>
-        </details>
-        <details>
-          <summary>Korleis betaler eg?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Med Vipps (943550) eller bankoverføring. Skriv datoen og namnet ditt i meldinga, så finn vi bookinga di. <a href="pay/">Slik betaler du, steg for steg</a>.</p>
-        </details>
-        <details>
-          <summary>Korleis kjem eg inn?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Når betalinga er komen inn, sender vi deg koden til døra på e-post dagen før besøket.</p>
-        </details>
-        <details>
-          <summary>Kan eg bade i sjøen?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Ja. Badstua ligg i sjøkanten ved Vanylvsfjorden på Fiskå, så du kan kjøle deg ned i sjøen mellom rundane. Badstue og bading skjer på eige ansvar.</p>
-        </details>
-        <details>
-          <summary>Kva skal eg ta med?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Badetøy, eige handkle å sitje eller liggje på, og rikeleg med vatn å drikke. Ikkje alkohol, verken inne eller ute.</p>
-        </details>
-        <details>
-          <summary>Kan born vere med?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Ja. Born under 16 år kjem saman med ein vaksen.</p>
-        </details>
-        <details>
-          <summary>Kan eg avbestille?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Avbestill på e-post eller Messenger seinast 24 timar før økta, så kostar det ingenting. Ved seinare avbestilling er gebyret 300 kr.</p>
-        </details>
-        <details>
-          <summary>Sel de gåvekort?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Ja, for 2, 4 eller 6 timar, gyldige i eitt år. <a href="gift/">Lag kortet på nettsida</a>, betal med Vipps eller bankoverføring, så sender vi det til deg. Book som vanleg og send oss nummeret på gåvekortet i staden for å betale.</p>
-        </details>
-        <details>
-          <summary>Kvar ligg badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>I sjøkanten nedanfor Fiskå Brygge Gjestgiveri på Fiskå i Vanylven, i Møre og Romsdal, ikkje langt frå Stad. <a href="find/">Kart og vegbeskriving</a>.</p>
-        </details>
-        <details>
-          <summary>Kven driv badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
-          <p>Vanylven Sauna er bygd av Stad Kystbygg og blir driven av frivillige frå Vanylven.</p>
-        </details>
+        <div class="col">
+          <details>
+            <summary>Kva kostar badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Ei privat økt kostar 600 kr for 2 timar, for heile gruppa på opptil 8 personar. Open badstue onsdagskveldar kostar 100 kr per person.</p>
+          </details>
+          <details>
+            <summary>Når er badstua open?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Privat badstue torsdag til søndag, 10:00 til 20:00, med siste start 18:00. Open badstue kvar onsdag, 17:00 til 20:00. Vil du kome på andre tider, send e-post til <a href="mailto:vanylvensauna@gmail.com">vanylvensauna@gmail.com</a> eller ei melding på <a href="https://www.facebook.com/profile.php?id=61570144756846" target="_blank" rel="noopener">Messenger</a>.</p>
+          </details>
+          <details>
+            <summary>Korleis bookar eg?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Finn ei ledig tid i <a href="https://calendly.com/vanylvensauna/sauna" target="_blank" rel="noopener">bookingkalenderen</a> vår, og betal med Vipps eller bankoverføring. Til open badstue på onsdagar treng du ikkje booke: berre kom.</p>
+          </details>
+          <details>
+            <summary>Korleis betaler eg?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Med Vipps (943550) eller bankoverføring. Skriv datoen og namnet ditt i meldinga, så finn vi bookinga di. <a href="pay/">Slik betaler du, steg for steg</a>.</p>
+          </details>
+          <details>
+            <summary>Korleis kjem eg inn?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Når betalinga er komen inn, sender vi deg koden til døra på e-post dagen før besøket.</p>
+          </details>
+          <details>
+            <summary>Kan eg bade i sjøen?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Ja. Badstua ligg i sjøkanten ved Vanylvsfjorden på Fiskå, så du kan kjøle deg ned i sjøen mellom rundane. Badstue og bading skjer på eige ansvar.</p>
+          </details>
+        </div>
+        <div class="col">
+          <details>
+            <summary>Kva skal eg ta med?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Badetøy, eige handkle å sitje eller liggje på, og rikeleg med vatn å drikke. Ikkje alkohol, verken inne eller ute.</p>
+          </details>
+          <details>
+            <summary>Kan born vere med?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Ja. Born under 16 år kjem saman med ein vaksen.</p>
+          </details>
+          <details>
+            <summary>Kan eg avbestille?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Avbestill på e-post eller Messenger seinast 24 timar før økta, så kostar det ingenting. Ved seinare avbestilling er gebyret 300 kr.</p>
+          </details>
+          <details>
+            <summary>Sel de gåvekort?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Ja, for 2, 4 eller 6 timar, gyldige i eitt år. <a href="gift/">Lag kortet på nettsida</a>, betal med Vipps eller bankoverføring, så sender vi det til deg. Book som vanleg og send oss nummeret på gåvekortet i staden for å betale.</p>
+          </details>
+          <details>
+            <summary>Kvar ligg badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>I sjøkanten nedanfor Fiskå Brygge Gjestgiveri på Fiskå i Vanylven, i Møre og Romsdal, ikkje langt frå Stad. <a href="find/">Kart og vegbeskriving</a>.</p>
+          </details>
+          <details>
+            <summary>Kven driv badstua?<i class="ph ph-plus" aria-hidden="true"></i></summary>
+            <p>Vanylven Sauna er bygd av Stad Kystbygg og blir driven av frivillige frå Vanylven.</p>
+          </details>
+        </div>
       </div>
     </div>
   </section>
