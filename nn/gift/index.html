@@ -234,6 +234,20 @@
     .nav .wrap { height: 64px; }
     .nav .btn { display: none; }
   }
+
+  /* Mail fallback: shown when a mailto link opened nothing */
+  .mailcopy { position: fixed; left: 50%; bottom: 24px; z-index: 95; transform: translate(-50%, 16px); opacity: 0; visibility: hidden;
+    width: min(440px, calc(100% - 32px)); padding: 18px 18px 18px 22px; border-radius: 20px; display: grid; grid-template-columns: 1fr auto; gap: 4px 14px; align-items: center;
+    background: rgb(18 26 29 / .96); box-shadow: 0 20px 60px rgb(0 0 0 / .45), inset 0 0 0 1px rgb(255 255 255 / .1); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    transition: opacity .3s, transform .3s, visibility .3s; }
+  .mailcopy.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+  .mailcopy p { margin: 0; color: var(--muted); font-size: .88rem; grid-column: 1; }
+  .mailcopy b { font-size: 1.05rem; color: var(--ink); word-break: break-all; grid-column: 1; }
+  .mailcopy .mc-copy { grid-column: 2; grid-row: 1 / span 2; border: 0; cursor: pointer; border-radius: 999px; padding: 12px 18px; min-width: 104px;
+    font: inherit; font-weight: 700; background: var(--heat); color: var(--on-heat); display: inline-flex; gap: 8px; align-items: center; justify-content: center; }
+  .mailcopy .mc-close { position: absolute; top: -10px; right: -10px; width: 30px; height: 30px; border-radius: 50%; border: 0; cursor: pointer;
+    background: #2a3438; color: var(--ink); display: grid; place-items: center; font-size: .9rem; }
+  @media (prefers-reduced-motion: reduce) { .mailcopy { transition: none; } }
 </style>
 </head>
 <body>
@@ -543,6 +557,54 @@
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       else if (!fog.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    });
+  })();
+
+  // Mail fallback: a mailto link that opens no email app shows the address to copy instead
+  (() => {
+    const nn = document.documentElement.lang === 'nn';
+    const T = nn ? { lead: 'Ingen e-postapp opna seg. Kopier adressa:', copy: 'Kopier', done: 'Kopiert', close: 'Lukk' }
+                 : { lead: 'No email app opened. Copy the address:', copy: 'Copy', done: 'Copied', close: 'Close' };
+    let box, timer;
+    const build = () => {
+      box = document.createElement('div');
+      box.className = 'mailcopy'; box.setAttribute('role', 'status'); box.setAttribute('aria-live', 'polite');
+      box.innerHTML = `<p>${T.lead}</p><b></b><button class="mc-copy" type="button"><i class="ph ph-copy" aria-hidden="true"></i><span>${T.copy}</span></button>`
+        + `<button class="mc-close" type="button" aria-label="${T.close}"><i class="ph ph-x" aria-hidden="true"></i></button>`;
+      document.body.appendChild(box);
+      const btn = box.querySelector('.mc-copy');
+      btn.addEventListener('click', async () => {
+        const text = box.querySelector('b').textContent;
+        try { await navigator.clipboard.writeText(text); }
+        catch { const r = document.createRange(); r.selectNodeContents(box.querySelector('b')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); s.removeAllRanges(); }
+        btn.querySelector('span').textContent = T.done; btn.querySelector('i').className = 'ph ph-check';
+        clearTimeout(timer); timer = setTimeout(hide, 2500);
+      });
+      box.querySelector('.mc-close').addEventListener('click', hide);
+      addEventListener('keydown', (e) => { if (e.key === 'Escape' && box.classList.contains('show')) hide(); });
+    };
+    const hide = () => box && box.classList.remove('show');
+    const show = (address) => {
+      if (!box) build();
+      box.querySelector('b').textContent = address;
+      const btn = box.querySelector('.mc-copy');
+      btn.querySelector('span').textContent = T.copy; btn.querySelector('i').className = 'ph ph-copy';
+      box.classList.add('show'); clearTimeout(timer); timer = setTimeout(hide, 12000);
+      btn.focus({ preventScroll: true });
+    };
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="mailto:"]');
+      if (!a || e.defaultPrevented) return;
+      const address = decodeURIComponent(a.getAttribute('href').slice(7).split('?')[0]);
+      let left = false;
+      const away = () => { left = true; };
+      addEventListener('blur', away, { once: true });
+      document.addEventListener('visibilitychange', away, { once: true });
+      setTimeout(() => {
+        removeEventListener('blur', away);
+        document.removeEventListener('visibilitychange', away);
+        if (!left && document.visibilityState === 'visible' && document.hasFocus()) show(address);
+      }, 900);
     });
   })();
 </script>

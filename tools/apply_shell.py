@@ -19,7 +19,9 @@ for path, lang, img, lang_href in [('index.html', 'en', 'img/', 'nn/'), ('nn/ind
     s, n3 = re.subn(r'<!-- seo -->.*?<!-- /seo -->', lambda m: block, s, count=1, flags=re.S)
     wx = '\n'.join(['<!-- weather -->', shared.weather(lang), '<!-- /weather -->'])
     s, n4 = re.subn(r'<!-- weather -->.*?<!-- /weather -->', lambda m: wx, s, count=1, flags=re.S)
-    assert (n1, n2, n3, n4) == (1, 1, 1, 1), (path, n1, n2, n3, n4)
+    mc = '\n'.join(['<!-- mailcopy -->', '<style>' + shared.MAIL_CSS + '</style>', '<script>' + shared.MAIL_JS + '</script>', '<!-- /mailcopy -->'])
+    s, n5 = re.subn(r'<!-- mailcopy -->.*?<!-- /mailcopy -->', lambda m: mc, s, count=1, flags=re.S)
+    assert (n1, n2, n3, n4, n5) == (1, 1, 1, 1, 1), (path, n1, n2, n3, n4, n5)
     with open(p, 'w', encoding='utf-8', newline='') as f:
         f.write(s)
     print('updated', path)
