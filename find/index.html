@@ -24,7 +24,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:ital,wght@0,400..900;1,400..700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/@phosphor-icons/web@2.1.1"></script>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css" integrity="sha384-6p9AefaqUhEVheRlj1mpAkbngHXy9mbYMrIdcIt4Jlc9lOLIablJq3bBsLOjGwZ7" crossorigin="anonymous">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/light/style.css" integrity="sha384-GzhNOdwUkh38xzoNEY1vRdLr+w8q+bXEJsd/km6Ef61w1Kfk+lself6cn14ilrpO" crossorigin="anonymous">
 <style>
   /* Find us: map, address, how to reach us. Same tokens and shapes as the main site. */
   :root {
@@ -374,6 +375,10 @@
     const word = (c) => W.sky[c] || (/thunder/.test(c) ? W.sky.thunder : /snow/.test(c) ? W.sky.snow : /sleet/.test(c) ? W.sky.sleet
       : /showers/.test(c) ? W.sky.showers : /^light/.test(c) ? W.sky.lightrain : /^heavy/.test(c) ? W.sky.heavyrain : /rain/.test(c) ? W.sky.rain : '');
     fetch('https://vanylven-vouchers.vercel.app/api/weather').then((r) => r.ok ? r.json() : Promise.reject()).then((d) => {
+      // Only numbers, HH:MM times and known sky codes reach the page
+      const num = (x) => (x === null || x === '' || !isFinite(x) ? null : Math.round(+x));
+      const hm = (x) => (/^\d\d:\d\d$/.test(x || '') ? x : null);
+      d = { air: num(d.air), sea: num(d.sea), sunrise: hm(d.sunrise), sunset: hm(d.sunset), sky: /^[a-z_]{1,40}$/.test(d.sky || '') ? d.sky : '' };
       if (d.air == null) return;
       const code = (d.sky || '').replace(/_(day|night|polartwilight)$/, ''), night = /_night$/.test(d.sky || '');
       const now = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Oslo', hour: '2-digit', minute: '2-digit' }).format(new Date());

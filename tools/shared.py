@@ -252,6 +252,10 @@ def weather(lang):
     const word = (c) => W.sky[c] || (/thunder/.test(c) ? W.sky.thunder : /snow/.test(c) ? W.sky.snow : /sleet/.test(c) ? W.sky.sleet
       : /showers/.test(c) ? W.sky.showers : /^light/.test(c) ? W.sky.lightrain : /^heavy/.test(c) ? W.sky.heavyrain : /rain/.test(c) ? W.sky.rain : '');
     fetch('%s').then((r) => r.ok ? r.json() : Promise.reject()).then((d) => {
+      // Only numbers, HH:MM times and known sky codes reach the page
+      const num = (x) => (x === null || x === '' || !isFinite(x) ? null : Math.round(+x));
+      const hm = (x) => (/^\d\d:\d\d$/.test(x || '') ? x : null);
+      d = { air: num(d.air), sea: num(d.sea), sunrise: hm(d.sunrise), sunset: hm(d.sunset), sky: /^[a-z_]{1,40}$/.test(d.sky || '') ? d.sky : '' };
       if (d.air == null) return;
       const code = (d.sky || '').replace(/_(day|night|polartwilight)$/, ''), night = /_night$/.test(d.sky || '');
       const now = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Oslo', hour: '2-digit', minute: '2-digit' }).format(new Date());
