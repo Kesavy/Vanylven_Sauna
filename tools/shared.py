@@ -101,7 +101,13 @@ def assets(root):
         f'<link rel="stylesheet" href="{root}fonts/fonts.css">',
         f'<link rel="stylesheet" href="{root}vendor/phosphor/regular.css">',
         f'<link rel="stylesheet" href="{root}vendor/phosphor/light.css">',
+        ANALYTICS,
     ])
+
+
+# Vercel Web Analytics: cookieless visit counts, served from this site's own address (/_vercel/insights)
+ANALYTICS = ('<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>\n'
+             '<script defer src="/_vercel/insights/script.js"></script>')
 
 
 def icons(img):
